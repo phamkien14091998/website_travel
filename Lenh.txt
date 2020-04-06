@@ -1,0 +1,16 @@
+composer global require laravel/installer
+composer create-project --prefer-dist laravel/laravel websitetravel "5.8.*"
+composer install
+php artisan key:generate
+
+- chạy php artisan migrate
+-chạy lại khi sửa đổi :  php artisan migrate:refresh
+
+- chạy lệnh đưa dữ liệu lên : php artisan db:seed
+
+
+/////
+tích hợp vuajs vào : 
+npm i
+
+npm run watch:  tự động theo dõi thay đổi
