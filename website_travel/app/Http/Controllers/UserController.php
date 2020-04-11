@@ -21,22 +21,18 @@ class UserController extends Controller
 {
     public function register(Request $request){
         $validator = Validator::make($request->all(),[
-            'user_name' => ['required'],
-            'email' => ['required'],
-            'password' => ['required'],
-
+            'user_name' => 'required|string|max:20', 
+            'email' => 'required|string|email|max:40|unique:users',  // email k đc trùng
+            'password' => 'required|string|min:5',
         ]);
-
         if($validator->fails()){ 
             return response()->json($validator->errors()->toJson(),400);
         }
-
-        
         $users = User::create([
             'user_name'=>$request->get('user_name'),
             'email'=>$request->get('email'),
-            'password'=>$request->get('password'),
-            //'password'=>Hash::make($request->json()->get('password')),
+            // 'password'=>$request->get('password'),
+            'password'=>Hash::make($request->get('password')),
             'full_name'=>$request->get('full_name'),
             'avatar'=>$request->get('avatar'),
             'date_of_birth'=>$request->get('date_of_birth'),
@@ -44,30 +40,28 @@ class UserController extends Controller
             'hometown'=>$request->get('hometown'),
             'hobbies'=>$request->get('hobbies'),
         ]);
-       
-        $token = JWTAuth::fromUser($users);
+        $token = JWTAuth::fromUser($users); // tao ra token
         return response()->json(compact('users','token'),201);
-
     } 
-
 	public function login(Request $request){
-        $creadentials = $request->json()->all();
-        
+        $creadentials = $request->only('email', 'password');
         try{
-            if(! $token = JWTAuth::attempt($creadentials)){
+            if(! $token = JWTAuth::attempt($creadentials)){  // khi mã hóa password mới dùng hàm này
                 return response()->json([
                     'error'=>'invalid credentials'
                 ],400);
             }
-
-        }catch(JWTException $e){
-            return response()->json([
+        }catch(JWTException $e){ 
+            return response()->json([ 
                 'error'=>'could not create token'
-            ]);
-        }
-    	 return response()->json(compact('token'));        
+            ],500);
+        } 
+         return response()->json(compact('token'));    
+    
+        //  if (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 1])) { // trả về true /false
+        //     // email admin mới được xác thực thành công 
+        // }
     }
-
     public function getAuthenticatedUser(){
         try {
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -75,7 +69,6 @@ class UserController extends Controller
                     'user not found' 
                 ],404);
             }
-
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json([
                 'token expired'
@@ -92,7 +85,5 @@ class UserController extends Controller
             ],$e->getStatusCode());
         }
         return response()->json(compact('users')); // gom thanh array
-
     }
-
 }

@@ -1,16 +1,53 @@
+* tạo project Laravel 5.8 và viết API
 composer global require laravel/installer
-composer create-project --prefer-dist laravel/laravel websitetravel "5.8.*"
+composer create-project --prefer-dist laravel/laravel website_travel "5.8.*"
 composer install
 php artisan key:generate
 
-- chạy php artisan migrate
+- chạy: php artisan migrate
 -chạy lại khi sửa đổi :  php artisan migrate:refresh
 
 - chạy lệnh đưa dữ liệu lên : php artisan db:seed
 
 
-/////
-tích hợp vuajs vào : 
-npm i
+////////////////////////////////////////////////
+hướng dẫn tích hợp vào Angular 
+-link : https://viblo.asia/p/khoi-tao-mot-project-ket-hop-giua-laravel-va-angular5-jvElaPDYZkw
 
-npm run watch:  tự động theo dõi thay đổi
+- tạo file và cấu hình đường dẫn api trong đó : proxy.conf.json 
+- thêm vào file : package.json :  chỗ "start": "ng serve --proxy-config proxy.conf.json"
+- chạy lênh : npm i --save bootstrap jquery (cài bootstrap, jquery)
+- thêm vào file angular.json : 
+	 "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
+
+-
+
+
+//////////////////////////////////////////////
+  	link hướng dẫn : https://www.youtube.com/watch?v=EnIcUkTlDqY
+
+* register/login 
+- Thêm "tymon/jwt-auth": "dev-develop" vào file composer.json 
+	-> chạy lệnh : composer update 
+- thêm trong file app.php(config)
+- User.php (model)
+- UserController.php (hàm xử lý)
+- api.php
+
+
+////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+

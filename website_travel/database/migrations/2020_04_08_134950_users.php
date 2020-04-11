@@ -17,7 +17,7 @@ class Users extends Migration
             $table->bigIncrements('user_id')->unsigned();
             $table->string('user_name',20)->nullable()->collation('utf8_unicode_ci');
             $table->string('email',40)->nullable()->collation('utf8_unicode_ci');
-            $table->string('password',40)->nullable()->collation('utf8_unicode_ci');
+            $table->string('password',255)->nullable()->collation('utf8_unicode_ci');
             $table->string('full_name',40)->nullable()->collation('utf8_unicode_ci');
             $table->text('avatar')->nullable()->collation('utf8_unicode_ci');
             $table->dateTime('date_of_birth')->nullable();
