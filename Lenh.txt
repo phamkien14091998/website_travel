@@ -40,8 +40,14 @@ hướng dẫn tích hợp vào Angular
 - UserController.php (hàm xử lý)
 - api.php
 
+- cài đặt thêm :  composer i @auth0/angular-jwt
+
+- Hướng dẫn sử dụng thông báo Toas : https://www.npmjs.com/package/ngx-toastr
+
+
 
 ////////////////////////////////////////////////
+
 
 
 

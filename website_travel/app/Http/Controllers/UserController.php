@@ -15,7 +15,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\PayloadFactory;
-use Tymon\JWTAuth\JWTManager as JWT;
+use Tymon\JWTAuth\JWTManager as JWT; 
 
 class UserController extends Controller
 {
@@ -46,8 +46,12 @@ class UserController extends Controller
 	public function login(Request $request){
         $creadentials = $request->only('email', 'password');
         try{
-            if(! $token = JWTAuth::attempt($creadentials)){  // khi mã hóa password mới dùng hàm này
-                return response()->json([
+            $user=User::where(['email'=>$request->input('email')])->first();
+            $customClaims = ['user_name' => $user['user_name'],'role' => $user['role']];
+            // giờ chế lại
+            $token = JWTAuth::claims($customClaims)->attempt($creadentials);
+            if(! $token ){  //  khi mã hóa password mới dùng hàm này
+                return response()->json([ // nó k vô đây nha , tk đúng nên xuống dưới nó tạo token 
                     'error'=>'invalid credentials'
                 ],400);
             }
@@ -56,7 +60,8 @@ class UserController extends Controller
                 'error'=>'could not create token'
             ],500);
         } 
-         return response()->json(compact('token'));    
+        
+        return response()->json(compact('token'));    
     
         //  if (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 1])) { // trả về true /false
         //     // email admin mới được xác thực thành công 
@@ -86,4 +91,22 @@ class UserController extends Controller
         }
         return response()->json(compact('users')); // gom thanh array
     }
+
+    // get user 
+    public function getUser(){
+        try {
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json([
+                    'user not found' 
+                ],404);
+            }
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json([
+                'token expired'
+            ],$e->getStatusCode());
+        }
+        return response()->json(compact('users'));
+    }
+
+
 }
