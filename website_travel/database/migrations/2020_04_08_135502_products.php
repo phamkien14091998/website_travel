@@ -18,10 +18,13 @@ class Products extends Migration
             $table->string('product_name',40)->nullable()->collation('utf8_unicode_ci');
             $table->string('price',20)->nullable();
             $table->text('description')->nullable()->collation('utf8_unicode_ci');
-            $table->string('status',20)->nullable()->collation('utf8_unicode_ci');
+            // $table->string('status',20)->nullable()->collation('utf8_unicode_ci');
             $table->integer('quantity')->nullable();
             $table->bigInteger('portfolio_id')->unsigned();
             $table->tinyInteger('flag')->default(1)->comment('0: Hết Hàng');
+            $table->text('image_1')->nullable()->collation('utf8_unicode_ci');
+            $table->text('image_2')->nullable()->collation('utf8_unicode_ci');
+            $table->text('image_3')->nullable()->collation('utf8_unicode_ci');
             $table->foreign('portfolio_id')
                   ->references('portfolio_id')
                   ->on('products_portfolio')

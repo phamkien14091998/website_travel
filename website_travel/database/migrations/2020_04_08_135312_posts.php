@@ -21,6 +21,7 @@ class Posts extends Migration
             $table->text('uptime')->nullable()->collation('utf8_unicode_ci');
             $table->text('fare')->nullable()->collation('utf8_unicode_ci');
             $table->text('main_image')->nullable()->collation('utf8_unicode_ci');
+            $table->tinyInteger('flag')->default(0)->comment('1: phê duyệt');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
             ->references('user_id')

@@ -16,8 +16,8 @@ class ProductsPortfolio extends Migration
         Schema::create('products_portfolio', function (Blueprint $table) {
             $table->bigIncrements('portfolio_id')->unsigned()->autoIncrement();
             $table->string('portfolio_name',50)->nullable()->collation('utf8_unicode_ci');
-            $table->text('description')->nullable()->collation('utf8_unicode_ci');
-            $table->text('image')->nullable();
+            // $table->text('description')->nullable()->collation('utf8_unicode_ci');
+            // $table->text('image')->nullable();
 
             $table->timestamps();
         });
