@@ -13,18 +13,18 @@ class ProductsImage extends Migration
      */
     public function up()
     {
-        // Schema::create('products_image', function (Blueprint $table) {
-        //     // $table->bigIncrements('product_image_id')->unsigned()->autoIncrement();
-        //     // $table->text('image_1')->nullable()->collation('utf8_unicode_ci');
-        //     // $table->text('image_2')->nullable()->collation('utf8_unicode_ci');
-        //     // $table->text('image_3')->nullable()->collation('utf8_unicode_ci');
-        //     // $table->bigInteger('product_id')->unsigned();
-        //     // $table->foreign('product_id')
-        //     // ->references('product_id')
-        //     // ->on('products');
+        Schema::create('products_image', function (Blueprint $table) {
+            // $table->bigIncrements('product_image_id')->unsigned()->autoIncrement();
+            // $table->text('image_1')->nullable()->collation('utf8_unicode_ci');
+            // $table->text('image_2')->nullable()->collation('utf8_unicode_ci');
+            // $table->text('image_3')->nullable()->collation('utf8_unicode_ci');
+            // $table->bigInteger('product_id')->unsigned();
+            // $table->foreign('product_id')
+            // ->references('product_id')
+            // ->on('products');
 
-        //     // $table->timestamps();
-        // });
+            // $table->timestamps();
+        });
     }
 
     /**

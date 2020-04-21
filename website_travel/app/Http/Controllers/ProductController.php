@@ -9,13 +9,19 @@ use App\Models\products;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing product
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         //get list product
+        $data_listProduct= products::getListProduct();
+
+        // dd($data_listProduct); // hay nay do tôi in chỗ này làm nó chạy k đc á
+        // // ông xóa đi
+        return  response()->json($data_listProduct);// trar về json
+        
     }
 
     public function getListPortfolio(){
@@ -25,59 +31,46 @@ class ProductController extends Controller
     }
 
     public function create(Request $request)
-    {
-        $image_1='';
-        $image_2='';
-        $image_3=''; 
-        // if($_FILES['fileUpload']['name'][0] && 
-        //     $_FILES['fileUpload']['name'][1] &&  
-        //     $_FILES['fileUpload']['name'][2] )
-        // {
-            $image_1= $_FILES['fileUpload']['name'][0];
-            $image_2= $_FILES['fileUpload']['name'][1];
-            $image_3= $_FILES['fileUpload']['name'][2];
-        // }
-        // if($_FILES['fileUpload']['name'][0] && $_FILES['fileUpload']['name'][1])
-        // {  
-        //     $image_1= $_FILES['fileUpload']['name'][0]; 
-        //     $image_2= $_FILES['fileUpload']['name'][1];
-            
-           
-        // } 
-        // if($_FILES['fileUpload']['name'][0] )
-        // {
-        //     $image_1= $_FILES['fileUpload']['name'][0]; 
-        //     $image_2= '';
-        //     $image_3='';
-        // } 
-       
+    {   
+        
         $validator = Validator::make($request->all(),[
             'product_name' => 'required|string|max:40|unique:products', 
         ]);
         if($validator->fails()){ 
-            return response()->json('dữ liệu không hợp lệ',400);
+            return response()->json('dữ liệu không hợp lệ',500);
         }
+
+        $uploadPath="upload/";
+        $filename='';
+
+        $images = array();
+        for($i=0 ; $i<count($_FILES['fileUpload']['name']);$i++){
+            $filename = $uploadPath . date("His-d-m-Y").rand(1,1000) . $_FILES['fileUpload']['name'][$i];
+            // thêm dữ liệu vô mảng mới
+            array_push($images,$filename);
+            // lưu hình
+            $d=move_uploaded_file($_FILES['fileUpload']['tmp_name'][$i],$filename);
+        } 
+        // for lấy ra phần tử của mảng
+        // for($i=0;$i<count($images);$i++){
+        //     $data[$i]= $images[$i];
+        // }
+
+        // ghép mảng images thành chuỗi ngăn cách bởi dấu |
+        $image_string='';
+        $image_string=join("|",$images);
+      
         $data=[
             'product_name' => $request->product_name,
             'price' => $request->price,
             'description' => $request->description,
             'quantity' => $request->quantity,
             'portfolio_id' => $request->portfolio_id,
-            'image_1'=>$image_1,
-            'image_2'=> $image_2,
-            'image_3'=>$image_3,
+            'images'=> $image_string,
         ]; 
-        $uploadPath="upload/";
-        $filename='';
-
-        for($i=0 ; $i<count($_FILES['fileUpload']['name']);$i++){
-            $filename = $_FILES['fileUpload']['name'][$i];
-            $image =$uploadPath . $_FILES['fileUpload']['name'][$i];
-
-            $d1=move_uploaded_file($_FILES['fileUpload']['tmp_name'][$i],$image);
-
-        }
-        if($data){ 
+       
+       
+        if($data){  
             $data_product=products::createProduct($data);
             if($data_product){ 
                 return response()->json('Thành Công',200);
@@ -85,7 +78,6 @@ class ProductController extends Controller
             return response()->json('Thất Bại',400);
         }
        return response()->json('Thiêu dữ liệu truyền vào',500);
-
 
 
     }

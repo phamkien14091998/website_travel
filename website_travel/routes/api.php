@@ -31,7 +31,7 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
 
  /*api product group*/
  Route::group(['prefix'=>'product'],function(){
-    Route::get('', 'ProductController@index');
+    Route::get('list-product', 'ProductController@index');
     Route::get('list-portfolio', 'ProductController@getListPortfolio');
     Route::post('new', 'ProductController@create');
     Route::post('', 'ProductController@delete');

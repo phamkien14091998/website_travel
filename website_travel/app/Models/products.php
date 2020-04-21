@@ -21,9 +21,7 @@ class products extends Model
         'description',
         'quantity',
         'portfolio_id',
-        'image_1',
-        'image_2',
-        'image_3',
+        'images',
 
     ];
     // create product
@@ -42,6 +40,22 @@ class products extends Model
                 ->get();
     }
 
+    //get list product 
+    public static function getListProduct(){
+
+        return DB::table('products')
+            ->leftJoin('products_portfolio','products_portfolio.portfolio_id','=','products.portfolio_id')
+            ->select(
+                'portfolio_name',
+                'product_name',
+                'price', 
+                'description',
+                'quantity',
+                'images',
+                'flag'
+            )
+            ->get(); 
+    }
    
 
 

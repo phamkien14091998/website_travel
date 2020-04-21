@@ -22,9 +22,7 @@ class Products extends Migration
             $table->integer('quantity')->nullable();
             $table->bigInteger('portfolio_id')->unsigned();
             $table->tinyInteger('flag')->default(1)->comment('0: Hết Hàng');
-            $table->text('image_1')->nullable()->collation('utf8_unicode_ci');
-            $table->text('image_2')->nullable()->collation('utf8_unicode_ci');
-            $table->text('image_3')->nullable()->collation('utf8_unicode_ci');
+            $table->string('images',255)->nullable()->collation('utf8_unicode_ci');
             $table->foreign('portfolio_id')
                   ->references('portfolio_id')
                   ->on('products_portfolio')
