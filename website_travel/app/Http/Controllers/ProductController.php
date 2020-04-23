@@ -120,12 +120,21 @@ class ProductController extends Controller
 
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
         //delete product
+        $product_id = $request->product_id;
+
+        $data = products::deleteProductById($product_id);
+        if($data){
+            return response()->json('xóa thành công sản phẩm',200);
+        }else{
+            return response()->json('không tìm thấy sản phẩm',400);
+        }
+
     }
 
-    public function update(Request $request, $id)
+    public function updateProductById(Request $request)
     {
         //update product
 
