@@ -70,7 +70,7 @@ class products extends Model
             'quantity',
             'images'
         )
-        ->get();
+        ->get();  
     
     return $data_product;
    }

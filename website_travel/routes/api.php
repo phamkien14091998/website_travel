@@ -32,7 +32,7 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
  /*api product group*/
  Route::group(['prefix'=>'product'],function(){
     Route::get('list-product', 'ProductController@index');
-    // Route::post('list-product', 'ProductController@searchProductbyName');
+    Route::post('search-product', 'ProductController@searchProductbyNameOrPortfolioId');
     // Route::post('search-product-portfolio', 'ProductController@searchProductByportfolioByid');
     Route::get('detail-product/{product_id}', 'ProductController@getDetailProduct');
     Route::get('list-portfolio', 'ProductController@getListPortfolio');
