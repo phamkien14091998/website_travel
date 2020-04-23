@@ -34,7 +34,7 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('list-product', 'ProductController@index');
     Route::get('list-portfolio', 'ProductController@getListPortfolio');
     Route::post('new', 'ProductController@create');
-    Route::post('', 'ProductController@delete');
-    Route::post('', 'ProductController@getCustomerGroupById');
+    Route::post('delete', 'ProductController@delete');
+    Route::post('update', 'ProductController@getCustomerGroupById');
 });
 

@@ -18,8 +18,7 @@ class ProductController extends Controller
         //get list product
         $data_listProduct= products::getListProduct();
 
-        // dd($data_listProduct); // hay nay do tôi in chỗ này làm nó chạy k đc á
-        // // ông xóa đi
+        
         return  response()->json($data_listProduct);// trar về json
         
     }
@@ -82,12 +81,21 @@ class ProductController extends Controller
 
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
         //delete product
+        $product_id = $request->product_id;
+
+        $data = products::deleteProductById($product_id);
+        if($data){
+            return response()->json('xóa thành công sản phẩm',200);
+        }else{
+            return response()->json('không tìm thấy sản phẩm',400);
+        }
+
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //update product
 
