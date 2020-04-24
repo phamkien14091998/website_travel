@@ -143,8 +143,10 @@ class products extends Model
     // update product by id : UPDATE Products SET product_name=$product_name WHERE product_id=$product_id
     public static function updateProductById($product_id,$data){
 
-        return self::where('product_id', $product_id);
-            // ->update(['votes' => 1]);
+        return self::where('product_id', $product_id)
+            ->update([
+                'votes' => 1
+                ]);
     }
 
 

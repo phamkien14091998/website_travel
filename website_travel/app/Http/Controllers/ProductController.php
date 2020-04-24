@@ -15,34 +15,13 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {  
-        // if($request->product_name && $request->portfolio_id){ 
-        //     $product_name = $request->product_name;
-        //     $portfolio_id = $request->portfolio_id;
-            
-        //     $data_product = products::searchProductByProNameAndPortId($product_name,$portfolio_id);
-    
-        //     return  response()->json($data_product,'200');
-        // }
-        // if($request->product_name){
-        //     $product_name = $request->product_name;
-        //     $data_product_search = products::searchProductByname($product_name);
-    
-        //     return  response()->json($data_product_search,'200');
-        // }
-        // if($request->portfolio_id){
-        //     $portfolio_id = $request->portfolio_id;
-        //     $data_product_search = products::searchProductByportfolioByid($portfolio_id);
-    
-        //     return  response()->json($data_product_search,'200');
-        // }
-        
-        
         //get list product
         $data_listProduct= products::getListProduct();
 
         return  response()->json($data_listProduct);// trar về json
         
     }
+    //tìm kiếm theo product_name hoạc portfolio_id
     public function searchProductbyNameOrPortfolioId(Request $request){
         if($request->product_name && $request->portfolio_id){ 
             $product_name = $request->product_name;
@@ -72,29 +51,22 @@ class ProductController extends Controller
         return  response()->json($data_listProduct);// trar về json
 
     }
-    // public function searchProductByportfolioByid(Request $request){
-    //     $portfolio_id = $request->portfolio_id;
-    //     $data_product_search = products::searchProductByportfolioByid($portfolio_id);
-
-    //     return  response()->json($data_product_search,'200');
-    // }
-
+    // get list thể loại sản phẩm
     public function getListPortfolio(){
         // get list product portfolio
         $data_portfolio= products::getListPortfolio();
         return response()->json($data_portfolio,200);
     }
-
+    // get chi tiết sản phẩm theo id
     public function getDetailProduct(Request $request){
         $product_id = $request->product_id;
 
         $data_product = products::getDetailProduct($product_id);
         return response()->json($data_product,'200');
     }
-
+    // thêm sản phẩm
     public function create(Request $request)
     {   
-        
         $validator = Validator::make($request->all(),[
             'product_name' => 'required|string|max:40|unique:products', 
         ]);
@@ -131,7 +103,6 @@ class ProductController extends Controller
             'images'=> $image_string,
         ]; 
        
-       
         if($data){  
             $data_product=products::createProduct($data);
             if($data_product){ 
@@ -140,15 +111,13 @@ class ProductController extends Controller
             return response()->json('Thất Bại',400);
         }
        return response()->json('Thiêu dữ liệu truyền vào',500);
-
-
     }
 
     public function delete(Request $request)
     {
         //delete product
         $product_id = $request->product_id;
-
+       
         $data = products::deleteProductById($product_id);
         if($data){
             return response()->json('xóa thành công sản phẩm',200);
