@@ -48,6 +48,7 @@ hướng dẫn tích hợp vào Angular
 
 ////////////////////////////////////////////////
 
+- khi co thêm [ngModel] => chạy thêm lệnh : npm install your-package-name
 
 
 

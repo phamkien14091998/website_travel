@@ -126,7 +126,8 @@ class products extends Model
         'price', 
         'description',
         'quantity',
-        'images'
+        'images',
+        'products.portfolio_id'
     )
     ->first();
 
@@ -138,15 +139,13 @@ class products extends Model
 
     return self::where('product_id','=',$product_id)
             ->delete();
-}
+    }
 
     // update product by id : UPDATE Products SET product_name=$product_name WHERE product_id=$product_id
     public static function updateProductById($product_id,$data){
 
         return self::where('product_id', $product_id)
-            ->update([
-                'votes' => 1
-                ]);
+            ->update($data);
     }
 
 

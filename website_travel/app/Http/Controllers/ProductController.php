@@ -67,13 +67,14 @@ class ProductController extends Controller
     // thêm sản phẩm
     public function create(Request $request)
     {   
+
         $validator = Validator::make($request->all(),[
             'product_name' => 'required|string|max:40|unique:products', 
-        ]);
-        if($validator->fails()){ 
+        ]);  
+        if($validator->fails()){   
             return response()->json('dữ liệu không hợp lệ',500);
         }
-
+       
         $uploadPath="upload/";
         $filename='';
 
@@ -129,7 +130,56 @@ class ProductController extends Controller
 
     public function updateProductById(Request $request)
     {
-        //update product
+
+        if($request->images){
+            $image_string= $request->images;
+            $image_string=explode(",", $image_string);
+            $image_string=join("|",$image_string);
+        }
+        // update product tên có thể k sửa
+        // $validator = Validator::make($request->all(),[
+        //     'product_name' => 'required|string|max:40|unique:products', 
+        // ]);
+        // if($validator->fails()){  
+        //     return response()->json('dữ liệu không hợp lệ',500);
+        // }
+        
+
+        $uploadPath="upload/";
+        $filename='';
+
+        $images = array();
+        if(isset($_FILES['fileUpload']['name'])){
+            for($i=0 ; $i<count($_FILES['fileUpload']['name']);$i++){
+                $filename = $uploadPath . date("His-d-m-Y").rand(1,1000) . $_FILES['fileUpload']['name'][$i];
+                // thêm dữ liệu vô mảng mới
+                array_push($images,$filename);
+                // lưu hình
+                $d=move_uploaded_file($_FILES['fileUpload']['tmp_name'][$i],$filename);
+            } 
+        // ghép mảng images thành chuỗi ngăn cách bởi dấu |
+            $image_string='';
+            $image_string=join("|",$images);
+        }
+      
+        $product_id= $request->product_id;
+        $data=[
+            'product_name' => $request->product_name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'quantity' => $request->quantity,
+            'portfolio_id' => $request->portfolio_id,
+            'images'=> $image_string,
+        ]; 
+       
+        if($data){  
+            $data_product=products::updateProductById($product_id,$data);
+            // if($data_product){ 
+                return response()->json('Sửa Thành Công',200);
+            // }
+            // return response()->json('Sửa Thất Bại',400);
+        }
+       return response()->json('Thiêu dữ liệu truyền vào',500);
 
     }
 

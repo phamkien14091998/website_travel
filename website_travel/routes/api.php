@@ -38,6 +38,6 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('list-portfolio', 'ProductController@getListPortfolio');
     Route::post('new', 'ProductController@create');
     Route::delete('delete/{product_id}', 'ProductController@delete');
-    Route::patch('update/{product_id}', 'ProductController@updateProductById');
+    Route::post('update/{product_id}', 'ProductController@updateProductById');
 });
 
