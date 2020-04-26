@@ -18,7 +18,8 @@ class FamousPlaces extends Migration
             $table->text('title')->nullable()->collation('utf8_unicode_ci');
             $table->text('image')->nullable()->collation('utf8_unicode_ci');
             $table->text('description')->nullable()->collation('utf8_unicode_ci');
-            $table->text('server_time')->nullable()->collation('utf8_unicode_ci');
+            $table->text('date_start')->nullable()->collation('utf8_unicode_ci');
+            $table->text('date_end')->nullable()->collation('utf8_unicode_ci');
             $table->bigInteger('province_id')->unsigned();
             $table->foreign('province_id')
             ->references('province_id')

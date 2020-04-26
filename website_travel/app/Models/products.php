@@ -50,6 +50,7 @@ class products extends Model
                 'quantity',
                 'images'
             )
+            // ->paginate(5);
             ->get(); 
     }
    // search product by product_name
@@ -148,6 +149,49 @@ class products extends Model
             ->update($data);
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // get 16 product mới nhất
+    public static function getProductNew(){
+
+        return DB::table('products')
+        ->leftJoin('products_portfolio','products_portfolio.portfolio_id','=','products.portfolio_id')
+        ->select(
+            'product_id',
+            'portfolio_name',
+            'product_name',
+            'price', 
+            'description',
+            'quantity',
+            'images'
+        )
+        ->orderBy('product_id', 'desc')
+        ->take(16)
+        ->where('quantity','>','0')
+        // ->paginate(5);
+        ->get(); 
+    }
+    // timf kiếm sản phẩm theo thể loại id (những sản phẩm còn hàng)
+     // search all product of product_portfolio_id
+    public static function searchProductByportfolioByidConHang($portfolio_id){
+        $data_product = self::leftJoin('products_portfolio','products_portfolio.portfolio_id','=','products.portfolio_id')
+        ->where('products.portfolio_id','=',$portfolio_id)
+        ->orderBy('product_id', 'ASC')
+        ->select(
+            'product_id',
+            'portfolio_name',
+            'product_name',
+            'price', 
+            'description',
+            'quantity',
+            'images'
+        )
+        ->where('quantity','>','0')
+        ->get();
+
+        return $data_product;
+    }
+   
 
 
 }

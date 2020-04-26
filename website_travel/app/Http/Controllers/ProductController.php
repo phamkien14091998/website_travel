@@ -183,4 +183,25 @@ class ProductController extends Controller
 
     }
 
+    /////////////////////////////////////////////////////////////
+
+    // Trang bán sản phẩm
+    public function getProductNew(){
+        //get list product new
+        $data_listProduct= products::getProductNew();
+
+        return  response()->json($data_listProduct);
+    }
+    // xem danh sách sản phẩm theo thể loại id
+    public function searchByPortfolio_id(Request $request){
+        $portfolio_id = $request->portfolio_id;
+
+        $data= products::searchProductByportfolioByidConHang($portfolio_id);
+        if($data){ 
+            return response()->json($data,200);
+        }
+        return response()->json('không tìm thấy sản phẩm nào',400);
+    }
+
+
 }

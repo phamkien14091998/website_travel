@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         //     [
         //         'user_name' => 'Kien Admin',
         //         'email' => 'kienadmin@gmail.com',
-        //         'password' => '12345',
+        //         'password' => '$2y$10$uFH/4L7itJlD3cKJKgQRKeafDRptTfGOrgmdiLu.4baLoO8/ojJJe',
         //         'full_name' => 'Phạm Duy KienAdmin',
         //         'avatar' => 'kienadmin.PNG',
         //         'date_of_birth' => '1998-09-14',
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         //     [
         //         'user_name' => 'Vu Admin',
         //         'email' => 'vuadmin@gmail.com',
-        //         'password' => '12345',
+        //         'password' => '$2y$10$uFH/4L7itJlD3cKJKgQRKeafDRptTfGOrgmdiLu.4baLoO8/ojJJe',
         //         'full_name' => 'Phan Cong Nhat VuAdmin',
         //         'avatar' => 'vuadmin.PNG',
         //         'date_of_birth' => '1998-07-20',

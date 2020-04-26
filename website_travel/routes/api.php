@@ -31,6 +31,7 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
 
  /*api product group*/
  Route::group(['prefix'=>'product'],function(){
+    // router trang quản lý sản phẩm
     Route::get('list-product', 'ProductController@index');
     Route::post('search-product', 'ProductController@searchProductbyNameOrPortfolioId');
     // Route::post('search-product-portfolio', 'ProductController@searchProductByportfolioByid');
@@ -39,5 +40,11 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::post('new', 'ProductController@create');
     Route::delete('delete/{product_id}', 'ProductController@delete');
     Route::post('update/{product_id}', 'ProductController@updateProductById');
+
+    // router trang ban sản phẩm
+    Route::get('list-product-new', 'ProductController@getProductNew');
+    // router xem sản phẩm theo id thể loại
+    Route::get('search-by-portfolio_id/{portfolio_id}', 'ProductController@searchByPortfolio_id');
+
 });
 
