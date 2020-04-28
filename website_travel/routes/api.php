@@ -48,3 +48,22 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
 
 });
 
+// router quản lý địa điểm
+Route::group(['prefix'=>'place'],function(){
+    Route::get('list', 'PlaceController@getListPlace');
+    Route::get('province', 'PlaceController@getListProvince');
+    Route::get('detail/{famous_place_id}', 'PlaceController@getDetailPlace');
+    Route::post('new', 'PlaceController@createPlace');
+    Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
+    Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
+
+});
+
+// router quản lý bài viết
+Route::group(['prefix'=>'post'],function(){
+    Route::get('list', 'PostController@getListPost');
+    Route::get('detail/{post_id}', 'PostController@getDetailPost');
+
+});
+
+

@@ -16,14 +16,15 @@ class FamousPlaces extends Migration
         Schema::create('famous_places', function (Blueprint $table) {
             $table->bigIncrements('famous_place_id')->unsigned()->autoIncrement();
             $table->text('title')->nullable()->collation('utf8_unicode_ci');
-            $table->text('image')->nullable()->collation('utf8_unicode_ci');
+            $table->string('images',255)->nullable()->collation('utf8_unicode_ci');
             $table->text('description')->nullable()->collation('utf8_unicode_ci');
             $table->text('date_start')->nullable()->collation('utf8_unicode_ci');
             $table->text('date_end')->nullable()->collation('utf8_unicode_ci');
             $table->bigInteger('province_id')->unsigned();
             $table->foreign('province_id')
             ->references('province_id')
-            ->on('provinces');
+            ->on('provinces')
+            ->onDelete('cascade'); // xoa bảng còn thì xóa ràng buộc bảng cha
 
             $table->timestamps();
         });

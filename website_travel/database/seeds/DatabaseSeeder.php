@@ -42,8 +42,6 @@ class DatabaseSeeder extends Seeder
         // ];
         // DB::table('users')->insert($data);
 
-        // insert table : provinces
-
         // $data_provinces = [
         //     [
         //         'province_name'=>'An Giang'
@@ -238,7 +236,7 @@ class DatabaseSeeder extends Seeder
         // ];
         // DB::table('provinces')->insert($data_provinces);
         
-        // insert table : products_portfolio
+      
         // $data_products_portfolio=[
         //     [
         //         'portfolio_name'=>'Dụng cụ bảo hộ'
