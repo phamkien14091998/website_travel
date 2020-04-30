@@ -20,7 +20,7 @@ class Posts extends Migration
             $table->text('duration')->nullable()->collation('utf8_unicode_ci');
             $table->text('uptime')->nullable()->collation('utf8_unicode_ci');
             $table->text('fare')->nullable()->collation('utf8_unicode_ci');
-            $table->text('main_image')->nullable()->collation('utf8_unicode_ci');
+            $table->string('images',255)->nullable()->collation('utf8_unicode_ci');
             $table->tinyInteger('flag')->default(0)->comment('1: phê duyệt, 2 : hủy bỏ');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
