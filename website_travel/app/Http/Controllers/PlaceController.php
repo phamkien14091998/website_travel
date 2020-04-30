@@ -130,5 +130,14 @@ class PlaceController extends Controller
 
     }
 
+    public function searchPlaceByProvivnceId(Request $request){
+        if($request->province_id){
+            $province_id = $request->province_id;
+            $data_search = places::searchPlaceByProvivnceId($province_id);
+
+            return  response()->json($data_search,'200');
+        }
+    }
+
 
 }

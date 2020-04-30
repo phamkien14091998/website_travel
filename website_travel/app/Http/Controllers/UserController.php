@@ -47,7 +47,7 @@ class UserController extends Controller
         $creadentials = $request->only('email', 'password');
         try{
             $user=User::where(['email'=>$request->input('email')])->first();
-            $customClaims = ['user_name' => $user['user_name'],'role' => $user['role']];
+            $customClaims = ['user_name' => $user['user_name'],'role' => $user['role'],'user_id' => $user['user_id']];
             // giờ chế lại
             $token = JWTAuth::claims($customClaims)->attempt($creadentials);
             if(! $token ){  //  khi mã hóa password mới dùng hàm này

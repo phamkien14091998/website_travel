@@ -17,7 +17,6 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-
     //get List Post đã duyệt
     public function getListPostDuyet(){
 
@@ -26,7 +25,6 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-
     //get List Post Bị quản trị viên hủy
     public function getListPostHuy(){
 
@@ -34,6 +32,35 @@ class PostController extends Controller
         if($data){  
             return response()->json($data,200);
         }
+    }
+
+    //Tìm kiếm bài viết theo flag(0,1,2)
+    public function getPostByFlag(Request $request){
+        $bai_duyet = $request->bai_duyet;
+        $bai_chua_duyet = $request->bai_chua_duyet;
+        $bai_huy = $request->bai_huy;
+        if($bai_duyet){ 
+            $data= posts::getListPostDuyet();
+            if($data){  
+                return response()->json($data,200);
+            }
+        }
+        if($bai_chua_duyet){
+            $data= posts::getListPost();
+            if($data){  
+                return response()->json($data,200);
+            }
+        }
+        if($bai_huy){
+            $data= posts::getListPostHuy();
+            if($data){  
+                return response()->json($data,200);
+            }
+        }
+        $data= posts::getAllPost();
+            if($data){  
+                return response()->json($data,200);
+            }
     }
 
     // get detail post by id
@@ -61,14 +88,14 @@ class PostController extends Controller
     // thêm sản phẩm
     public function create(Request $request)
     {   
-
+     
         $validator = Validator::make($request->all(),[
-            'title' => 'required|string|max:40|unique:posts', 
+            'title' => 'required|string|max:100|unique:posts', 
         ]);  
         if($validator->fails()){   
             return response()->json('dữ liệu không hợp lệ',500);
         }
-       
+               
         $uploadPath="upload-post/";
         $filename='';
 
@@ -86,22 +113,30 @@ class PostController extends Controller
         $image_string=join("|",$images);
       
         $data=[
-            // 'product_name' => $request->product_name,
-            // 'price' => $request->price,
-            // 'description' => $request->description,
-            // 'quantity' => $request->quantity,
-            // 'portfolio_id' => $request->portfolio_id,
-            // 'images'=> $image_string,
+            'title' => $request->title,
+            'date_start' => $request->date_start,
+            'date_end' => $request->date_end,
+            'duration' => $request->duration,
+            'fare' => $request->fare,
+            'images'=> $image_string,
+            'famous_place_id' => $request->famous_place_id,
+            'user_id' => $request->user_id,
+            'gaits' => $request->gaits,
+            'items' => $request->items,
+            'home_stay'=> $request->home_stay,
+            'visits' => $request->visits,
+            'activitis' => $request->activitis,
+            'note'=> $request->note,
         ]; 
        
-        if($data){  
+        // if($data){  
             $data_post=posts::createPost($data);
             if($data_post){ 
                 return response()->json('Thêm Thành Công',200);
             }
             return response()->json('Thêm Thất Bại',400);
-        }
-       return response()->json('Thiêu dữ liệu truyền vào',500);
+    //     }
+    //    return response()->json('Thiêu dữ liệu truyền vào',500);
     }
 
     public function updatePostById(Request $request)

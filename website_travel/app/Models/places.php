@@ -87,7 +87,19 @@ class places extends Model
 
         return self::where('famous_place_id','=',$famous_place_id)
                 ->delete();
-        }
- 
+    }
+    // timf kiếm địa điểm theo id tỉnh
+    public static function searchPlaceByProvivnceId($province_id) {
+        return 
+        self::where('province_id','=',$province_id)
+        // ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+        ->select(
+            'title',
+            'famous_place_id'
+        )
+        ->get();
+    }
+
 
 }
+    

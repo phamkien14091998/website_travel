@@ -16,15 +16,20 @@ class posts extends Model
 
     protected $fillable = [ 
         'title',
-        'location', 
         'duration',
-        'uptime',
+        'date_start',
+        'date_end',
         'fare',
         'images',
         'flag',
         'famous_place_id',
-        'user_id'
-
+        'user_id',
+        'gaits',
+        'items',
+        'home_stay',
+        'visits',
+        'activitis',
+        'note'
     ];
 
     // get list famous places đang chờ duyệt flag= 0
@@ -45,27 +50,34 @@ class posts extends Model
             ->select(
                 'users.user_name',
                 'posts.title',
-                'duration',
-                'uptime',
                 'flag'
             )
             ->where('flag','1') // khi flag= 1 là đã duyệt
             // ->paginate(5);
             ->get(); 
     }
-    // get list famous places đã bị hủy flag= 3 
+    // get list famous places đã bị hủy flag= 2
     // (lấy ra cho member xem bài đã bị hủy)
     public static function getListPostHuy(){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
             ->select(
                 'users.user_name',
                 'posts.title',
-                'duration',
-                'uptime',
                 'flag'
             )
-            ->where('flag','3') // khi flag= 3 là hủy
+            ->where('flag','2') // khi flag= 2 là hủy
             // ->paginate(5);
+            ->get(); 
+    }
+    
+    // get all post
+    public static function getAllPost(){
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(
+                'users.user_name',
+                'posts.title',
+                'flag'
+            )
             ->get(); 
     }
 
@@ -77,9 +89,9 @@ class posts extends Model
         ->leftJoin('users','users.user_id','=','posts.user_id')
         ->select(
             'posts.title',
-            'location', 
             'duration',
-            'uptime',
+            'date_start',
+            'date_end',
             'fare',
             'posts.images',
             'flag',

@@ -52,6 +52,7 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
 Route::group(['prefix'=>'place'],function(){
     Route::get('list', 'PlaceController@getListPlace');
     Route::get('province', 'PlaceController@getListProvince');
+    Route::post('search-place-by-province-id', 'PlaceController@searchPlaceByProvivnceId');
     Route::get('detail/{famous_place_id}', 'PlaceController@getDetailPlace');
     Route::post('new', 'PlaceController@createPlace');
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
@@ -63,6 +64,12 @@ Route::group(['prefix'=>'place'],function(){
 Route::group(['prefix'=>'post'],function(){
     Route::get('list', 'PostController@getListPost');
     Route::get('detail/{post_id}', 'PostController@getDetailPost');
+    Route::post('new', 'PostController@create');
+    Route::post('search-post', 'PostController@getPostByFlag');
+    
+    // Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
+    // Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
+
 
 });
 
