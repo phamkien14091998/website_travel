@@ -9,26 +9,26 @@ use App\Models\posts;
 
 class PostController extends Controller
 {
-    //get List Post chờ duyệt
-    public function getListPost(){
-
-        $data= posts::getListPost();
+    //get List Post chờ duyệt cuar user
+    public function getListPost(Request $request){
+        $user_id = $request->user_id;
+        $data= posts::getListPost($user_id);
+        if($data){   
+            return response()->json($data,200);
+        }
+    }
+    //get List 9 Post đã duyệt mới nhất cua tất cả user
+    public function getListPost9Duyet(){
+        $data= posts::getListPost9Duyet();
         if($data){  
             return response()->json($data,200);
         }
     }
-    //get List Post đã duyệt
-    public function getListPostDuyet(){
-
-        $data= posts::getListPostDuyet();
-        if($data){  
-            return response()->json($data,200);
-        }
-    }
-    //get List Post Bị quản trị viên hủy
-    public function getListPostHuy(){
-
-        $data= posts::getListPostHuy();
+    //get List Post Bị quản trị viên hủy cua user
+    public function getListPostHuy(Request $request){
+        $user_id = $request->user_id;
+ 
+        $data= posts::getListPostHuy($user_id);
         if($data){  
             return response()->json($data,200);
         }
@@ -36,28 +36,35 @@ class PostController extends Controller
 
     //Tìm kiếm bài viết theo flag(0,1,2)
     public function getPostByFlag(Request $request){
+        $user_id = $request->user_id;
+
+        // dd($request->all());
+ 
         $bai_duyet = $request->bai_duyet;
         $bai_chua_duyet = $request->bai_chua_duyet;
         $bai_huy = $request->bai_huy;
-        if($bai_duyet){ 
-            $data= posts::getListPostDuyet();
+        if($bai_duyet == 'true' ){  
+            $bai_duyet=1;
+            $data= posts::getListPostDuyet($bai_duyet,$user_id);
             if($data){  
                 return response()->json($data,200);
             }
         }
-        if($bai_chua_duyet){
-            $data= posts::getListPost();
+        if($bai_chua_duyet == 'true' ){
+            $bai_chua_duyet=0; 
+            $data= posts::getListPost($bai_chua_duyet,$user_id);
             if($data){  
                 return response()->json($data,200);
             }
         }
-        if($bai_huy){
-            $data= posts::getListPostHuy();
+        if($bai_huy == 'true'  ){ 
+            $bai_huy=2;
+            $data= posts::getListPostHuy($bai_huy,$user_id);
             if($data){  
                 return response()->json($data,200);
             }
         }
-        $data= posts::getAllPost();
+        $data= posts::getAllPost($user_id);
             if($data){  
                 return response()->json($data,200);
             }
@@ -191,7 +198,6 @@ class PostController extends Controller
             // return response()->json('Sửa Thất Bại',400);
         }
        return response()->json('Thiêu dữ liệu truyền vào',500);
-
     }
 
 }

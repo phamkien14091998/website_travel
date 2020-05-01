@@ -32,52 +32,78 @@ class posts extends Model
         'note'
     ];
 
-    // get list famous places đang chờ duyệt flag= 0
-    public static function getListPost(){
+    // get list famous places của user đang chờ duyệt flag= 0
+    public static function getListPost($bai_chua_duyet,$user_id){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
             ->select(
                 'users.user_name',
                 'posts.title',
-                'flag'
+                'posts.flag'
             )
-            ->where('flag','0') // khi flag= 0 là chưa duyệt
+            ->where([
+                'posts.flag'=>$bai_chua_duyet,
+                'users.user_id' => $user_id
+                ]) // khi flag= 0 là chưa duyệt
             // ->paginate(5);
             ->get(); 
     }
-    // get list famous places đã được duyệt flag= 1
-    public static function getListPostDuyet(){
+    // get list famous places của user đã được duyệt flag= 1
+    public static function getListPostDuyet($bai_duyet,$user_id){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
-            ->select(
+            ->select(  
                 'users.user_name',
                 'posts.title',
-                'flag'
+                'posts.flag'
             )
-            ->where('flag','1') // khi flag= 1 là đã duyệt
+            ->where([
+                'posts.flag'=>$bai_duyet,
+                'users.user_id' => $user_id
+            ]) // khi flag= 1 là đã duyệt
             // ->paginate(5);
             ->get(); 
     }
-    // get list famous places đã bị hủy flag= 2
+    // get list famous places của user đã bị hủy flag= 2
     // (lấy ra cho member xem bài đã bị hủy)
-    public static function getListPostHuy(){
+    public static function getListPostHuy($bai_huy,$user_id){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
             ->select(
                 'users.user_name',
                 'posts.title',
-                'flag'
+                'posts.flag'
             )
-            ->where('flag','2') // khi flag= 2 là hủy
+            ->where([
+                'posts.flag'=>$bai_huy,
+                'users.user_id' => $user_id
+            ]) // khi flag= 2 là hủy
             // ->paginate(5);
             ->get(); 
     }
     
-    // get all post
-    public static function getAllPost(){
+    // get all post của user đó
+    public static function getAllPost($user_id){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
             ->select(
                 'users.user_name',
                 'posts.title',
-                'flag'
+                'posts.flag'
             )
+            ->where('users.user_id' , $user_id)
+            ->get(); 
+    }
+
+    // lấy ra 9 bài viết được duyệt mới nhất
+    public static function getListPost9Duyet(){
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(  
+                'users.user_name',
+                'posts.title',
+                'posts.flag',
+                'posts.created_at',
+                'images'
+            )
+            ->orderBy('post_id', 'desc')
+            ->take(9)
+            ->where('posts.flag','1') // khi flag= 1 là đã duyệt
             ->get(); 
     }
 

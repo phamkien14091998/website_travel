@@ -100,6 +100,24 @@ class places extends Model
         ->get();
     }
 
+    // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
+     public static function getList8PlacesNew(){
+
+        return self::leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+            ->select(
+                'title',
+                'images', 
+                'description',
+                'date_start',
+                'date_end',
+                'province_name',
+                'famous_place_id'
+            )
+            ->orderBy('famous_place_id', 'desc')
+            ->take(8)
+            ->get(); 
+    }
+
 
 }
     

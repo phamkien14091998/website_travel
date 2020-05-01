@@ -58,11 +58,14 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
 
-});
+    Route::get('list-home', 'PlaceController@getList8PlacesNew');
 
+});
+ 
 // router quản lý bài viết
 Route::group(['prefix'=>'post'],function(){
-    Route::get('list', 'PostController@getListPost');
+    Route::get('list', 'PostController@getListPost');  // get list post chưa duyệt
+    Route::get('list-approved', 'PostController@getListPost9Duyet'); // get list 9 post đã duyệt
     Route::get('detail/{post_id}', 'PostController@getDetailPost');
     Route::post('new', 'PostController@create');
     Route::post('search-post', 'PostController@getPostByFlag');
