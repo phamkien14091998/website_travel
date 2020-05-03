@@ -213,6 +213,19 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
+    // Admin duyệt bài hoạc hủy bài
+    public function approvedOrNotApprovedPost(Request $request){
+        $post_id = $request->post_id;
+        $approved = $request->approved;
+        $notApproved = $request->notApproved;
+
+        $data= posts::approvedOrNotApprovedPost($post_id,$approved,$notApproved);
+        if($data){
+            return response()->json($data,200);
+        }
+        return response()->json('thất bại',500);
+
+    }
 
 }
 

@@ -72,6 +72,8 @@ Route::group(['prefix'=>'post'],function(){
     Route::post('update/{post_id}', 'PostController@updatePostById');
     Route::delete('delete/{post_id}', 'PostController@delete');
     Route::get('list-not-approved', 'PostController@getAllPostChuaDuyet');
+    // admin phê duyệt hoạc hủy bài viết của user
+    Route::post('approved-or-notapproved', 'PostController@approvedOrNotApprovedPost');
 
 });
 

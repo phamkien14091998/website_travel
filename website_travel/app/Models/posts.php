@@ -179,6 +179,18 @@ class posts extends Model
         ->get(); 
     }
 
+    // trang admin : phê duyêt bài viết
+    public static function approvedOrNotApprovedPost($post_id,$approved,$notApproved){
+        if(isset($approved)){
+            return self::where('post_id',$post_id)
+            ->update(['flag'=>1]); 
+        }else if(isset($notApproved)){
+            return self::where('post_id',$post_id)
+            ->update(['flag'=>2]); 
+        }
+      
+       
+    }
 
 
 }
