@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\posts;
+use App\Models\posts;   
 
 class PostController extends Controller
 {
@@ -182,12 +182,18 @@ class PostController extends Controller
       
         $post_id= $request->post_id;
         $data=[
-            // 'product_name' => $request->product_name,
-            // 'price' => $request->price,
-            // 'description' => $request->description,
-            // 'quantity' => $request->quantity,
-            // 'portfolio_id' => $request->portfolio_id,
-            // 'images'=> $image_string,
+            'title' => $request->title,
+            'date_start' => $request->date_start,
+            'date_end' => $request->date_end,
+            'duration' => $request->duration,
+            'fare' => $request->fare,
+            'images'=> $image_string,
+            'gaits' => $request->gaits,
+            'items' => $request->items,
+            'home_stay'=> $request->home_stay,
+            'visits' => $request->visits,
+            'activitis' => $request->activitis,
+            'note'=> $request->note,
         ]; 
        
         if($data){  
@@ -200,4 +206,13 @@ class PostController extends Controller
        return response()->json('Thiêu dữ liệu truyền vào',500);
     }
 
+    // get All post chưa duyệt trên trang quản trị viên
+    public function getAllPostChuaDuyet(){
+        $data= posts::getAllPostChuaDuyet();
+        if($data){  
+            return response()->json($data,200);
+        }
+    }
+
 }
+

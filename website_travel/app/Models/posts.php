@@ -85,7 +85,8 @@ class posts extends Model
             ->select(
                 'users.user_name',
                 'posts.title',
-                'posts.flag'
+                'posts.flag',
+                'posts.post_id'
             )
             ->where('users.user_id' , $user_id)
             ->get(); 
@@ -99,7 +100,8 @@ class posts extends Model
                 'posts.title',
                 'posts.flag',
                 'posts.created_at',
-                'images'
+                'images',
+                'posts.post_id'
             )
             ->orderBy('post_id', 'desc')
             ->take(9)
@@ -113,16 +115,28 @@ class posts extends Model
     $data = self::where('post_id','=',$post_id)
         ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
         ->leftJoin('users','users.user_id','=','posts.user_id')
+        ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
         ->select(
-            'posts.title',
+            'posts.title as post_title',
             'duration',
-            'date_start',
-            'date_end',
+            'posts.date_start',
+            'posts.date_end',
             'fare',
             'posts.images',
             'flag',
-            'famous_places.title',
-            'users.user_name'
+            'famous_places.title as place_title',
+            'users.user_name',
+            'posts.post_id',
+            'provinces.province_name',
+            'gaits',
+            'home_stay',
+            'visits',
+            'activitis',
+            'note',
+            'items',
+            'users.avatar',
+            'posts.created_at',
+            'famous_places.description'
         )
         ->first();
     return $data;
@@ -132,11 +146,12 @@ class posts extends Model
     public static function createPost($data){
 
         $data['created_at'] = Carbon::now();
+        $data['updated_at'] = Carbon::now();
         return  self::insertGetId($data);
     }
     // update post by id
     public static function updatePostById($post_id,$data){
-
+        
         $data['updated_at'] = Carbon::now();
         return self::where('post_id', $post_id)
             ->update($data);
@@ -146,6 +161,22 @@ class posts extends Model
 
     return self::where('post_id','=',$post_id)
             ->delete();
+    }
+    // get all bài viết chưa duyệt trang Admin
+    public static function getAllPostChuaDuyet(){
+
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+        ->select(  
+            'users.user_name',
+            'posts.title',
+            'posts.flag',
+            'posts.created_at',
+            'images',
+            'posts.post_id'
+        )
+        ->orderBy('post_id', 'desc')
+        ->where('posts.flag','0') 
+        ->get(); 
     }
 
 

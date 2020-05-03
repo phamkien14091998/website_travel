@@ -16,14 +16,15 @@ class Collections extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->bigIncrements('collection_id')->unsigned()->autoIncrement();
             $table->string('collection_name',100)->nullable()->collation('utf8_unicode_ci');
+            
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
             ->references('user_id')
             ->on('users');
-            $table->bigInteger('famous_place_id')->unsigned();
-            $table->foreign('famous_place_id')
-            ->references('famous_place_id')
-            ->on('famous_places');
+            // $table->bigInteger('famous_place_id')->unsigned();
+            // $table->foreign('famous_place_id')
+            // ->references('famous_place_id')
+            // ->on('famous_places');
 
             $table->timestamps();
         });

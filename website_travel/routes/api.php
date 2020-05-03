@@ -64,16 +64,14 @@ Route::group(['prefix'=>'place'],function(){
  
 // router quản lý bài viết
 Route::group(['prefix'=>'post'],function(){
-    Route::get('list', 'PostController@getListPost');  // get list post chưa duyệt
+    Route::get('list', 'PostController@getListPost');  // get list post chưa duyệt theo user
     Route::get('list-approved', 'PostController@getListPost9Duyet'); // get list 9 post đã duyệt
     Route::get('detail/{post_id}', 'PostController@getDetailPost');
     Route::post('new', 'PostController@create');
     Route::post('search-post', 'PostController@getPostByFlag');
-    
-    // Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
-    // Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
-
+    Route::post('update/{post_id}', 'PostController@updatePostById');
+    Route::delete('delete/{post_id}', 'PostController@delete');
+    Route::get('list-not-approved', 'PostController@getAllPostChuaDuyet');
 
 });
-
 

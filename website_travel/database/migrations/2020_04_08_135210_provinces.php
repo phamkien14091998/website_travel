@@ -16,6 +16,7 @@ class Provinces extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->bigIncrements('province_id')->unsigned()->autoIncrement();
             $table->string('province_name',30)->nullable()->collation('utf8_unicode_ci');
+            $table->string('image',255)->nullable()->collation('utf8_unicode_ci');
             
             $table->timestamps();
         });
