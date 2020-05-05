@@ -15,15 +15,17 @@ class TripDetails extends Migration
     {
         Schema::create('trip_details', function (Blueprint $table) {
             $table->bigIncrements('trip_detail_id')->unsigned()->autoIncrement();
-            $table->dateTime('departure_time');
-            $table->string('starting_point',255)->nullable()->collation('utf8_unicode_ci');
-            $table->string('departure_location',255)->nullable()->collation('utf8_unicode_ci');
-            $table->text('note')->nullable()->collation('utf8_unicode_ci');
-            $table->string('cost',20)->nullable();
+            $table->datetime('day')->nullable(); 
+
+            $table->bigInteger('province_id')->unsigned();
+            $table->foreign('province_id')
+            ->references('province_id')
+            ->on('provinces');
             $table->bigInteger('trip_id')->unsigned();
             $table->foreign('trip_id')
             ->references('trip_id')
-            ->on('trips');
+            ->on('trips')
+            ->onDelete('cascade'); 
 
             $table->timestamps();
         });

@@ -139,15 +139,21 @@ class PlaceController extends Controller
         }
     }
 
-    // get ra 8 địa điểm hiển thị lên trang chủ
-    public function getList8PlacesNew(){
-        $data= places::getList8PlacesNew();
+    // get ra 8 tinh hiển thị lên trang chủ
+    public function getList8Provinces(){
+        $data= places::getList8Provinces();
         if($data){  
             return response()->json($data,200);
-        }
-        
+        } 
     }
 
+    // get ra 11 địa điểm hiển thị lên trang province-details
+    public function getList11Provinces(){
+        $data= places::getList11Provinces();
+        if($data){  
+            return response()->json($data,200);
+        } 
+    }
 
 
 }

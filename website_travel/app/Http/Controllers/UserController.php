@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\users;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
@@ -106,6 +106,14 @@ class UserController extends Controller
             ],$e->getStatusCode());
         }
         return response()->json(compact('users'));
+    }
+
+    public function getUserByUserName(Request $request){
+        if($request->user_name){
+            $user_name = $request->user_name;
+            $data_search = users::getUserByUserName($user_name);
+            return  response()->json($data_search,'200');
+        }
     }
 
 

@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         //     ],
         //     [
         //         'province_name'=>'Bắc Kạn',
-        //         'image'=>'image_province/bac_can.jpg'
+        //         'image'=>'image_province/bac_kan.jpg'
         //     ],
         //     [
         //         'province_name'=>'Bạc Liêu',

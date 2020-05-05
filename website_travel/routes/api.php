@@ -52,13 +52,14 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
 Route::group(['prefix'=>'place'],function(){
     Route::get('list', 'PlaceController@getListPlace');
     Route::get('province', 'PlaceController@getListProvince');
-    Route::post('search-place-by-province-id', 'PlaceController@searchPlaceByProvivnceId');
+    Route::get('11provinces', 'PlaceController@getList11Provinces');
+    Route::get('search-place-by-province-id/{province_id}', 'PlaceController@searchPlaceByProvivnceId');
     Route::get('detail/{famous_place_id}', 'PlaceController@getDetailPlace');
     Route::post('new', 'PlaceController@createPlace');
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
 
-    Route::get('list-home', 'PlaceController@getList8PlacesNew');
+    Route::get('list-home', 'PlaceController@getList8Provinces');
 
 });
  
@@ -77,3 +78,7 @@ Route::group(['prefix'=>'post'],function(){
 
 });
 
+// router quản lý user (thông tin, collection, tạo lịch trình)
+Route::group(['prefix'=>'member'],function(){
+    Route::get('user/{user_name}', 'UserController@getUserByUserName');
+});

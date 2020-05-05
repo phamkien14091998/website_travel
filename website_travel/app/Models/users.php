@@ -23,4 +23,26 @@ class users extends Model
         'email_verified_at' => 'datetime',
     ];
 
+    // get user by user name
+    public static function getUserByUserName($user_name){
+
+        $data = self::where('user_name',$user_name)
+            ->select(
+                'user_id',
+                'user_name', 
+                'email',
+                'password',
+                'full_name',
+                'avatar',
+                'date_of_birth',
+                'gender',
+                'hometown',
+                'hobbies',
+                'created_at',
+                'updated_at'
+            )
+            ->first();
+        return $data;
+        }
+
 }
