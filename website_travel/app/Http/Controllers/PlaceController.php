@@ -130,16 +130,24 @@ class PlaceController extends Controller
 
     }
 
-    public function searchPlaceByProvivnceId(Request $request){
-        if($request->province_id){
+    public function searchPlaceByProvivnceId(Request $request){ 
+        if($request->province_id){ 
             $province_id = $request->province_id;
             $data_search = places::searchPlaceByProvivnceId($province_id);
-
             return  response()->json($data_search,'200');
         }
     }
+    // hàm vũ làm: tìm địa điểm phương thức get 
+    public function searchPlaceByProvivnceIdGET(Request $request){ 
+        if($request->province_id){ 
+            $province_id = $request->province_id;
+            $data_search = places::searchPlaceByProvivnceIdGET($province_id);
+            return  response()->json($data_search,'200');
+        }
+    }
+    
 
-    // get ra 8 tinh hiển thị lên trang chủ
+    // get ra 8 địa điểm hiển thị lên trang chủ
     public function getList8Provinces(){
         $data= places::getList8Provinces();
         if($data){  
@@ -154,6 +162,5 @@ class PlaceController extends Controller
             return response()->json($data,200);
         } 
     }
-
 
 }

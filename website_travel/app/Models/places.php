@@ -47,7 +47,8 @@ class places extends Model
         return DB::table('provinces')
             ->select(
                 'province_id',
-                'province_name'
+                'province_name',
+                'image'
             )
             ->get(); 
     }
@@ -90,59 +91,60 @@ class places extends Model
     }
     // timf kiếm địa điểm theo id tỉnh
     public static function searchPlaceByProvivnceId($province_id) {
-        return DB::table('posts')
-            ->join('famous_places','posts.famous_place_id','=','famous_places.famous_place_id')
-            ->join('provinces','provinces.province_id','=','famous_places.province_id')
-            ->join('users','users.user_id','=','posts.user_id')
-            ->where('provinces.province_id','=',$province_id)
-            ->select(
-                'users.avatar',
-                'users.user_name',
-                'posts.images',
-                'posts.created_at',
-                'posts.title',
-                'description',
-                'famous_places.title as title_of_place'
-            )
-            ->get(); 
+        
         // return 
-        // self::where('province_id','=',$province_id)
-        // // ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+        // self::where('famous_places.province_id','=',$province_id)
+        // ->join('provinces','provinces.province_id','=','famous_places.province_id')
         // ->select(
         //     'title',
-        //     'famous_place_id'
+        //     'famous_place_id',
+        //     'images',
+        //     'description',
+        //     'date_start',
+        //     'date_end',
+        //     'famous_places.created_at',
+        //     'province_name'
         // )
         // ->get();
+        return 
+        self::where('famous_places.province_id','=',$province_id)
+        ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+        ->select(
+            'title',
+            'famous_place_id',
+            'famous_places.province_id',
+            'famous_places.images',
+            'provinces.province_name'
+        )
+        ->get();
+    }
+    // vũ làm theo phương thức get
+    public static function searchPlaceByProvivnceIdGET($province_id) {
+        
+        return 
+        self::where('famous_places.province_id','=',$province_id)
+        ->join('provinces','provinces.province_id','=','famous_places.province_id')
+        ->select(
+            'title',
+            'famous_place_id',
+            'images',
+            'description',
+            'date_start',
+            'date_end',
+            'famous_places.created_at',
+            'province_name'
+        )
+        ->get();
     }
 
     // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
-     public static function getList8PlacesNew(){
-
-        return self::leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
-            ->select(
-                'title',
-                'images', 
-                'description',
-                'date_start',
-                'date_end',
-                'province_name',
-                'famous_place_id'
-            )
-            ->orderBy('famous_place_id', 'desc')
-            ->take(8)
-            ->get(); 
-    }
-
-
-    // get ra 8 tỉnh của tất cả những người đăng tại trang home
-    public static function getList8Provinces(){
+     public static function getList8Provinces(){
         return DB::table('provinces')
             ->select(
                 'province_id',
                 'province_name',
                 'image'
             )
-            ->orderBy('province_id', 'asc')
             ->take(8)
             ->get();
     }
@@ -155,7 +157,6 @@ class places extends Model
                     'province_name',
                     'image'
                 )
-                ->orderBy('province_id', 'asc')
                 ->take(11)
                 ->get();
         }

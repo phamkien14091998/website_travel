@@ -24,6 +24,15 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
+
+    //get List 9 Post đã duyệt mới nhất cua tất cả user
+    public function getAllPostDuyet(){
+        $data= posts::getAllPostDuyet();
+        if($data){  
+            return response()->json($data,200);
+        }
+    }
+
     //get List Post Bị quản trị viên hủy cua user
     public function getListPostHuy(Request $request){
         $user_id = $request->user_id;
@@ -224,8 +233,24 @@ class PostController extends Controller
             return response()->json($data,200);
         }
         return response()->json('thất bại',500);
-
     }
 
-}
+    public function getAllPostByPlaceId(Request $request){
+        if($request->famous_place_id){
+            $famous_place_id = $request->famous_place_id;
+            $data_search = posts::getAllPostByPlaceId($famous_place_id);
+            return  response()->json($data_search,'200');
+        }
+    }
 
+    public function getAllPostByProvinceId(Request $request){
+        if($request->province_id){
+            $province_id = $request->province_id;
+            $data_search = posts::getAllPostByProvinceId($province_id);
+            return  response()->json($data_search,'200');
+        }
+    }
+
+    
+
+}

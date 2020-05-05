@@ -53,18 +53,19 @@ Route::group(['prefix'=>'place'],function(){
     Route::get('list', 'PlaceController@getListPlace');
     Route::get('province', 'PlaceController@getListProvince');
     Route::get('11provinces', 'PlaceController@getList11Provinces');
-    Route::get('search-place-by-province-id/{province_id}', 'PlaceController@searchPlaceByProvivnceId');
+    Route::post('search-place-by-province-id', 'PlaceController@searchPlaceByProvivnceId');
+    Route::get('search-place-by-province-id/{province_id}', 'PlaceController@searchPlaceByProvivnceIdGET');
     Route::get('detail/{famous_place_id}', 'PlaceController@getDetailPlace');
     Route::post('new', 'PlaceController@createPlace');
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
-
     Route::get('list-home', 'PlaceController@getList8Provinces');
 
 });
  
 // router quản lý bài viết
 Route::group(['prefix'=>'post'],function(){
+    Route::get('all', 'PostController@getAllPostDuyet'); // get all post đã duyệt
     Route::get('list', 'PostController@getListPost');  // get list post chưa duyệt theo user
     Route::get('list-approved', 'PostController@getListPost9Duyet'); // get list 9 post đã duyệt
     Route::get('detail/{post_id}', 'PostController@getDetailPost');
@@ -75,7 +76,8 @@ Route::group(['prefix'=>'post'],function(){
     Route::get('list-not-approved', 'PostController@getAllPostChuaDuyet');
     // admin phê duyệt hoạc hủy bài viết của user
     Route::post('approved-or-notapproved', 'PostController@approvedOrNotApprovedPost');
-
+    Route::get('place/detail/{famous_place_id}', 'PostController@getAllPostByPlaceId');
+    Route::get('province/detail/{province_id}', 'PostController@getAllPostByProvinceId');
 });
 
 // router quản lý user (thông tin, collection, tạo lịch trình)

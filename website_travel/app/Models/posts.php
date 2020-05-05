@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use DB;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -31,6 +32,41 @@ class posts extends Model
         'activitis',
         'note'
     ];
+
+    // get list famous places của user đang chờ duyệt flag= 0
+    public static function getAllPostDuyet(){
+        return DB::table('posts')
+        ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
+            ->leftJoin('users','users.user_id','=','posts.user_id')
+            ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
+            ->select(
+                'posts.title as post_title',
+                'duration',
+                'posts.date_start',
+                'posts.date_end',
+                'fare',
+                'posts.images',
+                'flag',
+                'famous_places.title as place_title',
+                'users.user_name',
+                'posts.post_id',
+                'provinces.province_name',
+                'gaits',
+                'home_stay',
+                'visits',
+                'activitis',
+                'note',
+                'items',
+                'users.avatar',
+                'posts.created_at',
+                'famous_places.description'
+            )
+            ->where([
+                'posts.flag'=>1,
+                ]) // khi flag= 0 là chưa duyệt
+            // ->paginate(5);
+            ->get(); 
+    }
 
     // get list famous places của user đang chờ duyệt flag= 0
     public static function getListPost($bai_chua_duyet,$user_id){
@@ -188,9 +224,56 @@ class posts extends Model
             return self::where('post_id',$post_id)
             ->update(['flag'=>2]); 
         }
-      
-       
     }
 
+    // get detail place by id
+    public static function getAllPostByPlaceId($famous_place_id){
+        $data = self::where('posts.famous_place_id','=',$famous_place_id)
+            ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
+            ->leftJoin('users','users.user_id','=','posts.user_id')
+            ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
+            ->select(
+                'posts.title as post_title',
+                'duration',
+                'posts.date_start',
+                'posts.date_end',
+                'fare',
+                'posts.images',
+                'flag',
+                'famous_places.title as place_title',
+                'users.user_name',
+                'posts.post_id',
+                'provinces.province_name',
+                'gaits',
+                'home_stay',
+                'visits',
+                'activitis',
+                'note',
+                'items',
+                'users.avatar',
+                'posts.created_at',
+                'famous_places.description'
+            )
+            ->where([
+                'posts.flag'=>1,
+                ])
+            ->get(); 
+        return $data;
+        }
 
+    // get all post by province id 
+    public static function getAllPostByProvinceId($province_id){
+        return DB::table('provinces')
+            ->leftJoin('famous_places','famous_places.province_id','=','provinces.province_id')
+            ->leftJoin('posts','famous_places.province_id','=','provinces.province_id')
+            //->leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(
+            )
+            ->where([
+                'posts.flag'=>1,
+                'famous_places.province_id'=>$province_id,
+                ]) // khi flag= 0 là chưa duyệt
+            // ->paginate(5);
+            ->get(); 
+    }
 }
