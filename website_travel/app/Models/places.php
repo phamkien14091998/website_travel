@@ -128,7 +128,7 @@ class places extends Model
             'title',
             'famous_place_id',
             'images',
-            'description',
+            'description', 
             'date_start',
             'date_end',
             'famous_places.created_at',
@@ -159,6 +159,18 @@ class places extends Model
                 )
                 ->take(11)
                 ->get();
+        }
+
+        // lấy ra địa điểm by id
+        public static function getPlaceByid($famous_place_id){
+            return 
+            self::where('famous_place_id','=',$famous_place_id)
+            ->select(
+                'title',
+                'famous_place_id',
+                'famous_places.images'
+            )
+            ->get();
         }
 
 

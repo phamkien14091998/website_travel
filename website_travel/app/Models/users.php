@@ -45,4 +45,25 @@ class users extends Model
         return $data;
         }
 
+    // get user by user name
+    public static function getUserByUserId($user_id){
+
+        $data = self::where('user_id',$user_id)
+            ->select(
+                'user_id',
+                'user_name', 
+                'email',
+                'password',
+                'full_name',
+                'avatar',
+                'date_of_birth',
+                'gender',
+                'hometown',
+                'hobbies',
+                'created_at',
+                'updated_at'
+            )
+            ->first();
+        return $data;
+        }
 }

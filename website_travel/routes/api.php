@@ -82,5 +82,7 @@ Route::group(['prefix'=>'post'],function(){
 
 // router quản lý user (thông tin, collection, tạo lịch trình)
 Route::group(['prefix'=>'member'],function(){
-    Route::get('user/{user_name}', 'UserController@getUserByUserName');
+    Route::get('username/{user_name}', 'UserController@getUserByUserName'); // get user by user name
+    Route::get('userid/{user_id}', 'UserController@getUserByUserId'); // get user by user id
+    Route::post('update/{user_id}', 'UserController@updateUserById');
 });
