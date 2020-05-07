@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
-// });
+// });   
 
 // Route::group(['prefix'=>'user'],function(){
 //     Route::post('/login','UserController@login')->name("user.login");
@@ -60,6 +60,8 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
     Route::get('list-home', 'PlaceController@getList8Provinces');
+	 //lấy địa điểm theo id
+    Route::get('get-famous-id/{famous_place_id}', 'PlaceController@getPlaceByid');
 
 });
  
@@ -80,9 +82,19 @@ Route::group(['prefix'=>'post'],function(){
     Route::get('province/detail/{province_id}', 'PostController@getAllPostByProvinceId');
 });
 
-// router quản lý user (thông tin, collection, tạo lịch trình)
+// router quản lý user (thông tin, collection, tạo lịch trình) 
 Route::group(['prefix'=>'member'],function(){
     Route::get('username/{user_name}', 'UserController@getUserByUserName'); // get user by user name
     Route::get('userid/{user_id}', 'UserController@getUserByUserId'); // get user by user id
     Route::post('update/{user_id}', 'UserController@updateUserById');
+});
+
+// router quản lý collection
+Route::group(['prefix'=>'collection'],function(){
+    Route::post('list', 'CollectionController@getListCollectionByUser');  // get list collection theo user
+    Route::get('detail/{collection_id}', 'CollectionController@getDetailCollection');
+    Route::post('new', 'CollectionController@create');
+    Route::post('update/{colletion_id}', 'CollectionController@updateCollectionById');
+    Route::delete('delete/{collection_id}', 'CollectionController@delete');
+
 });
