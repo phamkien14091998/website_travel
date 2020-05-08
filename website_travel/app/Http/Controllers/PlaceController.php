@@ -163,14 +163,14 @@ class PlaceController extends Controller
         } 
     }
 
-    // lấy ra địa điểm theo id
-    public function getPlaceByid(Request $request){
-        if($request->famous_place_id){ 
-            $famous_place_id = $request->famous_place_id;
-            $data_search = places::getPlaceByid($famous_place_id);
+     // lấy ra địa điểm theo id
+     public function getPlaceByid(Request $request){
+        // if($request->all()){ 
+            $famous_place_id_arr = $request->all();
+            $data_search = places::getPlaceByid($famous_place_id_arr);
             return  response()->json($data_search,200);
-        }
-        return  response()->json('không hợp lệ',500);
+        // }
+        // return  response()->json('không hợp lệ',500);
     }
 
 }

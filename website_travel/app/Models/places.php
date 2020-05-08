@@ -161,17 +161,24 @@ class places extends Model
                 ->get();
         }
 
-        // lấy ra địa điểm by id
-        public static function getPlaceByid($famous_place_id){
-            return 
-            self::where('famous_place_id','=',$famous_place_id)
-            ->select(
+    // lấy ra địa điểm by id
+    public static function getPlaceByid($famous_place_id_arr){
+        $array_new=[];
+        for($i=0; $i< count($famous_place_id_arr) ;$i++ ){
+            $data['famous_place_id']=$famous_place_id_arr[$i]; 
+            $data_return =DB::table('famous_places')->where('famous_place_id',$data['famous_place_id'])
+                ->select(
                 'title',
-                'famous_place_id',
-                'famous_places.images'
+                'famous_place_id'
             )
             ->get();
+            // dd($data_return);die;
+            array_push($array_new,$data_return[0]);
         }
+        return $array_new;
+        
+    }
+
 
 
 }

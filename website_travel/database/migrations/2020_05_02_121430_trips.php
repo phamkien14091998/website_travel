@@ -17,18 +17,17 @@ class Trips extends Migration
             $table->bigIncrements('trip_id')->unsigned()->autoIncrement();
             $table->string('trip_name',255)->nullable()->collation('utf8_unicode_ci');
             $table->string('description',255)->nullable()->collation('utf8_unicode_ci');
-            $table->datetime('day_number')->nullable();
+            $table->datetime('day_start')->nullable(); 
+            $table->datetime('day_end')->nullable(); 
+
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
             ->references('user_id')
-            ->on('users');
+            ->on('users')
+            ->onDelete('cascade'); 
 
-            // trips (sẽ tạo đc tên và số ngày của chuyến đi)
-            // trip_id
-            // trip_name
-            // description
-            // date_number
-            // user_id
+            // trips (sẽ tạo đc tên và ngày đi -> ngày kết thúc chuyến)
+            // trips (trip_name,description,day_start,day_end,user_id)
             
             $table->timestamps();
         });

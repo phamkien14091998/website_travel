@@ -60,10 +60,11 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('update/{famous_place_id}', 'PlaceController@updatePlaceById');
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
     Route::get('list-home', 'PlaceController@getList8Provinces');
-	 //lấy địa điểm theo id
-    Route::get('get-famous-id/{famous_place_id}', 'PlaceController@getPlaceByid');
+     //lấy địa điểm theo id
+    Route::post('get-famous-id', 'PlaceController@getPlaceByid');
 
 });
+
  
 // router quản lý bài viết
 Route::group(['prefix'=>'post'],function(){
