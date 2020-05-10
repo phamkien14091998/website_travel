@@ -170,7 +170,7 @@ class PlaceController extends Controller
             $data_search = places::getPlaceByid($famous_place_id_arr);
             return  response()->json($data_search,200);
         // }
-        // return  response()->json('không hợp lệ',500);
+        // return  response()->json('không hợp lệ',500); 
     }
 
 }

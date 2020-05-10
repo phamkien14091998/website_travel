@@ -61,7 +61,7 @@ Route::group(['prefix'=>'place'],function(){
     Route::delete('delete/{famous_place_id}', 'PlaceController@deletePlace');
     Route::get('list-home', 'PlaceController@getList8Provinces');
      //lấy địa điểm theo id
-    Route::post('get-famous-id', 'PlaceController@getPlaceByid');
+    Route::post('get-famous-id', 'PlaceController@getPlaceByid'); 
 
 });
 
@@ -99,3 +99,13 @@ Route::group(['prefix'=>'collection'],function(){
     Route::delete('delete/{collection_id}', 'CollectionController@delete');
 
 });
+
+// router quản lý schedule
+Route::group(['prefix'=>'schedule'],function(){
+    Route::get('list-vehicle', 'ScheduleController@getListVehicle');  // get list vehicle
+    Route::post('new', 'ScheduleController@create');
+    Route::post('list', 'ScheduleController@getListScheduleByUser');  // get list schdule theo user
+    Route::get('detail/{trip_id}', 'ScheduleController@getDetailSchedule');
+    
+});
+

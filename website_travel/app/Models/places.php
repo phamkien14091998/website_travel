@@ -11,12 +11,12 @@ class places extends Model
      //
      protected $table="famous_places";
     
-     protected $primaryKey = 'famous_place_id ';
+     protected $primaryKey = 'famous_place_id';
      public $timestamps = false;
      protected $guarded = [];
  
      protected $fillable = [ 
-         'title',
+         'title', 
          'images', 
          'description',
          'date_start',

@@ -318,5 +318,42 @@ class DatabaseSeeder extends Seeder
 
         // DB::table('products_portfolio')->insert($data_products_portfolio);
 
+        // $data_vehicle=[
+        //         [
+        //             'title' => 'Tàu hỏa',
+        //             'description' => 'fa fa-subway'
+        //         ],
+        //         [
+        //             'title' => 'Bus',
+        //             'description' => 'fa fa-bus'
+        //         ],
+        //         [
+        //             'title' => 'Taxi/Car',
+        //             'description' => 'fa fa-taxi'
+        //         ],
+        //         [
+        //             'title' => 'Xe đạp',
+        //             'description' => 'fa fa-bicycle'
+        //         ],
+        //         [
+        //             'title' => 'Tàu thủy',
+        //             'description' => 'fa fa-ship'
+        //         ],
+        //         [
+        //             'title' => 'Máy bay',
+        //             'description' => 'fa fa-plane'
+        //         ],
+        //         [
+        //             'title' => 'Xe máy',
+        //             'description' => 'fa fa-motorcycle'
+        //         ],
+        //         [
+        //             'title' => 'Đi bộ',
+        //             'description' => 'fa fa-paw'
+        //         ],
+                
+        //     ];
+        //     DB::table('vehicles')->insert($data_vehicle);
+
     }
 }

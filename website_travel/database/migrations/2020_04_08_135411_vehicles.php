@@ -17,10 +17,10 @@ class Vehicles extends Migration
             $table->bigIncrements('vehicle_id')->unsigned()->autoIncrement();
             $table->text('title')->nullable()->collation('utf8_unicode_ci');
             $table->text('description')->nullable()->collation('utf8_unicode_ci');
-            $table->bigInteger('post_id')->unsigned();
-            $table->foreign('post_id')
-            ->references('post_id')
-            ->on('posts');
+            $table->bigInteger('trip_detail_id')->unsigned();
+            $table->foreign('trip_detail_id')
+            ->references('trip_detail_id')
+            ->on('trip_details');
 
             $table->timestamps();
         });
