@@ -105,7 +105,11 @@ Route::group(['prefix'=>'schedule'],function(){
     Route::get('list-vehicle', 'ScheduleController@getListVehicle');  // get list vehicle
     Route::post('new', 'ScheduleController@create');
     Route::post('list', 'ScheduleController@getListScheduleByUser');  // get list schdule theo user
-    Route::get('detail/{trip_id}', 'ScheduleController@getDetailSchedule');
+    Route::get('detail/{trip_id}', 'ScheduleController@getDetailSchedule'); // get detail chi tiết chuyến đi phía trong
+    Route::post('update/{trip_id}', 'ScheduleController@updateScheduleById');
+    Route::delete('delete/{trip_id}', 'ScheduleController@deleteSchedule');
+    Route::get('detail-trip/{trip_id}', 'ScheduleController@getDetailTrips'); // get ra chi tiết bảng trip
+    
     
 });
 

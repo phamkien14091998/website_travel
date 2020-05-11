@@ -55,16 +55,18 @@ class schedules extends Model
     public static function getListScheduleByUser($user_id){
         
         return self::where('user_id',$user_id)
-                ->select('trip_name','created_at','description','trip_id')
+                ->select('trip_name','created_at','description','trip_id','day_start','day_end')
+                ->orderBy('trip_id', 'desc')
                 ->get();
     } 
     // get detail schedule  by id
     public static function getDetailSchedule($trip_id){
         
         return DB::table('trip_details')
-        ->where('trip_id',$trip_id)
+        ->where('trip_details.trip_id',$trip_id)
         ->join('famous_places','famous_places.famous_place_id','=','trip_details.famous_place_id')
         ->join('provinces','provinces.province_id','=','famous_places.province_id')
+        ->join('trips','trips.trip_id','=','trip_details.trip_id')
         ->select(
             'famous_places.images',
             'famous_places.title',
@@ -76,11 +78,34 @@ class schedules extends Model
             'trip_details.time_to',
             'trip_details.time_stay',
             'trip_details.note',
-            'trip_details.vehicle'
+            'trip_details.vehicle',
+            'trips.trip_name'
             )
         ->get();
 
     }
+
+     // update schedule
+     public static function updateScheduleById($trip_id,$data){
+
+        return self::where('trip_id', $trip_id)
+            ->update($data);
+    }
+    //delete schedule
+    public static function deleteScheduleById($trip_id){
+
+        return self::where('trip_id','=',$trip_id)
+                ->delete();
+    }
+
+    // get detail lich trình by id (bảng trips)
+    // get detail product by id
+   public static function getDetailTrips($trip_id){
+    $data_schedule = self::where('trip_id','=',$trip_id)
+    ->first();
+
+    return $data_schedule;
+   }
 
  
 }

@@ -43,7 +43,7 @@ class PlaceController extends Controller
         if($validator->fails()){   
             return response()->json('tiêu đề không được trùng',500);
         }
-        $uploadPath="upload-place/"; 
+        $uploadPath="upload-place/";   
         $filename='';
 
         $images = array();
