@@ -17,8 +17,8 @@ class Trips extends Migration
             $table->bigIncrements('trip_id')->unsigned()->autoIncrement();
             $table->string('trip_name',255)->nullable()->collation('utf8_unicode_ci');
             $table->string('description',255)->nullable()->collation('utf8_unicode_ci');
-            $table->datetime('day_start')->nullable(); 
-            $table->datetime('day_end')->nullable(); 
+            $table->date('day_start')->nullable(); 
+            $table->date('day_end')->nullable(); 
 
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
