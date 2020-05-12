@@ -84,27 +84,25 @@ class ScheduleController extends Controller
             'day_end' => $request->day_end
          ]; 
          
-        $data=schedules::updateScheduleById($trip_id,$data);
-        if($data){ 
+    $data=schedules::updateScheduleById($trip_id,$data);
+        if($data){   
             return response()->json('Sửa Thành Công',200);
         }
         return response()->json('Sửa Thất Bại',400);
-         
-       
-     }
+    }
  
-     // delete place
-     public function deleteSchedule(Request $request)
-     {
-         $trip_id = $request->trip_id;
+    // delete schedule
+    public function deleteSchedule(Request $request)
+    {
+        $trip_id = $request->trip_id;
         
-         $data = schedules::deleteScheduleById($trip_id);
-         if($data){
-             return response()->json('xóa thành công lịch trình',200);
-         }else{
-             return response()->json('xóa thất bại',500);
+        $data = schedules::deleteScheduleById($trip_id);
+        if($data){
+            return response()->json('xóa thành công lịch trình',200);
+        }else{
+            return response()->json('xóa thất bại',500);
          }
- 
+  
      }
      // get detail trips 
      public function getDetailTrips(Request $request){
@@ -114,6 +112,46 @@ class ScheduleController extends Controller
         return response()->json($data_schedule,'200');
      }
 
+     // delete schedule-detail
+     public function deleteScheduleDetail(Request $request)
+     {
+         $trip_detail_id = $request->trip_detail_id;
+        
+         $data = schedules::deleteScheduleDetail($trip_detail_id);
+         if($data){
+             return response()->json('xóa thành công chi tiết lịch trình',200);
+         }else{
+             return response()->json('xóa thất bại',500);
+         }
+ 
+     }
+
+    // get detail trips 
+    public function getDetailScheduleDetail(Request $request){
+        $trip_detail_id = $request->trip_detail_id;
+
+        $data = schedules::getDetailScheduleDetail($trip_detail_id);
+        return response()->json($data,'200');
+    }
+
+      // update schedule-detail
+      public function updateScheduleDetail(Request $request)
+      { 
+          $trip_detail_id= $request->trip_detail_id;
+          $data=[
+             'time_to' => $request->time_to,
+             'time_stay' => $request->time_stay,
+             'note' => $request->note,
+             'vehicle' => $request->vehicle
+          ]; 
+          
+     $data=schedules::updateScheduleDetail($trip_detail_id,$data);
+         if($data){   
+             return response()->json('Sửa Thành Công',200);
+         }
+         return response()->json('Sửa Thất Bại',400);
+     }
+    
 
 
 

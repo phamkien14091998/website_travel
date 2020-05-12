@@ -65,6 +65,18 @@ class collections extends Model
 
     }
 
+    //delete collection
+    public static function deleteCollection($collection_id){
 
+        return self::where('collection_id','=',$collection_id)
+                ->delete();
+    }
+
+     // update schedule
+     public static function updateCollectionById($collection_id,$data){
+
+        return self::where('collection_id', $collection_id)
+            ->update($data);
+    }
     
 }

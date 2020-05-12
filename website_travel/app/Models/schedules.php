@@ -79,14 +79,15 @@ class schedules extends Model
             'trip_details.time_stay',
             'trip_details.note',
             'trip_details.vehicle',
+            'trip_details.trip_detail_id',
             'trips.trip_name'
             )
         ->get();
 
     }
 
-     // update schedule
-     public static function updateScheduleById($trip_id,$data){
+    // update schedule
+    public static function updateScheduleById($trip_id,$data){
 
         return self::where('trip_id', $trip_id)
             ->update($data);
@@ -100,12 +101,32 @@ class schedules extends Model
 
     // get detail lich trình by id (bảng trips)
     // get detail product by id
-   public static function getDetailTrips($trip_id){
+    public static function getDetailTrips($trip_id){
     $data_schedule = self::where('trip_id','=',$trip_id)
     ->first();
 
     return $data_schedule;
    }
+    //delete schedule-detail
+    public static function deleteScheduleDetail($trip_detail_id){
+
+        return DB::table('trip_details')->where('trip_detail_id','=',$trip_detail_id)
+                ->delete();
+    }
+     // update schedule-detail
+     public static function updateScheduleDetail($trip_detail_id,$data){
+
+        return DB::table('trip_details')->where('trip_detail_id', $trip_detail_id)
+            ->update($data);
+    }
+    // xem chi tiết schedule-detail
+    public static function getDetailScheduleDetail($trip_detail_id){
+        $data = DB::table('trip_details')->where('trip_detail_id','=',$trip_detail_id)
+        ->first();
+    
+        return $data;
+       }
+
 
  
 }

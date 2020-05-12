@@ -25,6 +25,9 @@ Route::post('register','UserController@register');
 Route::post('login','UserController@login');
 Route::get('profile','UserController@getAuthenticatedUser');
 
+Route::get('getInfo-facebook/{social}','SocialController@getInfoFacebook');
+Route::get('check-facebook/{social}','SocialController@checkInfoFacebook');
+
 Route::middleware('auth:api')->get('/users',function(Request $request){
     return $request->user();
 });
@@ -97,6 +100,7 @@ Route::group(['prefix'=>'collection'],function(){
     Route::post('new', 'CollectionController@create');
     Route::post('update/{colletion_id}', 'CollectionController@updateCollectionById');
     Route::delete('delete/{collection_id}', 'CollectionController@delete');
+    Route::delete('delete/{collection_id}', 'CollectionController@deleteCollection');
 
 });
 
@@ -109,7 +113,9 @@ Route::group(['prefix'=>'schedule'],function(){
     Route::post('update/{trip_id}', 'ScheduleController@updateScheduleById');
     Route::delete('delete/{trip_id}', 'ScheduleController@deleteSchedule');
     Route::get('detail-trip/{trip_id}', 'ScheduleController@getDetailTrips'); // get ra chi tiết bảng trip
-    
+    Route::delete('delete-detail/{trip_detail_id}', 'ScheduleController@deleteScheduleDetail'); // xóa chedule-detail
+    Route::get('trip-detail/{trip_detail_id}', 'ScheduleController@getDetailScheduleDetail'); // get ra chi tiết bảng trip-detail
+    Route::post('update-trip-detail/{trip_detail_id}', 'ScheduleController@updateScheduleDetail'); // cập nhật bảng trip_detail
     
 });
 
