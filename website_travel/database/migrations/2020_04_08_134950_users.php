@@ -25,7 +25,12 @@ class Users extends Migration
             $table->string('hometown',100)->nullable()->collation('utf8_unicode_ci');
             $table->text('hobbies')->nullable()->collation('utf8_unicode_ci');
             $table->tinyInteger('role')->default(0)->comment('1: Admin');
+            $table->string('phone_number',20)->nullable()->collation('utf8_unicode_ci');
+            $table->string('address',255)->nullable()->collation('utf8_unicode_ci');
             $table->rememberToken();
+            // login google
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
             
             $table->timestamps();
         });

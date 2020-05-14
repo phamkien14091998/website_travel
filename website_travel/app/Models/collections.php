@@ -72,11 +72,47 @@ class collections extends Model
                 ->delete();
     }
 
+    // get detail coolection by id
+    public static function getDetailCollectionById($collection_id){
+        $data = self::where('collection_id','=',$collection_id)
+             ->first();
+    
+        return $data;
+    }
+
      // update schedule
      public static function updateCollectionById($collection_id,$data){
 
         return self::where('collection_id', $collection_id)
             ->update($data);
     }
+    //add place into collection
+    public static function addPlaceIntoCollection($famous_place_id,$collection_id,$data_collection){
+        $famous_id = (int)$famous_place_id;
+        $data_detail_collection = DB::table('collection_detail')
+                                ->where('collection_id',$collection_id)
+                                ->get();
+        $data_col = $data_collection;
+        for($i=0;$i<count($data_detail_collection);$i++){
+            // echo $data_detail_collection[$i]->famous_place_id;die;
+            // nếu địa điểm đó chưa tồn tại rồi thì sẽ lưu thêm vào ,ngược lại không thêm vô 
+            if($famous_id == $data_detail_collection[$i]->famous_place_id){
+                echo "vo else";
+                return 1;
+            }
+        }
+        return  DB::table('collection_detail')->insertGetId($data_col);
+    }
+    // xóa địa điểm trong bộ sưu tập
+    public static function deletePlaceCollection($famous_place_id){
+
+        return DB::table('collection_detail')->where('famous_place_id','=',$famous_place_id)
+                ->delete();
+    }
+
+
+
+
+
     
 }

@@ -61,7 +61,9 @@ class users extends Model
                 'hometown',
                 'hobbies',
                 'created_at',
-                'updated_at'
+                'updated_at',
+                'phone_number',
+                'address'
             )
             ->first();
         return $data;

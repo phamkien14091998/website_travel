@@ -25,8 +25,13 @@ Route::post('register','UserController@register');
 Route::post('login','UserController@login');
 Route::get('profile','UserController@getAuthenticatedUser');
 
-Route::get('getInfo-facebook/{social}','SocialController@getInfoFacebook');
-Route::get('check-facebook/{social}','SocialController@checkInfoFacebook');
+Route::get('auth/google/url', 'SocialController@googleLoginUrl');
+Route::get('auth/google/callback', 'SocialController@googleLoginCallback');
+// Route::group(['middleware' => ['web']], function () {
+//     Route::get('auth','SocialController@redirectToProvider');
+//     Route::get('auth/callback','SocialController@handleProviderCallback');
+    
+// });
 
 Route::middleware('auth:api')->get('/users',function(Request $request){
     return $request->user();
@@ -96,12 +101,15 @@ Route::group(['prefix'=>'member'],function(){
 // router quản lý collection
 Route::group(['prefix'=>'collection'],function(){
     Route::post('list', 'CollectionController@getListCollectionByUser');  // get list collection theo user
-    Route::get('detail/{collection_id}', 'CollectionController@getDetailCollection');
+    Route::get('detail/{collection_id}', 'CollectionController@getDetailCollection'); // laáy ra các địa điểm trong bộ sưu tập
     Route::post('new', 'CollectionController@create');
     Route::post('update/{colletion_id}', 'CollectionController@updateCollectionById');
-    Route::delete('delete/{collection_id}', 'CollectionController@delete');
+    // Route::delete('delete/{collection_id}', 'CollectionController@delete');
     Route::delete('delete/{collection_id}', 'CollectionController@deleteCollection');
-
+    Route::get('detail-id/{collection_id}', 'CollectionController@getDetailCollectionById');
+    Route::post('add-place', 'CollectionController@addPlaceIntoCollection');  // thêm địa điểm vào bộ sưu tập của user
+    Route::delete('delete-place/{famous_place_id}', 'CollectionController@deletePlaceCollection'); // xóa địa điểm khỏi bộ sưu tập
+    
 });
 
 // router quản lý schedule
@@ -125,5 +133,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('cart/delete/{product_id}', 'CartController@deleteProductFromCart');
     Route::get('cart/total-money', 'CartController@getTotalCart');
     
+});
+// router comments  
+Route::group(['prefix'=>'comment'],function(){
+    Route::get('list-post/{post_id}', 'CommentController@getAllCommentByPostId');  // get all comment của bài post
+    Route::post('new-post', 'CommentController@createCommentByPostId'); // thêm comment của bài post 
+    Route::delete('delete/{comment_id}', 'CommentController@deleteComment');
 });
 
