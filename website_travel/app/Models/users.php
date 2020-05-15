@@ -68,4 +68,11 @@ class users extends Model
             ->first();
         return $data;
         }
+
+     // update user by id
+     public static function updateUserById($user_id,$data){
+
+        return self::where('user_id', $user_id)
+            ->update($data);
+    }
 }

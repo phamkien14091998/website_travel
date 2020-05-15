@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\schedules;
+
+use Mail;
+use App\Mail\MailSend;
  
 class ScheduleController extends Controller
 {
@@ -26,6 +29,8 @@ class ScheduleController extends Controller
         if($validator->fails()){   
             return response()->json('tên lịch trình không được trùng',500);
         }
+
+       
         // $place_id_luu_arr = $request->place_id_luu_arr;
         $dataDetail_trip = $request->dataDetail_trip;
 
@@ -34,6 +39,8 @@ class ScheduleController extends Controller
         $day_start = $request->day_start;
         $day_end = $request->day_end;
         $user_id = $request->user_id;
+        $email = $request->email;
+
 
         $data_trip =[
             'trip_name' => $trip_name,
@@ -43,11 +50,17 @@ class ScheduleController extends Controller
             'user_id'=>$user_id
         ];
 
-
         $data= schedules::createSchedule($dataDetail_trip,$data_trip);
+
+        \Mail::send('welcome',['data_trip'=>$data_trip],function($message) use($email){
+            $message->from('phamkien14091998@gmail.com','WebsiteTravel');
+            $message->to($email)->subject('Thông Báo Tạo Lịch Trình!');
+        });
         if($data){  
             return response()->json($data,200);
         }
+
+
     }
 
     // lấy danh sách lịch trinh theo user
