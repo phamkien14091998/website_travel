@@ -46,14 +46,15 @@ class SocialController extends Controller
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
 
-        dd($googleUser);
+        // dd($googleUser);
         DB::beginTransaction();
         try {
+            dd($googleUser->getName());die;
             $socialAccount = users::firstOrNew(
                 ['user_id' => $googleUser->getId(), 'social_provider' => 'google'],
                 ['user_name' => $googleUser->getName()]
             );
-
+            
             if (!($user = $socialAccount->user)) {
                 $user = users::create([
                     'email' => $googleUser->getEmail(),

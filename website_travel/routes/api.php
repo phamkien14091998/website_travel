@@ -70,6 +70,9 @@ Route::group(['prefix'=>'place'],function(){
     Route::get('list-home', 'PlaceController@getList8Provinces');
      //lấy địa điểm theo id
     Route::post('get-famous-id', 'PlaceController@getPlaceByid'); 
+    // lấy ra chi tiết địa điểm ở trang chủ
+    Route::get('detail-home/{famous_place_id}', 'PlaceController@getDetail');
+
 
 });
 

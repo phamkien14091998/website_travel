@@ -179,6 +179,20 @@ class places extends Model
         
     }
 
+    public static function getDetail($famous_place_id){
+
+        $data = self::where('famous_place_id','=',$famous_place_id)
+            ->select(
+                'title',
+                'images', 
+                'description',
+                'date_start',
+                'date_end',
+                'famous_place_id'
+            )
+            ->first();
+        return $data;
+        }
 
 
 }

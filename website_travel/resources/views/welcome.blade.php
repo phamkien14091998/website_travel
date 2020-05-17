@@ -34,26 +34,27 @@
                     height: 350px;
                     background-color: #ffff;
                     margin-left: 155px;">
-                    <!-- Laravel -->
+                    <!-- Laravel --> 
                     <h1 style="text-align: center ;padding-top: 15px; color:red ; 
                                 padding-top: 20px; border-bottom: 1px solid;">
                     THÔNG BÁO TẠO LỊCH TRÌNH THÀNH CÔNG</h1>
-                    <h2 style="padding-top: 15px; padding-left:10px">
-                        Tên Lịch trình : {{$data_trip['trip_name']}}
-                    </h2>
-                    <br>
-                    <span style="padding-top: 10px;padding-left:10px">
-                        <b>Thời gian bắt đầu chuyến đi </b>: {{$data_trip['day_start']}}
-                    </span>
-                    <br>
-                    <span style="padding-top: 10px;padding-left:10px">
-                        <b>Thời gian kết thúc </b>: {{$data_trip['day_end']}}
-                    </span>
-                    <br>
-                    <span style="padding-top: 10px;padding-left:10px">
-                        <b>Mô tả</b> : {{$data_trip['description']}}
-                    </span>
-
+                    @if(isset($data_trip))
+                        <h2 style="padding-top: 15px; padding-left:10px" >
+                            Tên Lịch trình : {{$data_trip['trip_name']}}
+                        </h2>
+                        <br>
+                        <span style="padding-top: 10px;padding-left:10px" >
+                            <b>Thời gian bắt đầu chuyến đi </b>: {{$data_trip['day_start']}}
+                        </span>
+                        <br>
+                        <span style="padding-top: 10px;padding-left:10px" *ngIf="$data_trip">
+                            <b>Thời gian kết thúc </b>: {{$data_trip['day_end']}}
+                        </span>
+                        <br>
+                        <span style="padding-top: 10px;padding-left:10px" *ngIf="$data_trip">
+                            <b>Mô tả</b> : {{$data_trip['description']}}
+                        </span>
+                    @endif
                     <br>
                     <div class="row col-md-12 tex-center">
                                 <span>Đây là thư tự động từ hệ thống. Vui lòng không trả lời email này. </span>

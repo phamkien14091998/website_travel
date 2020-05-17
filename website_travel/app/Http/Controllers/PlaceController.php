@@ -155,22 +155,29 @@ class PlaceController extends Controller
         } 
     }
 
-    // get ra 11 địa điểm hiển thị lên trang province-details
+    // get ra 11 địa điểm hiển thị lên trang province-details 
     public function getList11Provinces(){
         $data= places::getList11Provinces();
-        if($data){  
+        if($data){   
             return response()->json($data,200);
         } 
     }
-
-     // lấy ra địa điểm theo id
-     public function getPlaceByid(Request $request){
+    // lấy ra địa điểm theo id
+    public function getPlaceByid(Request $request){
         // if($request->all()){ 
             $famous_place_id_arr = $request->all();
             $data_search = places::getPlaceByid($famous_place_id_arr);
             return  response()->json($data_search,200);
         // }
         // return  response()->json('không hợp lệ',500); 
+    }
+
+    // lấy ra chi tiết địa điểm ở trang chủ
+    public function getDetail(Request $request){ 
+        $famous_place_id = $request->famous_place_id;
+
+        $data = places::getDetail($famous_place_id);
+        return response()->json($data,200);
     }
 
 }

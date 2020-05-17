@@ -41,7 +41,6 @@ class ScheduleController extends Controller
         $user_id = $request->user_id;
         $email = $request->email;
 
-
         $data_trip =[
             'trip_name' => $trip_name,
             'description' => $description,
@@ -158,11 +157,12 @@ class ScheduleController extends Controller
              'vehicle' => $request->vehicle
           ]; 
           
+          
      $data=schedules::updateScheduleDetail($trip_detail_id,$data);
-         if($data){   
+        //  if($data){     
              return response()->json('Sửa Thành Công',200);
-         }
-         return response()->json('Sửa Thất Bại',400);
+        //  }
+        //  return response()->json('Sửa Thất Bại',400);
      }
     
 
