@@ -33,7 +33,8 @@ class Posts extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')
             ->references('user_id')
-            ->on('users');
+            ->on('users')
+            ->onDelete('cascade'); // xóa bảng user thì xóa luôn bảng posts
             $table->bigInteger('famous_place_id')->unsigned();
             $table->foreign('famous_place_id')
             ->references('famous_place_id')

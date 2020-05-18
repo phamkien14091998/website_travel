@@ -143,4 +143,11 @@ Route::group(['prefix'=>'comment'],function(){
     Route::post('new-post', 'CommentController@createCommentByPostId'); // thêm comment của bài post 
     Route::delete('delete/{comment_id}', 'CommentController@deleteComment');
 });
+// router rating  
+Route::group(['prefix'=>'rating'],function(){
+    Route::post('new', 'RatingController@createRating'); // thêm đán giá của bài post 
+    Route::post('check', 'RatingController@checkUserRatingPost'); // kiểm tra xem user đang đăng nhập có đánh giá bài viết chưa 
+    Route::post('update', 'RatingController@updateRating'); // thêm đán giá của bài post 
+    Route::post('list', 'RatingController@getAllRatingPost'); // lấy ra tất cả đánh giá của bài post đó
+});
 

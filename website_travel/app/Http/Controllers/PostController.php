@@ -17,7 +17,7 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-    //get List 9 Post đã duyệt mới nhất cua tất cả user
+    //get List 9 Post đã duyệt mới nhất cua tất cả user  
     public function getListPost9Duyet(){
         $data= posts::getListPost9Duyet();
         if($data){  

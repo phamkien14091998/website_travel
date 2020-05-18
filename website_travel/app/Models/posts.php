@@ -35,37 +35,59 @@ class posts extends Model
 
     // get list famous places của user đang chờ duyệt flag= 0
     public static function getAllPostDuyet(){
-        return DB::table('posts')
-        ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
-            ->leftJoin('users','users.user_id','=','posts.user_id')
-            ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
-            ->select(
-                'posts.title as post_title',
-                'duration',
-                'posts.date_start',
-                'posts.date_end',
-                'fare',
-                'posts.images',
-                'flag',
-                'famous_places.title as place_title',
-                'users.user_name',
-                'posts.post_id',
-                'provinces.province_name',
-                'gaits',
-                'home_stay',
-                'visits',
-                'activitis',
-                'note',
-                'items',
-                'users.avatar',
-                'posts.created_at',
-                'famous_places.description'
+        // return DB::table('posts')
+        // ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
+        //     ->leftJoin('users','users.user_id','=','posts.user_id')
+        //     ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
+        //     ->select(
+        //         'posts.title as post_title',
+        //         'duration',
+        //         'posts.date_start',
+        //         'posts.date_end',
+        //         'fare',
+        //         'posts.images',
+        //         'flag',
+        //         'famous_places.title as place_title',
+        //         'users.user_name',
+        //         'posts.post_id',
+        //         'provinces.province_name',
+        //         'gaits',
+        //         'home_stay',
+        //         'visits',
+        //         'activitis',
+        //         'note',
+        //         'items',
+        //         'users.avatar',
+        //         'posts.created_at',
+        //         'famous_places.description'
+        //     )
+        //     ->where([
+        //         'posts.flag'=>1,
+        //         ]) // khi flag= 0 là chưa duyệt
+        //     // ->paginate(5);
+        //     ->get(); 
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
+            ->leftJoin('rating','rating.post_id','=','posts.post_id')
+            ->select(  
+                DB::raw(
+                    'avg(point) as avgPoint,
+                    count(point) as countRating,
+                    posts.post_id,
+                    posts.title,
+                    users.user_name,
+                    posts.flag,
+                    images,
+                    posts.created_at
+                    '
+                    )
             )
-            ->where([
-                'posts.flag'=>1,
-                ]) // khi flag= 0 là chưa duyệt
-            // ->paginate(5);
+            ->orderBy('avgPoint', 'desc')
+            ->take(9)
+            ->where('posts.flag','1') // khi flag= 1 là đã duyệt
+            ->groupBy('post_id')
             ->get(); 
+
     }
 
     // get list famous places của user đang chờ duyệt flag= 0
@@ -130,19 +152,29 @@ class posts extends Model
 
     // lấy ra 9 bài viết được duyệt mới nhất
     public static function getListPost9Duyet(){
+
         return self::leftJoin('users','users.user_id','=','posts.user_id')
+            // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
+            ->leftJoin('rating','rating.post_id','=','posts.post_id')
             ->select(  
-                'users.user_name',
-                'posts.title',
-                'posts.flag',
-                'posts.created_at',
-                'images',
-                'posts.post_id'
+                DB::raw(
+                    'avg(point) as avgPoint,
+                    count(point) as countRating,
+                    posts.post_id,
+                    posts.title,
+                    users.user_name,
+                    posts.flag,
+                    images,
+                    posts.created_at
+                    '
+                    )
             )
-            ->orderBy('post_id', 'desc')
+            ->orderBy('avgPoint', 'desc')
             ->take(9)
             ->where('posts.flag','1') // khi flag= 1 là đã duyệt
+            ->groupBy('post_id')
             ->get(); 
+
     }
 
     // get detail place by id
