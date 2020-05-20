@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\products;
-use DB; 
+
 
 class cart extends Model
 {
@@ -15,20 +15,21 @@ class cart extends Model
 	public static function add($product_id){
 		$product = products::find($product_id);
 		$temp = 0;
-        if(Session::has('cart')){
+		
+        if(Session::has('cart')){	
             for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-               if($product_id == Session::get('cart.name')[$i]['product_id']){
-                    $temp += 1;
+               if($product_id == Session::get('cart.name')[$i]['id']){
+					$temp += 1;
                 }
-            }
+			}
             if($temp == 0) {
-                Session::push('cart.name', $product);
-            }
+                Session::push('cart.name', ['id' => $product_id, 'qty' => 1,'name' => $product->product_name, 'price' => $product->price,'images' => $product->images]);
+			}
         } else {
-            Session::put('cart',$product);
-            Session::push('cart.name', $product);
+			Session::put('cart',$product);
+			Session::push('cart.name', ['id' => $product_id, 'qty' => 1,'name' => $product->product_name, 'price' => $product->price,'images' => $product->images]);
 		}
-		return Session::get('cart.name');
+		return count(Session::get('cart.name'));
 	}
 
 	//get all product for cart
@@ -42,24 +43,68 @@ class cart extends Model
 	//xóa một sản phẩm khỏi giỏ hàng
 	public static function deleteProductFromCart($product_id){
 		if(Session::has('cart')){
-            for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-               if($product_id == Session::get('cart.name')[$i]['product_id']){
-				   unset(Session::get('cart.name')[$i]['product_id']); 
-					return Session::get('cart');
-                }
-            }
-        }
-		return 'Thất bại';
+			$product = products::find($product_id);
+			$products = Session::pull('cart.name', []); // Second argument is a default value
+
+			$mangId = [];
+			for($i=0 ; $i < count($products) ; $i++){
+				$mangId[$i] = ($products[$i]['id']);
+			}
+			if(($key = array_search($product['product_id'], $mangId)) != 1000) {
+				array_splice($products,$key,1);
+			}
+			Session::put('cart.name', $products);
+        } else {
+			return 'null';
+		}
+		if(count(Session::get('cart.name')) > 0) {
+			return Session::get('cart.name');
+		}
+		return 'null';
 	}
 
 	//get tổng tiền các sản phẩm trong cart
 	public static function getTotalCart(){
 		$totalMoney = 0;
-		for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-			if(Session::has('cart') && Session::get('cart.name')[$i]['product_id'] != null) {
-				$totalMoney += (int)Session::get('cart.name')[$i]['price'];
+		if(Session::has('cart')){
+			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
+				if(Session::get('cart.name')[$i]['id'] != null) {
+					$totalMoney += (int)Session::get('cart.name')[$i]['price'] * Session::get('cart.name')[$i]['qty'];
+				}
 			}
 		}
 		return $totalMoney;
+	}
+
+	//tăng số lượng sản phẩm trong cart
+	public static function tangSoLuongSP($id){
+		if(Session::has('cart')){
+			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
+				if(Session::get('cart.name')[$i]['id'] == $id) {
+					$t = Session::get('cart.name');
+					$t[$i]['qty'] +=1;
+					Session::put('cart.name', $t);
+					break;
+				}
+			}
+		}
+		return Session::get('cart.name');
+	}
+
+	//giảm số lượng sản phẩm trong cart
+	public static function giamSoLuongSP($id){
+		if(Session::has('cart')){
+			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
+				if(Session::get('cart.name')[$i]['id'] == $id) {
+					$t = Session::get('cart.name');
+					if($t[$i]['qty'] > 1){
+						$t[$i]['qty'] -=1;
+						Session::put('cart.name', $t);
+					}
+					break;
+				}
+			}
+		}
+		return Session::get('cart.name');
 	}
 }

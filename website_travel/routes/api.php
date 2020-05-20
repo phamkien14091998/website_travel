@@ -48,7 +48,6 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::post('new', 'ProductController@create');
     Route::delete('delete/{product_id}', 'ProductController@delete');
     Route::post('update/{product_id}', 'ProductController@updateProductById');
-
     // router trang ban sản phẩm
     Route::get('list-product-new', 'ProductController@getProductNew');
     // router xem sản phẩm theo id thể loại
@@ -72,7 +71,12 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('get-famous-id', 'PlaceController@getPlaceByid'); 
     // lấy ra chi tiết địa điểm ở trang chủ
     Route::get('detail-home/{famous_place_id}', 'PlaceController@getDetail');
-
+    // lấy ra tất cả địa điểm theo province_id
+    Route::get('province/{province_id}', 'PlaceController@getDetail');
+    // lấy tất cả địa điểm theo tỉnh trừ đi địa điểm hiện tại new
+    Route::post('search-place-by-province-id-new', 'PlaceController@searchPlaceByProvivnceIdNewPost');
+    // tìm kiếm địa điểm theo title 
+    Route::post('search-by-title', 'PlaceController@searchPlaceByTitle'); 
 
 });
 
@@ -90,8 +94,10 @@ Route::group(['prefix'=>'post'],function(){
     Route::get('list-not-approved', 'PostController@getAllPostChuaDuyet');
     // admin phê duyệt hoạc hủy bài viết của user
     Route::post('approved-or-notapproved', 'PostController@approvedOrNotApprovedPost');
-    Route::get('place/detail/{famous_place_id}', 'PostController@getAllPostByPlaceId');
+    // lấy danh sách bài post liên quan đến địa điểm
+    Route::get('place/detail/{famous_place_id}', 'PostController@getAllPostByPlaceId'); 
     Route::get('province/detail/{province_id}', 'PostController@getAllPostByProvinceId');
+    Route::get('top-10-user', 'PostController@getTop10User');// lấy ra tôp 10 user có số điểm cao nhất tháng để thưởng (trang home)
 });
 
 // router quản lý user (thông tin, collection, tạo lịch trình) 
@@ -134,8 +140,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('cart/add/{product_id}', 'CartController@addToCart');
     Route::get('cart/get-all/', 'CartController@getAllProductForCart');
     Route::get('cart/delete/{product_id}', 'CartController@deleteProductFromCart');
-    Route::get('cart/total-money', 'CartController@getTotalCart');
-    
+    Route::get('cart/total-money', 'CartController@getTotalCart'); 
+    Route::get('cart/tangSoLuongSP/{id}', 'CartController@tangSoLuongSP'); 
+    Route::get('cart/giamSoLuongSP/{id}', 'CartController@giamSoLuongSP');
 });
 // router comments  
 Route::group(['prefix'=>'comment'],function(){
@@ -151,3 +158,7 @@ Route::group(['prefix'=>'rating'],function(){
     Route::post('list', 'RatingController@getAllRatingPost'); // lấy ra tất cả đánh giá của bài post đó
 });
 
+// router thanh toán
+Route::group(['middleware' => ['web']], function () {
+    Route::post('bill/payment/{user_id}', 'BillController@payment');  // get all comment của bài post
+});

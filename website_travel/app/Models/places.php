@@ -22,7 +22,11 @@ class places extends Model
          'date_start',
          'date_end',
          'province_id',
- 
+         'cultural',
+         'weather',
+         'vehicle',
+         'cuisine',
+         'advice'
      ];
 
     //get list famous places
@@ -65,7 +69,12 @@ class places extends Model
             'date_end',
             'province_name',
             'famous_place_id',
-            'famous_places.province_id'
+            'famous_places.province_id',
+            'cultural',
+            'weather',
+            'vehicle',
+            'cuisine',
+            'advice'
         )
         ->first();
 
@@ -182,18 +191,70 @@ class places extends Model
     public static function getDetail($famous_place_id){
 
         $data = self::where('famous_place_id','=',$famous_place_id)
+            ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
             ->select(
                 'title',
                 'images', 
                 'description',
                 'date_start',
                 'date_end',
-                'famous_place_id'
+                'famous_place_id',
+                'cultural',
+                'weather',
+                'vehicle',
+                'cuisine',
+                'advice',
+                'provinces.province_name',
+                'famous_places.province_id'
             )
             ->first();
         return $data;
-        }
+    }
+    // lấy tất cả địa điểm theo tỉnh trừ địa điểm hiện tại
+    public static function searchPlaceByProvivnceIdNewPost($province_id,$famous_place_id){
+        $sql= "famous_places.province_id = {$province_id} 
+        AND famous_places.famous_place_id != {$famous_place_id}";
 
+        return 
+        self::whereRaw(
+            $sql
+            )
+        ->join('provinces','provinces.province_id','=','famous_places.province_id')
+        ->select(
+            'title',
+            'famous_place_id',
+            'images',
+            'description', 
+            'date_start',
+            'date_end',
+            'famous_places.created_at',
+            'province_name',
+            'famous_places.province_id'
+        )
+        ->get();
+    }
+    // tìm kiếm địa điểm theo title
+    public static function searchPlaceByTitle($title){
+        $condition ='';
+        $condition.="title like '%{$title}%'";
+        return self::whereRaw($condition)
+                ->join('provinces','provinces.province_id','=','famous_places.province_id')
+                ->orderBy('famous_place_id', 'ASC')
+                ->select(
+                    'title',
+                    'famous_place_id',
+                    'images',
+                    'description', 
+                    'date_start',
+                    'date_end',
+                    'famous_places.created_at',
+                    'province_name',
+                    'famous_places.province_id'
+                    )
+                ->get();
+    }
+
+    
 
 }
     

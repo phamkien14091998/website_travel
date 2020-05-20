@@ -24,7 +24,6 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-
     //get List 9 Post đã duyệt mới nhất cua tất cả user
     public function getAllPostDuyet(){
         $data= posts::getAllPostDuyet();
@@ -32,7 +31,6 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-
     //get List Post Bị quản trị viên hủy cua user
     public function getListPostHuy(Request $request){
         $user_id = $request->user_id;
@@ -42,12 +40,9 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-
     //Tìm kiếm bài viết theo flag(0,1,2)
     public function getPostByFlag(Request $request){
         $user_id = $request->user_id;
-
-        // dd($request->all());
  
         $bai_duyet = $request->bai_duyet;
         $bai_chua_duyet = $request->bai_chua_duyet;
@@ -78,7 +73,6 @@ class PostController extends Controller
                 return response()->json($data,200);
             }
     }
-
     // get detail post by id
     public function getDetailPost(Request $request){
         $post_id = $request->post_id;
@@ -86,7 +80,6 @@ class PostController extends Controller
         $data = posts::getDetailPost($post_id);
         return response()->json($data,'200');
     }
-
     // delete post
     public function delete(Request $request)
     {
@@ -98,13 +91,10 @@ class PostController extends Controller
         }else{
             return response()->json('xóa thất bại',400);
         }
-
     }
-
     // thêm sản phẩm
     public function create(Request $request)
     {   
-     
         $validator = Validator::make($request->all(),[
             'title' => 'required|string|max:100|unique:posts', 
         ]);  
@@ -144,7 +134,6 @@ class PostController extends Controller
             'activitis' => $request->activitis,
             'note'=> $request->note,
         ]; 
-       
         // if($data){  
             $data_post=posts::createPost($data);
             if($data_post){ 
@@ -157,7 +146,6 @@ class PostController extends Controller
 
     public function updatePostById(Request $request)
     {
-
         if($request->images){
             $image_string= $request->images;
             $image_string=explode(",", $image_string);
@@ -171,7 +159,6 @@ class PostController extends Controller
         //     return response()->json('dữ liệu không hợp lệ',500);
         // }
         
-
         $uploadPath="upload-post/";
         $filename='';
 
@@ -214,7 +201,6 @@ class PostController extends Controller
         }
        return response()->json('Thiêu dữ liệu truyền vào',500);
     }
-
     // get All post chưa duyệt trên trang quản trị viên
     public function getAllPostChuaDuyet(){
         $data= posts::getAllPostChuaDuyet();
@@ -234,7 +220,6 @@ class PostController extends Controller
         }
         return response()->json('thất bại',500);
     }
-
     public function getAllPostByPlaceId(Request $request){
         if($request->famous_place_id){
             $famous_place_id = $request->famous_place_id;
@@ -242,13 +227,21 @@ class PostController extends Controller
             return  response()->json($data_search,'200');
         }
     }
-
     public function getAllPostByProvinceId(Request $request){
         if($request->province_id){
             $province_id = $request->province_id;
             $data_search = posts::getAllPostByProvinceId($province_id);
             return  response()->json($data_search,'200');
         }
+    }
+    public function getTop10User(){
+       
+        $data = posts::getTop10User();
+        if($data){
+            return  response()->json($data,200);
+        }
+        return response()->json('khong tim thay',400);
+
     }
 
     

@@ -20,6 +20,13 @@ class FamousPlaces extends Migration
             $table->text('description')->nullable()->collation('utf8_unicode_ci');
             $table->text('date_start')->nullable()->collation('utf8_unicode_ci');
             $table->text('date_end')->nullable()->collation('utf8_unicode_ci');
+
+            $table->text('cultural')->nullable()->collation('utf8_unicode_ci'); // văn hóa
+            $table->text('weather')->nullable()->collation('utf8_unicode_ci'); // thời tiết 
+            $table->text('vehicle')->nullable()->collation('utf8_unicode_ci'); // phương tiện
+            $table->text('cuisine')->nullable()->collation('utf8_unicode_ci'); // ẩm thực
+            $table->text('advice')->nullable()->collation('utf8_unicode_ci'); // lời khuyên
+
             $table->bigInteger('province_id')->unsigned();
             $table->foreign('province_id')
             ->references('province_id')

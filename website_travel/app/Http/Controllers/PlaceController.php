@@ -64,6 +64,12 @@ class PlaceController extends Controller
             'date_start' => $request->date_start,
             'date_end' => $request->date_end,
             'province_id' => $request->province_id,
+
+            'cultural' => $request->cultural,
+            'weather' => $request->weather,
+            'vehicle' => $request->vehicle,
+            'cuisine' => $request->cuisine,
+            'advice' => $request->advice
         ]; 
         $data=places::createPlace($data);
         if($data){ 
@@ -104,6 +110,12 @@ class PlaceController extends Controller
             'date_start' => $request->date_start,
             'date_end' => $request->date_end,
             'province_id' => $request->province_id,
+
+            'cultural' => $request->cultural,
+            'weather' => $request->weather,
+            'vehicle' => $request->vehicle,
+            'cuisine' => $request->cuisine,
+            'advice' => $request->advice
         ]; 
        
         if($data){  
@@ -179,5 +191,26 @@ class PlaceController extends Controller
         $data = places::getDetail($famous_place_id);
         return response()->json($data,200);
     }
+
+    public function searchPlaceByProvivnceIdNewPost(Request $request){
+            $province_id = $request->province_id;
+            $famous_place_id = $request->famous_place_id;
+
+            $data_search = places::searchPlaceByProvivnceIdNewPost($province_id,$famous_place_id);
+            
+            return  response()->json($data_search,'200');
+    }
+    // tìm kiếm địa điểm theo title
+    public function searchPlaceByTitle(Request $request){
+        $title = $request->title;
+        if($title){
+            $data_search = places::searchPlaceByTitle($title);
+        
+        return  response()->json($data_search,'200');
+        }
+        // return response()->json('chưa nhập title','200');
+    }
+        
+
 
 }

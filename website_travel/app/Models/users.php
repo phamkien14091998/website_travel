@@ -25,7 +25,7 @@ class users extends Model
 
     // get user by user name
     public static function getUserByUserName($user_name){
-
+        
         $data = self::where('user_name',$user_name)
             ->select(
                 'user_id',
@@ -47,7 +47,7 @@ class users extends Model
 
     // get user by user name
     public static function getUserByUserId($user_id){
-
+        
         $data = self::where('user_id',$user_id)
             ->select(
                 'user_id',

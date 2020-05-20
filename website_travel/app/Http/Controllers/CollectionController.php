@@ -12,14 +12,15 @@ class CollectionController extends Controller
 {
     // create collection new 
     public function create(Request $request){
-        $validator = Validator::make($request->all(),[
-            'collection_name' => 'required|string|max:40|unique:collections', 
-        ]);  
-        if($validator->fails()){   
-            return response()->json('Tên Bộ Sưu Tập không được trùng',500);
-        }
+        // $validator = Validator::make($request->all(),[
+        //     'collection_name' => 'required|string|max:40|unique:collections'
+        // ]);  
+        // if($validator->fails()){   
+        //     return response()->json('Tên Bộ Sưu Tập không được trùng',500);
+        // }
         
         $collection_name = $request->collection_name;
+        $user_id = $request->user_id;
       
         $data_collection=[
             'collection_name' => $request->collection_name,
@@ -30,12 +31,16 @@ class CollectionController extends Controller
             'famous_place_id_array' => $famous_place_id_array
         ];
         
-        $data=collections::createCollection($collection_name,$data_collection,$data_collection_detail);
+        $data=collections::createCollection($collection_name,$data_collection,$data_collection_detail,$user_id);
 
-        if($data){ 
+       
+        if($data !=''){  
+
             return response()->json('Thành Công',200);
+        } else if($data == ''){
+            return response()->json('Ten BST da ton tai',400);
         }
-        return response()->json('Thất Bại',400);
+        
 
     }
 

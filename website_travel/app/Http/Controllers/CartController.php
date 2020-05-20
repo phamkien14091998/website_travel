@@ -46,5 +46,19 @@ class CartController extends Controller
         return null;
     }
 
-    
+    public function tangSoLuongSP($id){
+        $value = cart::tangSoLuongSP($id);
+        if($value){
+            return response()->json($value,200);
+        }
+        return null;
+    }
+
+    public function giamSoLuongSP($id){
+        $value = cart::giamSoLuongSP($id);
+        if($value){
+            return response()->json($value,200);
+        }
+        return null;
+    }
 }

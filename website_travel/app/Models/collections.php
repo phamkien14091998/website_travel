@@ -22,20 +22,35 @@ class collections extends Model
     // ];
 
     // create collection new
-     public static function createCollection($collection_name,$data_collection,$data_collection_detail){
+     public static function createCollection($collection_name,$data_collection,$data_collection_detail,$user_id){
         $data_collection['created_at'] = Carbon::now();
-        
-        $data_colle = self::insertGetId($data_collection);
+        $collections = DB::table('collections')->get();
 
-        // tạo mảng mới -> for và insert đưa nó vào table
-        $data_detail=[];
-        for($i=0; $i< count($data_collection_detail['famous_place_id_array']) ;$i++ ){
-            $data_detail['famous_place_id']=$data_collection_detail['famous_place_id_array'][$i]; 
-            $data_detail['collection_id'] = $data_colle;
-            $data_d =DB::table('collection_detail')
-                        ->insertGetId($data_detail);
+        $data_colle='';
+        
+        for($i=0; $i< count($collections);$i++){
+            if($collections[$i]->collection_name == $data_collection['collection_name'] && 
+                $collections[$i]->user_id == $data_collection['user_id']
+            ){
+                return $data_colle = '';
+            }
         }
-                        
+
+        $data_colle = self::
+                insertGetId($data_collection);
+
+        // nếu địa điểm khác rỗng mới cho insert , va $data_colle !=''
+        if($data_colle!='' &&  $data_collection_detail['famous_place_id_array'][0] !=""  ){
+            // tạo mảng mới -> for và insert đưa nó vào table
+            $data_detail=[];
+            for($i=0; $i< count($data_collection_detail['famous_place_id_array']) ;$i++ ){
+                $data_detail['famous_place_id']=$data_collection_detail['famous_place_id_array'][$i]; 
+                $data_detail['collection_id'] = $data_colle;
+                $data_d =DB::table('collection_detail')
+                            ->insertGetId($data_detail);
+            }
+        }
+                   
         return $data_colle;
 
     }
