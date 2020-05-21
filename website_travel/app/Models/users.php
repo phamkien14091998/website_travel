@@ -4,8 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class users extends Model
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\PayloadFactory;
+use Tymon\JWTAuth\JWTManager as JWT; 
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+
+
+class users extends Authenticatable implements JWTSubject
 {
+    use Notifiable;
     //
     protected $table="users";
     
@@ -13,8 +33,8 @@ class users extends Model
     public $timestamps = false;
     protected $guarded = [];
 
-    protected $fillable = [
-         'email', 'password',
+    protected $fillable = [  // phải điền đầ đủ những trường cần thêm
+         'email','user_name','password'
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -22,6 +42,13 @@ class users extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier(){
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims(){
+        return [];
+    }
 
     // get user by user name
     public static function getUserByUserName($user_name){
@@ -75,4 +102,55 @@ class users extends Model
         return self::where('user_id', $user_id)
             ->update($data);
     }
+
+    // ham create user by google
+    public static function createUserGoogle($user_name,$email){
+        
+        $users = self::create([
+            'email'=>$email,
+            'user_name'=>$user_name,
+            'password' => Hash::make('12345')
+        ]);
+       
+        $token = JWTAuth::fromUser($users); // tao ra token
+        return response()->json(compact('users','token'),201);
+    } 
+
+    // log in google
+    public static function loginGoogle($newUser){
+        
+        $creadentials = [
+            'email'=> $newUser->email,
+            'password' => '12345'
+        ];
+       
+        try{
+            $user=self::where(['email'=>$newUser->email])->first();
+           
+            $customClaims = 
+            [
+            'user_name' => $user->user_name,
+            'role' => $user->role,
+            'user_id' => $user->user_id,
+            'email' => $user->email
+            ];
+            
+            // giờ chế lại
+            $token = JWTAuth::claims($customClaims)->attempt($creadentials);
+            if(! $token ){  //  khi mã hóa password mới dùng hàm này
+               
+                return response()->json([ // nó k vô đây nha , tk đúng nên xuống dưới nó tạo token 
+                    'error'=>'invalid credentials'
+                ],400);
+            }
+        }catch(JWTException $e){  
+            return response()->json([ 
+                'error'=>'could not create token'
+            ],500);
+        }  
+        return response()->json(compact('token'));    
+    }
+
+
+
 }

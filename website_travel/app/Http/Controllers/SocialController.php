@@ -25,59 +25,40 @@ class SocialController extends Controller
      */
     public function googleLoginUrl()
     {
-       
         return response()->json([
             'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl(),
         ]);
-        // return Socialite::driver('google')->redirect();
     }  
-
-    // public function googleLoginUrl()
-    // {
-    //     dd(response()->json([
-    //         'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl(),
-    //     ]));
-    //     return response()->json([
-    //         'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl(),
-    //     ]);
-    // }
-
+    //xử lý
     public function googleLoginCallback()
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
-
-        // dd($googleUser);
-        DB::beginTransaction();
         try {
-            dd($googleUser->getName());die;
-            $socialAccount = users::firstOrNew(
-                ['user_id' => $googleUser->getId(), 'social_provider' => 'google'],
-                ['user_name' => $googleUser->getName()]
-            );
+            $user = Socialite::driver('google')->stateless()->user();
             
-            if (!($user = $socialAccount->user)) {
-                $user = users::create([
-                    'email' => $googleUser->getEmail(),
-                    'user_name' => $googleUser->getName(),
-                ]);
-                $socialAccount->fill(['user_id' => $user->id])->save();
+            $finduser = users::where('email',$user->email)->first();  // tim xem email có trong db chưa
+          
+            if($finduser){ // nếu có
+
+                $token =users::loginGoogle($finduser);
+                
+                return redirect('http://localhost:4200/login')->with('token',$token);
+
+            }else{
+                $user_name= $user->name;
+                $email = $user->email;
+                
+                $newUser = users::createUserGoogle($user_name,$email);
+
+                $token =users::loginGoogle($newUser);
+
+                // return $token;
+                return redirect()->back();
             }
 
-            // Manually login user
-            Auth::setUser($user);
-
-            DB::commit();
-
-            return response()->json([
-                'user' => new UserResource($user),
-                'google_user' => $googleUser,
-            ]);
         } catch (Exception $e) {
-            DB::rollBack();
-            Log::error($e);
-
-            throw $e;
+            return redirect('/auth/google/url');
         }
+      
     
     }
 

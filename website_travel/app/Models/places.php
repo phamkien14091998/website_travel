@@ -253,6 +253,34 @@ class places extends Model
                     )
                 ->get();
     }
+    // lấy ra top 10 place có số điểm đc đánh giá cao nhất tháng hiện tại
+    public static function getTop10Place(){
+
+        $m = getdate()['mon'];
+        $y = getdate()['year'];
+       
+       return DB::table('famous_places')
+       ->leftJoin('rating','rating.famous_place_id','=','famous_places.famous_place_id')
+       ->select(  
+           DB::raw(
+               '
+               sum(point) as sumPoint,
+               rating.created_at,
+               famous_places.title,
+               images
+               '
+               )
+       )
+       ->orderBy('sumPoint', 'desc')
+       ->take(10)
+       ->whereDay('rating.created_at','<', '32')
+       ->whereDay('rating.created_at','>', '0')
+       ->whereMonth('rating.created_at', $m)
+       ->whereYear('rating.created_at', $y)
+       ->groupBy('famous_places.famous_place_id')
+       ->get(); 
+
+   }
 
     
 

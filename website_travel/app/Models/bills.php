@@ -27,6 +27,7 @@ class bills extends Model
                 'product_id' => $cart[$i]['id'],
                 'quantity' => $cart[$i]['qty'],
                 'price' => $cart[$i]['price'],
+                'product_name' => $cart[$i]['name'],
                 'created_at' => Carbon::now(),
             ];
             $bill_detail_id = billdetails::insertGetId($dataBillDetail);
@@ -36,8 +37,25 @@ class bills extends Model
             return true;
         }
         return false;
-        
     }
+
+    public static function getAllProductByUserId($user_id){
+
+        $data = self::where('user_id','=',$user_id)
+            ->leftJoin('bill_details','bills.bill_id','=','bill_details.bill_id')
+            ->select(
+                'bills.bill_id',
+                'bills.created_at',
+                'bills.ship_fee',
+                'total',
+                'product_name',
+                'quantity',
+                'price'
+            )
+            ->get();
+    
+        return $data;
+        }
 
 }
 ?>

@@ -210,7 +210,16 @@ class PlaceController extends Controller
         }
         // return response()->json('chưa nhập title','200');
     }
-        
+    // lấy ra top 10 sản phẩm được đánh giá cao nhất
+    public function getTop10Place(){
+       
+        $data = places::getTop10Place();
+        if($data){
+            return  response()->json($data,200);
+        }
+        return response()->json('khong tim thay',400);
+
+    }
 
 
 }

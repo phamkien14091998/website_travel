@@ -45,5 +45,11 @@ class BillController extends Controller
             return response()->json('Thanh toán thất bại',500);
         } 
     }
+    // get all products by user_id
+    public function getAllProductByUserId(Request $request){
+        $user_id = $request->user_id;
+        $data = bills::getAllProductByUserId($user_id);
+        return response()->json($data,'200');
+    }
 }
 ?>

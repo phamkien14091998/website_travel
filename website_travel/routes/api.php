@@ -77,6 +77,8 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('search-place-by-province-id-new', 'PlaceController@searchPlaceByProvivnceIdNewPost');
     // tìm kiếm địa điểm theo title 
     Route::post('search-by-title', 'PlaceController@searchPlaceByTitle'); 
+    // lấy ra tôp 10 user có số điểm cao nhất tháng để thưởng (trang home)
+    Route::get('top-10', 'PlaceController@getTop10Place');
 
 });
 
@@ -154,11 +156,21 @@ Route::group(['prefix'=>'comment'],function(){
 Route::group(['prefix'=>'rating'],function(){
     Route::post('new', 'RatingController@createRating'); // thêm đán giá của bài post 
     Route::post('check', 'RatingController@checkUserRatingPost'); // kiểm tra xem user đang đăng nhập có đánh giá bài viết chưa 
-    Route::post('update', 'RatingController@updateRating'); // thêm đán giá của bài post 
+    Route::post('update', 'RatingController@updateRating'); // sửa đánh giá của bài post 
     Route::post('list', 'RatingController@getAllRatingPost'); // lấy ra tất cả đánh giá của bài post đó
+
+    Route::post('place/new', 'RatingController@createRatingPlace'); // thêm đán giá cho địa điểm 
+    Route::post('place/check', 'RatingController@checkUserRatingPlace'); // kiểm tra xem user đang đăng nhập có đánh giá địa điểm chưa 
+    Route::post('place/update', 'RatingController@updateRatingPlace'); // sửa đánh giá của địa điểm 
+    Route::post('place/list', 'RatingController@getAllRatingPlace'); // lấy ra tất cả đánh giá của địa điểm đó
 });
 
 // router thanh toán
 Route::group(['middleware' => ['web']], function () {
     Route::post('bill/payment/{user_id}', 'BillController@payment');  // get all comment của bài post
 });
+// router đơn hàng user () 
+Route::group(['prefix'=>'order'],function(){
+    Route::get('list-order/{user_id}', 'BillController@getAllProductByUserId'); // get user by user id
+});
+
