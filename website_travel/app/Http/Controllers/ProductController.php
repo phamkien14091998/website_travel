@@ -202,6 +202,11 @@ class ProductController extends Controller
         }
         return response()->json('không tìm thấy sản phẩm nào',400);
     }
+    // lấy ra top 10 product
+    public function getTop10(){
+        $data= products::getTop10();
+        return response()->json($data,200);
+    }
 
 
 }

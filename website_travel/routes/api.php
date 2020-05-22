@@ -52,7 +52,9 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('list-product-new', 'ProductController@getProductNew');
     // router xem sản phẩm theo id thể loại
     Route::get('search-by-portfolio_id/{portfolio_id}', 'ProductController@searchByPortfolio_id');
-
+    // lấy ra 10 sản phẩm bán chạy nhất
+    Route::get('top10', 'ProductController@getTop10');
+    
 });
 
 // router quản lý địa điểm

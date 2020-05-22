@@ -191,6 +191,33 @@ class products extends Model
 
         return $data_product;
     }
+    // lấy ra 10 sản phẩm bán chạy nhất
+    public static function getTop10(){
+        $m = getdate()['mon'];
+        $y = getdate()['year'];
+
+        return DB::table('products')
+            ->leftJoin('bill_details','bill_details.product_id','=','products.product_id')
+            ->select(
+                DB::raw(
+                    '
+                    sum(bill_details.quantity) as sumQuantity,
+                    bill_details.created_at,
+                    product_name
+                    '
+                )
+            )
+            ->orderBy('sumQuantity', 'desc')
+            ->take(10)
+            ->whereDay('bill_details.created_at','<', '32')
+            ->whereDay('bill_details.created_at','>', '0')
+            ->whereMonth('bill_details.created_at', $m)
+            ->whereYear('bill_details.created_at', $y)
+            ->groupBy('products.product_id')
+            ->get(); 
+
+    }
+
    
 
 
