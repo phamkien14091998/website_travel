@@ -22,7 +22,6 @@ class products extends Model
         'quantity',
         'portfolio_id',
         'images',
-
     ];
     // create product
     public static function createProduct($data){
@@ -72,7 +71,6 @@ class products extends Model
             'images'
         )
         ->get();  
-    
     return $data_product;
    }
    // search all product of product_portfolio_id
@@ -90,7 +88,6 @@ class products extends Model
         'images'
     )
     ->get();
-
     return $data_product;
    }
    // lấy ra sản phẩm có product_name và portfolio_id
@@ -131,26 +128,20 @@ class products extends Model
         'products.portfolio_id'
     )
     ->first();
-
     return $data_product;
    }
-
    // delete product by id 
    public static function deleteProductById($product_id){
-
     return self::where('product_id','=',$product_id)
             ->delete();
     }
-
     // update product by id : UPDATE Products SET product_name=$product_name WHERE product_id=$product_id
     public static function updateProductById($product_id,$data){
 
         return self::where('product_id', $product_id)
             ->update($data);
     }
-
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
     // get 16 product mới nhất
     public static function getProductNew(){
 
@@ -191,7 +182,7 @@ class products extends Model
 
         return $data_product;
     }
-    // lấy ra 10 sản phẩm bán chạy nhất
+    // lấy ra 10 sản phẩm bán chạy nhất tháng qua
     public static function getTop10(){
         $m = getdate()['mon'];
         $y = getdate()['year'];
@@ -215,10 +206,15 @@ class products extends Model
             ->whereYear('bill_details.created_at', $y)
             ->groupBy('products.product_id')
             ->get(); 
-
     }
+    // thống kê doanh thu từ tháng 1->12 năm 2020
+    public static function getStatisticsRevenue(){
+        $sql="Select Month(created_at) as 'month',Year(created_at) as 'year', Sum(total) as 'doanhThu'
+        From bills
+        Group by Month(created_at) order by Month(created_at) DESC";
 
-   
+        return DB::select($sql);
+    }
 
 
 }

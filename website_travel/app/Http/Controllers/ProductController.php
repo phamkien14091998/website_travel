@@ -207,6 +207,12 @@ class ProductController extends Controller
         $data= products::getTop10();
         return response()->json($data,200);
     }
+    // thống kê doanh thu từ tháng 1->12 năm 2020
+    public function getStatisticsRevenue(){
+        $data= products::getStatisticsRevenue();
+        return response()->json($data,200);
+    }
+    
 
 
 }

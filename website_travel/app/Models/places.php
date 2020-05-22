@@ -129,7 +129,6 @@ class places extends Model
     }
     // vũ làm theo phương thức get
     public static function searchPlaceByProvivnceIdGET($province_id) {
-        
         return 
         self::where('famous_places.province_id','=',$province_id)
         ->join('provinces','provinces.province_id','=','famous_places.province_id')
@@ -145,7 +144,6 @@ class places extends Model
         )
         ->get();
     }
-
     // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
      public static function getList8Provinces(){
         return DB::table('provinces')
@@ -157,19 +155,17 @@ class places extends Model
             ->take(8)
             ->get();
     }
-
-        // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
-        public static function getList11Provinces(){
-            return DB::table('provinces')
-                ->select(
-                    'province_id',
-                    'province_name',
-                    'image'
-                )
-                ->take(11)
-                ->get();
-        }
-
+    // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
+    public static function getList11Provinces(){
+        return DB::table('provinces')
+            ->select(
+                'province_id',
+                'province_name',
+                'image'
+            )
+            ->take(11)
+            ->get();
+    }
     // lấy ra địa điểm by id
     public static function getPlaceByid($famous_place_id_arr){
         $array_new=[];
@@ -185,11 +181,9 @@ class places extends Model
             array_push($array_new,$data_return[0]);
         }
         return $array_new;
-        
     }
 
     public static function getDetail($famous_place_id){
-
         $data = self::where('famous_place_id','=',$famous_place_id)
             ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
             ->select(
@@ -279,9 +273,7 @@ class places extends Model
        ->whereYear('rating.created_at', $y)
        ->groupBy('famous_places.famous_place_id')
        ->get(); 
-
    }
-
     
 
 }

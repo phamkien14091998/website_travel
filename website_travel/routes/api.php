@@ -54,7 +54,9 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('search-by-portfolio_id/{portfolio_id}', 'ProductController@searchByPortfolio_id');
     // lấy ra 10 sản phẩm bán chạy nhất
     Route::get('top10', 'ProductController@getTop10');
-    
+    // thống kê doanh thu theo tháng trong năm 2020
+    Route::get('statistics-revenue', 'ProductController@getStatisticsRevenue');
+
 });
 
 // router quản lý địa điểm
