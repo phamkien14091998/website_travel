@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 
 Route::post('register','UserController@register');
 Route::post('login','UserController@login');
-Route::get('profile','UserController@getAuthenticatedUser');
+Route::get('profile','UserController@getAuthenticatedUser'); 
 
 Route::get('auth/google/url', 'SocialController@googleLoginUrl');
 Route::get('auth/google/callback', 'SocialController@googleLoginCallback');
@@ -56,6 +56,10 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('top10', 'ProductController@getTop10');
     // thống kê doanh thu theo tháng trong năm 2020
     Route::get('statistics-revenue', 'ProductController@getStatisticsRevenue');
+     // router trang ban sản phẩm(lấy ra 16 sản phẩm bán chạy nhất)
+    Route::get('list-revenue', 'ProductController@getProducRevenue');
+    // tìm kiếm sản phẩm theo tên 
+    Route::post('search-name', 'ProductController@searchProductbyName');
 
 });
 
@@ -83,6 +87,8 @@ Route::group(['prefix'=>'place'],function(){
     Route::post('search-by-title', 'PlaceController@searchPlaceByTitle'); 
     // lấy ra tôp 10 user có số điểm cao nhất tháng để thưởng (trang home)
     Route::get('top-10', 'PlaceController@getTop10Place');
+    // tìm kiếm địa điểm theo title hoạc province_id  
+    Route::post('search', 'PlaceController@searchPlaceByTitleAndProvinId');
 
 });
 
@@ -171,10 +177,16 @@ Route::group(['prefix'=>'rating'],function(){
 
 // router thanh toán
 Route::group(['middleware' => ['web']], function () {
-    Route::post('bill/payment/{user_id}', 'BillController@payment');  // get all comment của bài post
+    Route::post('bill/paymentCash/{user_id}', 'BillController@paymentCash');  // get all comment của bài post
+    Route::post('bill/paymentPaypal/{user_id}', 'BillController@paymentPaypal');  // thanh toán bằng paypal
+    Route::get('paypal/status', 'BillController@statusBill'); // get tình trạng của đơn hàng sau khi thanh toán
+    Route::get('paypal/detail/{id}', 'BillController@paymentDetail'); // get tình trạng của đơn hàng sau khi thanh toán
+    Route::get('paypal/payment', 'BillController@paymentPayPalInsertData'); // insert dữ liệu vào db sau khi thanh toán thành công
 });
 // router đơn hàng user () 
 Route::group(['prefix'=>'order'],function(){
     Route::get('list-order/{user_id}', 'BillController@getAllProductByUserId'); // get user by user id
 });
+
+
 

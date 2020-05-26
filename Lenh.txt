@@ -51,6 +51,11 @@ hướng dẫn tích hợp vào Angular
 - khi co thêm [ngModel] => chạy thêm lệnh : npm install your-package-name
 
 
+//// sử dụng thanh toán online : 
+composer require paypal/rest-api-sdk-php
+
+
+
 
 
 

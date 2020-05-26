@@ -78,10 +78,11 @@ class cart extends Model
 
 	//tăng số lượng sản phẩm trong cart
 	public static function tangSoLuongSP($id){
+		$soLuongCon = products::find($id)['quantity'];
 		if(Session::has('cart')){
 			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
 				if(Session::get('cart.name')[$i]['id'] == $id) {
-					$t = Session::get('cart.name');
+					$t = Session::get('cart.name');			
 					$t[$i]['qty'] +=1;
 					Session::put('cart.name', $t);
 					break;
@@ -89,6 +90,7 @@ class cart extends Model
 			}
 		}
 		return Session::get('cart.name');
+		//return null;
 	}
 
 	//giảm số lượng sản phẩm trong cart
@@ -106,5 +108,18 @@ class cart extends Model
 			}
 		}
 		return Session::get('cart.name');
+	}
+
+	public static function getSoLuongTonKho(){
+		$arr = [];
+		if(Session::has('cart')){
+			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
+				$t = Session::get('cart.name');
+				$arr[$i] = products::find($t[$i]['id'])['quantity'];
+			}
+			return $arr;
+		} else {
+			return null;
+		}
 	}
 }

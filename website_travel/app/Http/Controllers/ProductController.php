@@ -212,7 +212,19 @@ class ProductController extends Controller
         $data= products::getStatisticsRevenue();
         return response()->json($data,200);
     }
-    
+      // Trang bán sản phẩm (lấy ra 16 sản phẩm bán chạy nhất)
+      public function getProducRevenue(){
+        //get list product new
+        $data_listProduct= products::getProducRevenue();
+
+        return  response()->json($data_listProduct);
+    }
+    // tim kiem san pham theo ten
+    public function searchProductbyName(Request $request){
+        $product_name = $request->product_name;
+        $data = products::searchProductbyName($product_name);
+        return response()->json($data);
+    }
 
 
 }

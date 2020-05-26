@@ -37,9 +37,10 @@ class SocialController extends Controller
             
             $finduser = users::where('email',$user->email)->first();  // tim xem email có trong db chưa
           
-            if($finduser){ // nếu có
+            if($finduser){ // nếu có 
 
                 $token =users::loginGoogle($finduser);
+                // dd(redirect('http://localhost:4200/login')->with('token',$token));die;
                 
                 return redirect('http://localhost:4200/login')->with('token',$token);
 

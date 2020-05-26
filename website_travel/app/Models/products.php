@@ -215,6 +215,25 @@ class products extends Model
 
         return DB::select($sql);
     }
+    // lấy ra 16 sản phẩm bán chạy nhất từ trước tới nay
+    public static function getProducRevenue(){
+        return DB::table('products')
+            ->leftJoin('bill_details','bill_details.product_id','=','products.product_id')
+            ->select(
+                DB::raw(
+                    '
+                    sum(bill_details.quantity) as sumBill_detail,
+                    products.product_name ,
+                    products.price , 
+                    products.images 
+                    '
+                )
+            )
+            ->orderBy('sumBill_detail', 'desc')
+            ->take(16)
+            ->groupBy('products.product_id')
+            ->get(); 
+    }
 
 
 }

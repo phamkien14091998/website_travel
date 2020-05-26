@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class places extends Model
-{
+{ 
      //
      protected $table="famous_places";
     
@@ -129,21 +129,45 @@ class places extends Model
     }
     // vũ làm theo phương thức get
     public static function searchPlaceByProvivnceIdGET($province_id) {
+        // return 
+        // self::where('famous_places.province_id','=',$province_id)
+        // ->join('provinces','provinces.province_id','=','famous_places.province_id')
+        // ->select(
+        //     'title',
+        //     'famous_place_id',
+        //     'images',
+        //     'description', 
+        //     'date_start',
+        //     'date_end',
+        //     'famous_places.created_at',
+        //     'province_name'
+        // )
+        // ->get();
         return 
-        self::where('famous_places.province_id','=',$province_id)
-        ->join('provinces','provinces.province_id','=','famous_places.province_id')
-        ->select(
-            'title',
-            'famous_place_id',
-            'images',
-            'description', 
-            'date_start',
-            'date_end',
-            'famous_places.created_at',
-            'province_name'
-        )
-        ->get();
+            self::where('famous_places.province_id','=',$province_id)
+            ->join('provinces','provinces.province_id','=','famous_places.province_id')
+            ->leftJoin('rating','rating.famous_place_id','=','famous_places.famous_place_id')
+            ->select(
+                DB::raw(
+                    'avg(point) as avgPoint,
+                    count(point) as countRating,
+                    famous_places.famous_place_id,
+                    famous_places.title,
+                    famous_places.images,
+                    famous_places.created_at,
+                    description,
+                    date_start,
+                    date_end
+                    '
+                    )
+            )
+            ->orderBy('avgPoint', 'desc')
+            ->groupBy('famous_place_id')
+            ->get(); 
+    
+        
     }
+
     // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
      public static function getList8Provinces(){
         return DB::table('provinces')
@@ -208,25 +232,49 @@ class places extends Model
     public static function searchPlaceByProvivnceIdNewPost($province_id,$famous_place_id){
         $sql= "famous_places.province_id = {$province_id} 
         AND famous_places.famous_place_id != {$famous_place_id}";
-
+        // return 
+        // self::whereRaw(
+        //     $sql
+        //     )
+        // ->join('provinces','provinces.province_id','=','famous_places.province_id')
+        // ->select(
+        //     'title',
+        //     'famous_place_id',
+        //     'images',
+        //     'description', 
+        //     'date_start',
+        //     'date_end',
+        //     'famous_places.created_at',
+        //     'province_name',
+        //     'famous_places.province_id'
+        // )
+        // ->get();
         return 
-        self::whereRaw(
-            $sql
+            self::whereRaw(
+                $sql
+                )
+            ->join('provinces','provinces.province_id','=','famous_places.province_id')
+            ->leftJoin('rating','rating.famous_place_id','=','famous_places.famous_place_id')
+            ->select(
+                DB::raw(
+                    'avg(point) as avgPoint,
+                    count(point) as countRating,
+                    famous_places.famous_place_id,
+                    famous_places.title,
+                    famous_places.images,
+                    famous_places.created_at,
+                    description,
+                    date_start,
+                    date_end,
+                    province_name,
+                    famous_places.province_id
+                    '
+                    )
             )
-        ->join('provinces','provinces.province_id','=','famous_places.province_id')
-        ->select(
-            'title',
-            'famous_place_id',
-            'images',
-            'description', 
-            'date_start',
-            'date_end',
-            'famous_places.created_at',
-            'province_name',
-            'famous_places.province_id'
-        )
-        ->get();
-    }
+            ->orderBy('avgPoint', 'desc')
+            ->groupBy('famous_place_id')
+            ->get(); 
+    } 
     // tìm kiếm địa điểm theo title
     public static function searchPlaceByTitle($title){
         $condition ='';
@@ -261,7 +309,8 @@ class places extends Model
                sum(point) as sumPoint,
                rating.created_at,
                famous_places.title,
-               images
+               images,
+               famous_places.famous_place_id
                '
                )
        )
@@ -274,7 +323,53 @@ class places extends Model
        ->groupBy('famous_places.famous_place_id')
        ->get(); 
    }
-    
+   // tìm kiếm địa điểm theo tỉnh
+   public static function searchPlaceByProvinId($province_id){
+    $sql= "famous_places.province_id = {$province_id} ";
+
+    return 
+    self::whereRaw(
+        $sql
+        )
+    ->leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+    ->select(
+        'title',
+        'famous_place_id',
+        'images',
+        'description', 
+        'date_start',
+        'date_end',
+        'famous_places.created_at',
+        'province_name',
+        'famous_places.province_id'
+    )
+    ->get();
+    }
+    // tìm kiếm địa điểm theo id tỉnh và title địa điểm
+    public static function searchPlaceByTitleAndProvinId($title,$province_id){
+        $condition ='';
+        if(isset($title) && isset($province_id)){ 
+            $condition.="title like '%{$title}%' and provinces.province_id = '$province_id'";
+        }
+        $data = self::leftJoin('provinces','provinces.province_id','=','famous_places.province_id')
+            ->whereRaw('('.$condition.')')
+            ->orderBy('famous_place_id', 'ASC')
+            ->select(
+                'title',
+                'famous_place_id',
+                'images',
+                'description', 
+                'date_start',
+                'date_end',
+                'famous_places.created_at',
+                'province_name',
+                'famous_places.province_id' 
+            )
+            ->get();
+        
+        return $data;
+       }
+
 
 }
     

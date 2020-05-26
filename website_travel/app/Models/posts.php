@@ -83,7 +83,6 @@ class posts extends Model
                     )
             )
             ->orderBy('avgPoint', 'desc')
-            ->take(9)
             ->where('posts.flag','1') // khi flag= 1 là đã duyệt
             ->groupBy('post_id')
             ->get(); 
@@ -149,6 +148,7 @@ class posts extends Model
     }
     // lấy ra 9 bài viết được duyệt mới nhất
     public static function getListPost9Duyet(){
+        // $sql="select count(c.comment_id) as count,post_id from posts p left join comments c on p.post_id = c.post_id  group by post_id";
 
         return self::leftJoin('users','users.user_id','=','posts.user_id')
             // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
@@ -164,7 +164,7 @@ class posts extends Model
                     images,
                     posts.created_at
                     '
-                    )
+                )
             )
             ->orderBy('avgPoint', 'desc')
             ->take(9)

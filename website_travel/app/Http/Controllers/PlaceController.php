@@ -220,6 +220,36 @@ class PlaceController extends Controller
         return response()->json('khong tim thay',400);
 
     }
+    //tìm kiếm địa điểm theo title và province_id
+    public function searchPlaceByTitleAndProvinId(Request $request){
+        if($request->title && $request->province_id){ 
+            $title = $request->title;
+            $province_id = $request->province_id;
+            
+            $data = places::searchPlaceByTitleAndProvinId($title,$province_id);
+    
+            return  response()->json($data,'200');
+        }
+        if($request->title){
+            $title = $request->title;
+            $data = places::searchPlaceByTitle($title);
+    
+            return  response()->json($data,'200');
+        }
+        if($request->province_id){
+            $province_id = $request->province_id;
+            $data = places::searchPlaceByProvinId($province_id);
+    
+            return  response()->json($data,'200');
+        }
+        
+        //get list places
+        $data= places::getListPlaces();
+
+        return  response()->json($data,'200');// trar về json
+      
+
+    }
 
 
 }

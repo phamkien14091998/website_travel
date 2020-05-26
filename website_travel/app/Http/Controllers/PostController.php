@@ -24,7 +24,7 @@ class PostController extends Controller
             return response()->json($data,200);
         }
     }
-    //get List 9 Post đã duyệt mới nhất cua tất cả user
+    //get List  Post đã duyệt mới nhất cua tất cả user
     public function getAllPostDuyet(){
         $data= posts::getAllPostDuyet();
         if($data){  

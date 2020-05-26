@@ -61,4 +61,12 @@ class CartController extends Controller
         }
         return null;
     }
+
+    public function getSoLuongTonKho(){
+        $value = cart::getSoLuongTonKho();
+        if($value){
+            return response()->json($value,200);
+        }
+        return null;
+    }
 }

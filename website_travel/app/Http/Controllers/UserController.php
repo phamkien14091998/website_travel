@@ -33,12 +33,12 @@ class UserController extends Controller
             'email'=>$request->get('email'),
             // 'password'=>$request->get('password'),
             'password'=>Hash::make($request->get('password')),
-            'full_name'=>$request->get('full_name'),
+            // 'full_name'=>$request->get('full_name'),
             'avatar'=>$request->get('avatar'),
             'date_of_birth'=>$request->get('date_of_birth'),
             'gender'=>$request->get('gender'),
-            'hometown'=>$request->get('hometown'),
-            'hobbies'=>$request->get('hobbies'),
+            // 'hometown'=>$request->get('hometown'),
+            // 'hobbies'=>$request->get('hobbies'),
         ]);
         $token = JWTAuth::fromUser($users); // tao ra token
         return response()->json(compact('users','token'),201);

@@ -115,7 +115,7 @@ class users extends Authenticatable implements JWTSubject
         $token = JWTAuth::fromUser($users); // tao ra token
         return response()->json(compact('users','token'),201);
     } 
-
+  
     // log in google
     public static function loginGoogle($newUser){
         
