@@ -76,6 +76,7 @@ class posts extends Model
                     posts.post_id,
                     posts.title,
                     users.user_name,
+                    users.avatar,
                     posts.flag,
                     images,
                     posts.created_at
@@ -160,6 +161,7 @@ class posts extends Model
                     posts.post_id,
                     posts.title,
                     users.user_name,
+                    users.avatar,
                     posts.flag,
                     images,
                     posts.created_at
@@ -311,7 +313,8 @@ class posts extends Model
                 '
                 sum(point) as sumPoint,
                 users.user_name,
-                rating.created_at
+                rating.created_at,
+                users.avatar
                 '
                 )
         )
