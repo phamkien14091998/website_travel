@@ -243,6 +243,14 @@ class PostController extends Controller
         return response()->json('khong tim thay',400);
 
     }
+    // update viewer 
+    public function updateViewer(Request $request){
+        $post_id= $request->post_id;
+        $viewer= $request->viewer;
+       
+        $data = posts::updateViewer($post_id,$viewer);
+        return  response()->json($data,200);
+    }
 
     
 

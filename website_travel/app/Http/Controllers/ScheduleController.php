@@ -65,7 +65,7 @@ class ScheduleController extends Controller
     // lấy danh sách lịch trinh theo user
     public function getListScheduleByUser(Request $request){
        
-        $user_id = $request->all()[0];
+        $user_id = $request->user_id;
         $data = schedules::getListScheduleByUser($user_id);
         if($data){
             return response()->json($data,200);

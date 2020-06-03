@@ -35,58 +35,57 @@ class posts extends Model
 
     // get list famous places của user đang chờ duyệt flag= 0
     public static function getAllPostDuyet(){
-        // return DB::table('posts')
-        // ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
-        //     ->leftJoin('users','users.user_id','=','posts.user_id')
-        //     ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
-        //     ->select(
-        //         'posts.title as post_title',
-        //         'duration',
-        //         'posts.date_start',
-        //         'posts.date_end',
-        //         'fare',
-        //         'posts.images',
-        //         'flag',
-        //         'famous_places.title as place_title',
-        //         'users.user_name',
-        //         'posts.post_id',
-        //         'provinces.province_name',
-        //         'gaits',
-        //         'home_stay',
-        //         'visits',
-        //         'activitis',
-        //         'note',
-        //         'items',
-        //         'users.avatar',
-        //         'posts.created_at',
-        //         'famous_places.description'
+
+        // $post = self::leftJoin('users','users.user_id','=','posts.user_id')
+        //     // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
+        //     ->leftJoin('rating','rating.post_id','=','posts.post_id')
+        //     ->select(  
+        //         DB::raw(
+        //             'avg(point) as avgPoint,
+        //             count(point) as countRating,
+                    // posts.post_id,
+                    // posts.title,
+                    // users.user_name,
+                    // users.avatar,
+                    // posts.flag,
+                    // images,
+                    // posts.created_at
+        //             '
+        //             )
         //     )
-        //     ->where([
-        //         'posts.flag'=>1,
-        //         ]) // khi flag= 0 là chưa duyệt
-        //     // ->paginate(5);
+        //     ->orderBy('avgPoint', 'desc')
+        //     ->where('posts.flag','1') // khi flag= 1 là đã duyệt
+        //     ->groupBy('post_id')
         //     ->get(); 
-        return self::leftJoin('users','users.user_id','=','posts.user_id')
-            // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
-            ->leftJoin('rating','rating.post_id','=','posts.post_id')
-            ->select(  
-                DB::raw(
-                    'avg(point) as avgPoint,
-                    count(point) as countRating,
-                    posts.post_id,
-                    posts.title,
-                    users.user_name,
-                    users.avatar,
-                    posts.flag,
-                    images,
-                    posts.created_at
-                    '
-                    )
-            )
-            ->orderBy('avgPoint', 'desc')
-            ->where('posts.flag','1') // khi flag= 1 là đã duyệt
-            ->groupBy('post_id')
-            ->get(); 
+        // $data = [
+        //     $countComment,
+        //     $post
+        // ];
+
+        $d = "SELECT
+                post_id,
+                posts.post_id,
+                posts.title,
+                users.user_name,
+                users.avatar,
+                posts.flag,
+                images,
+                posts.viewer,
+                posts.created_at,
+                ( SELECT count(*) FROM rating WHERE rating.post_id = posts.post_id ) AS countRating,
+                ( SELECT AVG( point ) FROM rating WHERE rating.post_id = posts.post_id ) AS avgPoint,
+                ( SELECT count(*) FROM comments WHERE comments.post_id = posts.post_id ) AS countComment 
+            FROM
+                posts 
+            LEFT JOIN users on users.user_id= posts.user_id
+            WHERE
+                posts.flag = 1
+            ORDER BY
+                avgPoint DESC 
+            ";
+        $d = DB::select($d);
+
+        return $d;
 
     }
     // get list famous places của user đang chờ duyệt flag= 0
@@ -151,32 +150,59 @@ class posts extends Model
     public static function getListPost9Duyet(){
         // $sql="select count(c.comment_id) as count,post_id from posts p left join comments c on p.post_id = c.post_id  group by post_id";
 
-        return self::leftJoin('users','users.user_id','=','posts.user_id')
-            // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
-            ->leftJoin('rating','rating.post_id','=','posts.post_id')
-            ->select(  
-                DB::raw(
-                    'avg(point) as avgPoint,
-                    count(point) as countRating,
-                    posts.post_id,
-                    posts.title,
-                    users.user_name,
-                    users.avatar,
-                    posts.flag,
-                    images,
-                    posts.created_at
-                    '
-                )
-            )
-            ->orderBy('avgPoint', 'desc')
-            ->take(9)
-            ->where('posts.flag','1') // khi flag= 1 là đã duyệt
-            ->groupBy('post_id')
-            ->get(); 
+        // return self::leftJoin('users','users.user_id','=','posts.user_id')
+        //     // ->leftJoin('comments','comments.post_id','=','posts.post_id') // lấy số lượng cmt ra
+        //     ->leftJoin('rating','rating.post_id','=','posts.post_id')
+        //     ->select(  
+        //         DB::raw(
+        //             'avg(point) as avgPoint,
+        //             count(point) as countRating,
+        //             posts.post_id,
+        //             posts.title,
+        //             users.user_name,
+        //             users.avatar,
+        //             posts.flag,
+        //             images,
+        //             posts.created_at
+        //             '
+        //         )
+        //     )
+        //     ->orderBy('avgPoint', 'desc')
+        //     ->take(9)
+        //     ->where('posts.flag','1') // khi flag= 1 là đã duyệt
+        //     ->groupBy('post_id')
+        //     ->get(); 
+
+        $d = "SELECT
+            post_id,
+            posts.post_id,
+            posts.title,
+            users.user_name,
+            users.avatar,
+            posts.flag,
+            images,
+            posts.viewer,
+            posts.created_at,
+            ( SELECT count(*) FROM rating WHERE rating.post_id = posts.post_id ) AS countRating,
+            ( SELECT AVG( point ) FROM rating WHERE rating.post_id = posts.post_id ) AS avgPoint,
+            ( SELECT count(*) FROM comments WHERE comments.post_id = posts.post_id ) AS countComment 
+        FROM
+            posts 
+        LEFT JOIN users on users.user_id= posts.user_id
+        WHERE
+            posts.flag = 1
+        ORDER BY
+            avgPoint DESC 
+        LIMIT 9	
+        ";
+    $d = DB::select($d);
+
+    return $d;
 
     }
     // get detail place by id
     public static function getDetailPost($post_id){
+
         $data = self::where('post_id','=',$post_id)
             ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
             ->leftJoin('users','users.user_id','=','posts.user_id')
@@ -201,7 +227,8 @@ class posts extends Model
                 'items',
                 'users.avatar',
                 'posts.created_at',
-                'famous_places.description'
+                'famous_places.description',
+                'viewer'
             )
             ->first();
         return $data;
@@ -250,37 +277,66 @@ class posts extends Model
     }
     // get detail place by id
     public static function getAllPostByPlaceId($famous_place_id){
-        $data = self::where('posts.famous_place_id','=',$famous_place_id)
-            ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
-            ->leftJoin('users','users.user_id','=','posts.user_id')
-            ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
-            ->select(
-                'posts.title as post_title',
-                'duration',
-                'posts.date_start',
-                'posts.date_end',
-                'fare',
-                'posts.images',
-                'flag',
-                'famous_places.title as place_title',
-                'users.user_name',
-                'posts.post_id',
-                'provinces.province_name',
-                'gaits',
-                'home_stay',
-                'visits',
-                'activitis',
-                'note',
-                'items',
-                'users.avatar',
-                'posts.created_at',
-                'famous_places.description'
-            )
-            ->where([
-                'posts.flag'=>1,
-                ])
-            ->get(); 
-        return $data;
+        // $data = self::where('posts.famous_place_id','=',$famous_place_id)
+        //     ->leftJoin('famous_places','famous_places.famous_place_id','=','posts.famous_place_id')
+        //     ->leftJoin('users','users.user_id','=','posts.user_id')
+        //     ->leftJoin('provinces','famous_places.province_id','=','provinces.province_id')
+        //     ->select(
+        //         'posts.title as post_title',
+        //         'duration',
+        //         'posts.date_start',
+        //         'posts.date_end',
+        //         'fare',
+        //         'posts.images',
+        //         'flag',
+        //         'famous_places.title as place_title',
+        //         'users.user_name',
+        //         'posts.post_id',
+        //         'provinces.province_name',
+        //         'gaits',
+        //         'home_stay',
+        //         'visits',
+        //         'activitis',
+        //         'note',
+        //         'items',
+        //         'users.avatar',
+        //         'posts.created_at',
+        //         'famous_places.description'
+        //     )
+        //     ->where([
+        //         'posts.flag'=>1,
+        //         ])
+            // ->get(); 
+        // return $data;
+
+
+        $d = "SELECT
+                posts.post_id,
+                posts.title,
+                users.user_name,
+                users.avatar,
+                posts.flag,
+                posts.images,
+                posts.viewer,
+                posts.created_at,
+                ( SELECT count(*) FROM rating WHERE rating.post_id = posts.post_id ) AS countRating,
+                ( SELECT AVG( point ) FROM rating WHERE rating.post_id = posts.post_id ) AS avgPoint,
+                ( SELECT count(*) FROM comments WHERE comments.post_id = posts.post_id ) AS countComment 
+            FROM
+                posts
+                LEFT JOIN users ON users.user_id = posts.user_id
+                LEFT JOIN famous_places ON famous_places.famous_place_id = posts.famous_place_id 
+            WHERE
+                posts.famous_place_id = {$famous_place_id} 
+            ORDER BY
+            avgPoint DESC 
+        ";
+        $d = DB::select($d);
+
+    return $d;
+
+
+
         }
     // get all post by province id 
     public static function getAllPostByProvinceId($province_id){
@@ -330,7 +386,14 @@ class posts extends Model
         ->whereYear('rating.created_at', $y)
         ->groupBy('users.user_id')
         ->get(); 
-
+    }
+    // update viewer
+    public static function updateViewer($post_id,$viewer){
+        $data = [
+            'viewer' => $viewer
+        ];
+        $updateViewerPost = self::where('post_id', $post_id)
+            ->update($data);
     }
 
 

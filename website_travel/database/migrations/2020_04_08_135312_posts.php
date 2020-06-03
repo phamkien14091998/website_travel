@@ -29,6 +29,7 @@ class Posts extends Migration
             $table->text('visits')->nullable()->collation('utf8_unicode_ci');
             $table->text('activitis')->nullable()->collation('utf8_unicode_ci');
             $table->text('note')->nullable()->collation('utf8_unicode_ci');
+            $table->integer('viewer')->nullable();
 
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')

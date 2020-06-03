@@ -60,6 +60,8 @@ Route::middleware('auth:api')->get('/users',function(Request $request){
     Route::get('list-revenue', 'ProductController@getProducRevenue');
     // tìm kiếm sản phẩm theo tên 
     Route::post('search-name', 'ProductController@searchProductbyName');
+    // thống kê toàn bộ trang home
+    Route::get('statistical', 'ProductController@getStatistical');
 
 });
 
@@ -110,6 +112,9 @@ Route::group(['prefix'=>'post'],function(){
     Route::get('place/detail/{famous_place_id}', 'PostController@getAllPostByPlaceId'); 
     Route::get('province/detail/{province_id}', 'PostController@getAllPostByProvinceId');
     Route::get('top-10-user', 'PostController@getTop10User');// lấy ra tôp 10 user có số điểm cao nhất tháng để thưởng (trang home)
+    //update viewer bai post
+    Route::post('updateViewer', 'PostController@updateViewer');
+
 });
 
 // router quản lý user (thông tin, collection, tạo lịch trình) 

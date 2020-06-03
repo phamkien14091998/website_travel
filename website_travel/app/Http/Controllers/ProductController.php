@@ -225,6 +225,13 @@ class ProductController extends Controller
         $data = products::searchProductbyName($product_name);
         return response()->json($data);
     }
+    // thống kê toàn bộ trang home
+
+    public function getStatistical(){
+        $data= products::getStatistical();
+
+        return  response()->json($data);
+    }
 
 
 }

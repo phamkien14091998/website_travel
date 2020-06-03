@@ -55,8 +55,8 @@ class schedules extends Model
     public static function getListScheduleByUser($user_id){
         
         return self::where('user_id',$user_id)
-                ->select('trip_name','created_at','description','trip_id','day_start','day_end')
-                ->orderBy('trip_id', 'desc')
+                ->select('trip_name','trips.created_at','trips.description','trips.trip_id','day_start','day_end')
+                ->orderBy('trips.trip_id', 'desc')
                 ->get();
     } 
     // get detail schedule  by id

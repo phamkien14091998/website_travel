@@ -49,12 +49,16 @@ class places extends Model
     public static function getListProvince(){
 
         return DB::table('provinces')
-            ->select(
-                'province_id',
-                'province_name',
-                'image'
+            ->leftJoin('famous_places','famous_places.province_id','=','provinces.province_id')
+            ->selectRaw(
+                'provinces.province_id,
+                province_name,
+                count(famous_places.province_id) as countPlace,
+                provinces.image'
+
             )
-            ->get(); 
+            ->groupBy('provinces.province_id')
+            ->get();
     }
     // get detail place by id
     public static function getDetailPlace($famous_place_id){
@@ -171,24 +175,32 @@ class places extends Model
     // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
      public static function getList8Provinces(){
         return DB::table('provinces')
-            ->select(
-                'province_id',
-                'province_name',
-                'image'
+            ->leftJoin('famous_places','famous_places.province_id','=','provinces.province_id')
+            ->selectRaw(
+                'provinces.province_id,
+                province_name,
+                count(famous_places.province_id) as countPlace,
+                provinces.image'
+
             )
+            ->groupBy('provinces.province_id')
             ->take(8)
             ->get();
     }
-    // get ra 8 địa điểm mới nhất của tất cả những người đăng tại trang home
+    // get ra 11 địa điểm mới nhất của tất cả những người đăng tại trang home
     public static function getList11Provinces(){
         return DB::table('provinces')
-            ->select(
-                'province_id',
-                'province_name',
-                'image'
-            )
-            ->take(11)
-            ->get();
+        ->leftJoin('famous_places','famous_places.province_id','=','provinces.province_id')
+        ->selectRaw(
+            'provinces.province_id,
+            province_name,
+            count(famous_places.province_id) as countPlace,
+            provinces.image'
+
+        )
+        ->groupBy('provinces.province_id')
+        ->take(11)
+        ->get();
     }
     // lấy ra địa điểm by id
     public static function getPlaceByid($famous_place_id_arr){

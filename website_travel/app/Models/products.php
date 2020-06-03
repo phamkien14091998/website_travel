@@ -234,6 +234,50 @@ class products extends Model
             ->groupBy('products.product_id')
             ->get(); 
     }
+    // thống kê toàn bộ trang home
+    public static function getStatistical(){
+        $countProvince = DB::table('provinces')
+                    -> selectRaw(
+                        '
+                        count(province_id) as countProvince
+                        '
+                    )->get();
+        $countPlace = DB::table('famous_places')
+                    -> selectRaw(
+                        '
+                        count(famous_place_id) as countPlace
+                        '
+                    )->get();
+        $countPost = DB::table('posts')
+                    ->where('flag',1)
+                    -> selectRaw(
+                        '
+                        count(post_id) as countPost
+                        '
+                    )->get();
+        $countUser = DB::table('users')
+                    -> selectRaw(
+                        '
+                        count(user_id) as countUser
+                        '
+                    )->get();
+        $countRating = DB::table('rating')
+                    -> selectRaw(
+                        '
+                        count(point) as countRating
+                        '
+                    )->get();
+        
+        $data = [
+            $countProvince,
+            $countPlace,
+            $countPost,
+            $countUser,
+            $countRating
+        ];
+        return $data; 
+
+    }
 
 
 }
