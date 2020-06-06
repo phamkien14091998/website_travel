@@ -58,6 +58,29 @@ class comments extends Model
         return self::where('comment_id','=',$comment_id)
         ->delete();
     }
+    // update comment by id
+    public static function updateCommentByid($comment_id,$content,$post_id){
+        $data = [
+            'content' => $content
+        ];
+        $updateComment = DB::table('comments')
+            ->where('comment_id', $comment_id)
+            ->update($data);
+
+        return self::where('post_id',$post_id)
+            ->leftJoin('users','users.user_id','=','comments.user_id')
+            ->select(
+                'comments.content',
+                'comments.user_id',
+                'comments.post_id',
+                'comments.comment_id',
+                'users.user_name',
+                'comments.created_at'
+            )
+            ->orderBy('comment_id','desc')
+            ->get(); 
+    }
+
 
 }
  

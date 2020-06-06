@@ -43,5 +43,15 @@ class CommentController extends Controller
          }
  
     }
+    // update Comment by id
+    public function updateCommentByid(Request $request){
+        $comment_id= $request->comment_id;
+        $content= $request->content;
+        $post_id= $request->post_id;
+        
+        $data = comments::updateCommentByid($comment_id,$content,$post_id);
+        
+        return  response()->json($data,200);
+    }
 
 }

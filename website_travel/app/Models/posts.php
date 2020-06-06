@@ -94,7 +94,8 @@ class posts extends Model
             ->select(
                 'users.user_name',
                 'posts.title',
-                'posts.flag'
+                'posts.flag',
+                'posts.post_id'
             )
             ->where([
                 'posts.flag'=>$bai_chua_duyet,
@@ -109,7 +110,8 @@ class posts extends Model
             ->select(  
                 'users.user_name',
                 'posts.title',
-                'posts.flag'
+                'posts.flag',
+                'posts.post_id'
             )
             ->where([
                 'posts.flag'=>$bai_duyet,
@@ -125,7 +127,8 @@ class posts extends Model
             ->select(
                 'users.user_name',
                 'posts.title',
-                'posts.flag'
+                'posts.flag',
+                'posts.post_id'
             )
             ->where([
                 'posts.flag'=>$bai_huy,

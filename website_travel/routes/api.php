@@ -114,6 +114,7 @@ Route::group(['prefix'=>'post'],function(){
     Route::get('top-10-user', 'PostController@getTop10User');// lấy ra tôp 10 user có số điểm cao nhất tháng để thưởng (trang home)
     //update viewer bai post
     Route::post('updateViewer', 'PostController@updateViewer');
+    
 
 });
 
@@ -166,6 +167,8 @@ Route::group(['prefix'=>'comment'],function(){
     Route::get('list-post/{post_id}', 'CommentController@getAllCommentByPostId');  // get all comment của bài post
     Route::post('new-post', 'CommentController@createCommentByPostId'); // thêm comment của bài post 
     Route::delete('delete/{comment_id}', 'CommentController@deleteComment');
+    // update Comment by id
+    Route::post('updateCommentByid', 'CommentController@updateCommentByid');
 });
 // router rating  
 Route::group(['prefix'=>'rating'],function(){

@@ -251,7 +251,6 @@ class PostController extends Controller
         $data = posts::updateViewer($post_id,$viewer);
         return  response()->json($data,200);
     }
-
     
 
 }
