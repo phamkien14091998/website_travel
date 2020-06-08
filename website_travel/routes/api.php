@@ -135,7 +135,7 @@ Route::group(['prefix'=>'collection'],function(){
     Route::delete('delete/{collection_id}', 'CollectionController@deleteCollection');
     Route::get('detail-id/{collection_id}', 'CollectionController@getDetailCollectionById');
     Route::post('add-place', 'CollectionController@addPlaceIntoCollection');  // thêm địa điểm vào bộ sưu tập của user
-    Route::delete('delete-place/{famous_place_id}', 'CollectionController@deletePlaceCollection'); // xóa địa điểm khỏi bộ sưu tập
+    Route::post('delete-place', 'CollectionController@deletePlaceCollection'); // xóa địa điểm khỏi bộ sưu tập
     
 });
 

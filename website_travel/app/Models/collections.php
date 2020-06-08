@@ -74,7 +74,8 @@ class collections extends Model
             'famous_places.date_start',
             'famous_places.date_end',
             'provinces.province_name',
-            'famous_places.famous_place_id'
+            'famous_places.famous_place_id',
+            'collection_detail.collection_id'
             )
         ->get();
 
@@ -119,9 +120,13 @@ class collections extends Model
         return  DB::table('collection_detail')->insertGetId($data_col);
     }
     // xóa địa điểm trong bộ sưu tập
-    public static function deletePlaceCollection($famous_place_id){
+    public static function deletePlaceCollection($famous_place_id,$collection_id){
 
-        return DB::table('collection_detail')->where('famous_place_id','=',$famous_place_id)
+        return DB::table('collection_detail')
+                ->where([
+                    'famous_place_id'=> $famous_place_id,
+                    'collection_id'=> $collection_id
+                ])
                 ->delete();
     }
 

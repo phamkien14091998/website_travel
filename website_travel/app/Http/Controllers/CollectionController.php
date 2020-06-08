@@ -121,8 +121,9 @@ class CollectionController extends Controller
     public function deletePlaceCollection(Request $request)
     {
         $famous_place_id = $request->famous_place_id;
+        $collection_id = $request->collection_id;
         
-        $data = collections::deletePlaceCollection($famous_place_id);
+        $data = collections::deletePlaceCollection($famous_place_id,$collection_id);
         if($data){
             return response()->json('xóa thành công địa điểm trong bộ sưu tập',200);
         }else{

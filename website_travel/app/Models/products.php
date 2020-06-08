@@ -225,7 +225,9 @@ class products extends Model
                     sum(bill_details.quantity) as sumBill_detail,
                     products.product_name ,
                     products.price , 
-                    products.images 
+                    products.images,
+                    products.quantity,
+                    products.description
                     '
                 )
             )
