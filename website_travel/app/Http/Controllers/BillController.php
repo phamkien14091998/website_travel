@@ -103,6 +103,12 @@ class BillController extends Controller
         $dataPayment = Session::get('dataPayment');
         $checkPayment = bills::payment($dataPayment,$cart);
         if($checkPayment){
+            // đâyy là đoạn mà nó thanh toán paypal xong, cũng lấy ra 
+            // trong cái $cart là dữ liệu sp mà nó mua, còn trong cái datapayment là dữ liệu mà nó chọn lúc
+            // thanh toán ok , để t theemthuwr  r ông test coi chứ t chưa biết test ntn
+            // ông tắt ultra và chờ t 15 phút 
+            // giờ ông làm cái thanh toán iten mặt phải k
+            // làm gửi mail cái thanh toán tiền mặt trc đi ok 
             return response()->json('Thanh toán thành công',200);
         } else {
             return response()->json('Thanh toán thất bại',500);
@@ -112,7 +118,7 @@ class BillController extends Controller
     //thanh toán bằng tiền mặt
     public function paymentCash(Request $request){
         $user_id = $request->user_id;
-        $cart =  Session::get('cart.name');//lấy ra giỏ hàng
+        $cart =  Session::get('cart.name');//lấy ra giỏ hàng cart này là mảng sản phẩm nó mua
         $totalMoneyOfCart = 0;//Tổng tiền sản phẩm trong giỏ hàng không tính phí ship
         for($i = 0 ; $i < count($cart) ; $i++){
             $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
@@ -138,9 +144,15 @@ class BillController extends Controller
             "total" => $totalMoneyOfCart,
         ]; 
 
+        $email = $request->email;
         //gọi models
+        
         $payment=bills::payment($dataPayment,$cart);
         if($payment){
+            \Mail::send('payment',['cart'=>$cart , 'totalMoneyOfCart'=>$totalMoneyOfCart],function($message) use($email){
+                $message->from('phamkien14091998@gmail.com','WebsiteTravel');
+                $message->to($email)->subject('Thông Báo Mua Sản Phẩm !');
+            });
             return response()->json('Thanh toán thành công',200);
         } else {
             return response()->json('Thanh toán thất bại',500);
