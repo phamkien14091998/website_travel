@@ -29,7 +29,7 @@
                     @if(isset($cart))
                        
                         <span style="padding-top: 10px;padding-left:10px" >
-                            <!-- <b>Tổng tiền : {{$totalMoneyOfCart}} Đ</b> :  -->
+                            <b>Tổng tiền : {{$totalMoneyOfCart}} Đ</b>  
                         </span>
 
                         <div class="inner" style="height: 200px;overflow-x: scroll;">
