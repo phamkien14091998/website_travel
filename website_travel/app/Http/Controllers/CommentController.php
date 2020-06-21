@@ -53,5 +53,39 @@ class CommentController extends Controller
         
         return  response()->json($data,200);
     }
+    // create comment by trip
+    public function createCommentByTripId(Request $request){
+        $data_comment = $request->all();
+        $user_id= $request->user_id;
+
+        $data=comments::createCommentByTripId($user_id,$data_comment);
+
+        if($data){ 
+            return response()->json($data,200);
+        }
+        return response()->json('Thất Bại',400);
+    }
+    // get all cmt cua lich trinh
+    public function getAllCommentByTripId(Request $request){
+        $trip_id = $request->trip_id;
+
+        $data = comments::getAllCommentByTripId($trip_id);
+        
+        if($data){ 
+            return response()->json($data,200);
+        }
+        return response()->json('Thất Bại',400);
+
+    }
+    // update cmt by trip_id
+    public function updateCommentByidTrip(Request $request){
+        $comment_id= $request->comment_id;
+        $content= $request->content;
+        $trip_id= $request->trip_id;
+        
+        $data = comments::updateCommentByidTrip($comment_id,$content,$trip_id);
+        
+        return  response()->json($data,200);
+    }
 
 }

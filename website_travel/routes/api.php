@@ -151,6 +151,11 @@ Route::group(['prefix'=>'schedule'],function(){
     Route::delete('delete-detail/{trip_detail_id}', 'ScheduleController@deleteScheduleDetail'); // xóa chedule-detail
     Route::get('trip-detail/{trip_detail_id}', 'ScheduleController@getDetailScheduleDetail'); // get ra chi tiết bảng trip-detail
     Route::post('update-trip-detail/{trip_detail_id}', 'ScheduleController@updateScheduleDetail'); // cập nhật bảng trip_detail
+    Route::post('get-all-user', 'ScheduleController@getAllUser');
+    Route::post('get-username', 'ScheduleController@getUserNameById');
+    Route::post('get-invate-schedule', 'ScheduleController@getInvateSchedule');
+    Route::post('get-user-by-trip_id', 'ScheduleController@getUserByTripId');
+    Route::post('get-user-create-by-trip_id', 'ScheduleController@getUserCreateByTripId');
     
 });
 
@@ -169,6 +174,11 @@ Route::group(['prefix'=>'comment'],function(){
     Route::delete('delete/{comment_id}', 'CommentController@deleteComment');
     // update Comment by id
     Route::post('updateCommentByid', 'CommentController@updateCommentByid');
+
+    Route::post('new-trip', 'CommentController@createCommentByTripId'); // thêm comment của bài trip 
+    Route::get('list-trip/{trip_id}', 'CommentController@getAllCommentByTripId');  // get all comment của lich trinh
+    Route::post('updateCommentByidTrip', 'CommentController@updateCommentByidTrip'); // update cmt by trip_id
+    
 });
 // router rating  
 Route::group(['prefix'=>'rating'],function(){
@@ -189,7 +199,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('bill/paymentPaypal/{user_id}', 'BillController@paymentPaypal');  // thanh toán bằng paypal
     Route::get('paypal/status', 'BillController@statusBill'); // get tình trạng của đơn hàng sau khi thanh toán
     Route::get('paypal/detail/{id}', 'BillController@paymentDetail'); // get tình trạng của đơn hàng sau khi thanh toán
-    Route::get('paypal/payment', 'BillController@paymentPayPalInsertData'); // insert dữ liệu vào db sau khi thanh toán thành công
+    Route::post('paypal/payment', 'BillController@paymentPayPalInsertData'); // insert dữ liệu vào db sau khi thanh toán thành công
 });
 // router đơn hàng user () 
 Route::group(['prefix'=>'order'],function(){

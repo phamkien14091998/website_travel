@@ -19,6 +19,7 @@ class Trips extends Migration
             $table->string('description',255)->nullable()->collation('utf8_unicode_ci');
             $table->date('day_start')->nullable(); 
             $table->date('day_end')->nullable(); 
+            $table->string('friends',255)->nullable()->collation('utf8_unicode_ci');
 
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')

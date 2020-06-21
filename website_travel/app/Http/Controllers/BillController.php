@@ -92,23 +92,34 @@ class BillController extends Controller
     {
         $paymentStatus = $this->paypalSvc->getPaymentStatus();
         if($paymentStatus->state == "approved"){
+            // đoan jreturn này là khi thnah toán xong nó trả về trang này
+            // mà t k biết sao để nó hiện thông báo, chỉ đưa về đc trang này thôi
+            // khi về trang này thì 
+            // chỗnayfoong lamfsao truyền thêm thông báo nha
+            // khoan , chỗ này là trả về luôn tại đây hả
+            // thnah toán xong nó reddire về trang này, xong từ trang này nó mưới gọi hàm insert
             return response()->redirectTo('http://localhost:4200/product');
         } else {
             return response()->redirectTo('http://localhost:4200');
         }        
     }
 
-    public function paymentPayPalInsertData(){
+    public function paymentPayPalInsertData(Request $request){
         $cart = Session::get('cart.name');
         $dataPayment = Session::get('dataPayment');
         $checkPayment = bills::payment($dataPayment,$cart);
+
+        for($i = 0 ; $i < count($cart) ; $i++){
+            $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
+        }
+        $email = $request->email;
+
         if($checkPayment){
-            // đâyy là đoạn mà nó thanh toán paypal xong, cũng lấy ra 
-            // trong cái $cart là dữ liệu sp mà nó mua, còn trong cái datapayment là dữ liệu mà nó chọn lúc
-            // thanh toán ok , để t theemthuwr  r ông test coi chứ t chưa biết test ntn
-            // ông tắt ultra và chờ t 15 phút 
-            // giờ ông làm cái thanh toán iten mặt phải k
-            // làm gửi mail cái thanh toán tiền mặt trc đi ok 
+            
+            \Mail::send('payment',['cart'=>$cart , 'totalMoneyOfCart'=>$totalMoneyOfCart],function($message) use($email){
+                $message->from('phamkien14091998@gmail.com','WebsiteTravel');
+                $message->to($email)->subject('Thông Báo Mua Sản Phẩm !');
+            });
             return response()->json('Thanh toán thành công',200);
         } else {
             return response()->json('Thanh toán thất bại',500);

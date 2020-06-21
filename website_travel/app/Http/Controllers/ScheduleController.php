@@ -22,7 +22,7 @@ class ScheduleController extends Controller
         }
     }
     // create schedule
-    public function create(Request $request){
+    public function create(Request $request){ 
         $validator = Validator::make($request->all(),[
             'trip_name' => 'required|string|max:40|unique:trips', 
         ]);  
@@ -30,7 +30,6 @@ class ScheduleController extends Controller
             return response()->json('tên lịch trình không được trùng',500);
         }
 
-       
         // $place_id_luu_arr = $request->place_id_luu_arr;
         $dataDetail_trip = $request->dataDetail_trip;
 
@@ -40,16 +39,19 @@ class ScheduleController extends Controller
         $day_end = $request->day_end;
         $user_id = $request->user_id;
         $email = $request->email;
+        $friends = $request->friends;
+        $friends_arr = $request->friends_arr;
 
         $data_trip =[
             'trip_name' => $trip_name,
             'description' => $description,
             'day_start' => $day_start,
             'day_end' => $day_end,
-            'user_id'=>$user_id
+            'user_id'=>$user_id,
+            'friends'=>$friends
         ];
 
-        $data= schedules::createSchedule($dataDetail_trip,$data_trip);
+        $data= schedules::createSchedule($dataDetail_trip,$data_trip,$friends_arr);
 
         \Mail::send('welcome',['data_trip'=>$data_trip],function($message) use($email){
             $message->from('phamkien14091998@gmail.com','WebsiteTravel');
@@ -164,8 +166,39 @@ class ScheduleController extends Controller
         //  }
         //  return response()->json('Sửa Thất Bại',400);
      }
+
+    public function getAllUser(Request $request){
+        $user_id = $request->user_id;
+
+        $data = schedules::getAllUser($user_id);
+        return response()->json($data,200);
+    }
     
-
-
+    public function getUserNameById(Request $request){
+        $arr_user_id = $request->arr_user_id;
+        
+        $data = schedules::getUserNameById($arr_user_id);
+        return response()->json($data,200);
+    }
+    public function getInvateSchedule(Request $request){
+        $user_id = $request->user_id;
+        
+        $data = schedules::getInvateSchedule($user_id);
+        return response()->json($data,200);
+    }
+    public function getUserByTripId(Request $request){
+        $trip_id = $request->trip_id;
+        
+        $data = schedules::getUserByTripId($trip_id);
+        return response()->json($data,200);
+    }
+    // get user tạo lịch trình theo trip_id
+    public function getUserCreateByTripId(Request $request){
+        $trip_id = $request->trip_id;
+        
+        $data = schedules::getUserCreateByTripId($trip_id);
+        return response()->json($data,200);
+    }
+    
 
 }

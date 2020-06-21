@@ -40,20 +40,20 @@ class SocialController extends Controller
             if($finduser){ // nếu có 
 
                 $token =users::loginGoogle($finduser);
-                // dd(redirect('http://localhost:4200/login')->with('token',$token));die;
-                
-                return redirect('http://localhost:4200/login')->with('token',$token);
+               
+                $url = 'http://localhost:4200/google-login?token='.$token;
+                return redirect($url); 
 
             }else{
-                $user_name= $user->name;
+                $user_name= $user->name; 
                 $email = $user->email;
                 
                 $newUser = users::createUserGoogle($user_name,$email);
 
                 $token =users::loginGoogle($newUser);
 
-                // return $token;
-                return redirect()->back();
+                $url = 'http://localhost:4200/google-login?token='.$token;
+                return redirect($url); 
             }
 
         } catch (Exception $e) {

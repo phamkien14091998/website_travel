@@ -34,7 +34,7 @@ class users extends Authenticatable implements JWTSubject
     protected $guarded = [];
 
     protected $fillable = [  // phải điền đầ đủ những trường cần thêm
-         'email','user_name','password'
+         'email','user_name','password','avatar'
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -109,7 +109,8 @@ class users extends Authenticatable implements JWTSubject
         $users = self::create([
             'email'=>$email,
             'user_name'=>$user_name,
-            'password' => Hash::make('12345')
+            'password' => Hash::make('12345'),
+            'avatar'=>'upload-avatar/img_user.PNG',
         ]);
        
         $token = JWTAuth::fromUser($users); // tao ra token
@@ -132,7 +133,8 @@ class users extends Authenticatable implements JWTSubject
             'user_name' => $user->user_name,
             'role' => $user->role,
             'user_id' => $user->user_id,
-            'email' => $user->email
+            'email' => $user->email,
+            'avatar' => $user->avatar
             ];
             
             // giờ chế lại
@@ -148,7 +150,8 @@ class users extends Authenticatable implements JWTSubject
                 'error'=>'could not create token'
             ],500);
         }  
-        return response()->json(compact('token'));    
+        return $token;
+        // response()->json(compact('token'));    
     }
 
 

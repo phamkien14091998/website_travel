@@ -20,10 +20,14 @@ class Comments extends Migration
             $table->foreign('user_id')
             ->references('user_id')
             ->on('users');
-            $table->bigInteger('post_id')->unsigned();
+            $table->bigInteger('post_id')->unsigned()->nullable();
             $table->foreign('post_id')
             ->references('post_id')
             ->on('posts');
+            $table->bigInteger('trip_id')->unsigned()->nullable();
+            $table->foreign('trip_id')
+            ->references('trip_id')
+            ->on('trips');
 
             $table->timestamps();
         });

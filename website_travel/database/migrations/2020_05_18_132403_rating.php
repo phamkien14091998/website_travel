@@ -19,7 +19,7 @@ class Rating extends Migration
             $table->integer('point')->nullable(); // số sao mà user đánh giá cho bài viết đó
 
             // cột này lưu id bài post được đánh giá
-            $table->bigInteger('post_id')->unsigned(); //->nullable()
+            $table->bigInteger('post_id')->unsigned()->nullable(); 
             $table->foreign('post_id')
             ->references('post_id')
             ->on('posts')
@@ -33,7 +33,7 @@ class Rating extends Migration
             ->onDelete('cascade'); 
 
             // cột này lưu id bài post được đánh giá
-            $table->bigInteger('famous_place_id')->unsigned(); //->nullable()
+            $table->bigInteger('famous_place_id')->unsigned()->nullable();
             $table->foreign('famous_place_id')
             ->references('famous_place_id')
             ->on('famous_places')
