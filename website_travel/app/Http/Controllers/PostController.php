@@ -47,6 +47,31 @@ class PostController extends Controller
         $bai_duyet = $request->bai_duyet;
         $bai_chua_duyet = $request->bai_chua_duyet;
         $bai_huy = $request->bai_huy;
+        if($bai_duyet == 'true' && $bai_chua_duyet == 'true'){
+            $bai_duyet=1;
+            $bai_chua_duyet=0; 
+            $data= posts::getListPostDuyetAndChua($bai_duyet,$bai_chua_duyet,$user_id);
+            if($data){  
+                return response()->json($data,200);
+            }
+
+        }
+        if($bai_duyet == 'true' && $bai_huy == 'true'){
+            $bai_duyet=1;
+            $bai_huy=2; 
+            $data= posts::getListPostDuyetAndHuy($bai_duyet,$bai_huy,$user_id);
+            if($data){  
+                return response()->json($data,200);
+            }
+        }
+        if($bai_chua_duyet == 'true' && $bai_huy == 'true'){
+            $bai_chua_duyet=0;
+            $bai_huy=2; 
+            $data= posts::getListPostChuaAndHuy($bai_chua_duyet,$bai_huy,$user_id);
+            if($data){  
+                return response()->json($data,200);
+            }
+        }
         if($bai_duyet == 'true' ){  
             $bai_duyet=1;
             $data= posts::getListPostDuyet($bai_duyet,$user_id);
@@ -64,10 +89,11 @@ class PostController extends Controller
         if($bai_huy == 'true'  ){ 
             $bai_huy=2;
             $data= posts::getListPostHuy($bai_huy,$user_id);
-            if($data){  
-                return response()->json($data,200);
-            }
+                if($data){  
+                    return response()->json($data,200);
+                }
         }
+        
         $data= posts::getAllPost($user_id);
             if($data){  
                 return response()->json($data,200);

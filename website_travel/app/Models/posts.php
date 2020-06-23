@@ -137,6 +137,44 @@ class posts extends Model
             // ->paginate(5);
             ->get(); 
     }
+    public static function getListPostDuyetAndChua($bai_duyet,$bai_chua_duyet,$user_id){
+        
+        $sql="users.user_id = {$user_id} AND (posts.flag = 0 OR posts.flag = 1 ) ";
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(
+                'users.user_name',
+                'posts.title',
+                'posts.flag',
+                'posts.post_id'
+            )
+            ->whereRaw($sql) 
+            ->get(); 
+    }
+    public static function getListPostDuyetAndHuy($bai_duyet,$bai_huy,$user_id){
+        $sql="(posts.flag = {$bai_duyet} OR posts.flag = {$bai_huy}  )AND  users.user_id = {$user_id}";
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(
+                'users.user_name',
+                'posts.title',
+                'posts.flag',
+                'posts.post_id'
+            )
+            ->whereRaw($sql) 
+            ->get(); 
+    }
+    public static function getListPostChuaAndHuy($bai_chua_duyet,$bai_huy,$user_id){
+        $sql="(posts.flag = {$bai_chua_duyet} OR posts.flag = {$bai_huy}  )AND  users.user_id = {$user_id}";
+        return self::leftJoin('users','users.user_id','=','posts.user_id')
+            ->select(
+                'users.user_name',
+                'posts.title',
+                'posts.flag',
+                'posts.post_id'
+            )
+            ->whereRaw($sql) 
+            ->get(); 
+    }
+    
     // get all post của user đó
     public static function getAllPost($user_id){
         return self::leftJoin('users','users.user_id','=','posts.user_id')
