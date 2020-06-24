@@ -227,7 +227,8 @@ class products extends Model
                     products.price , 
                     products.images,
                     products.quantity,
-                    products.description
+                    products.description,
+                    products.product_id
                     '
                 )
             )

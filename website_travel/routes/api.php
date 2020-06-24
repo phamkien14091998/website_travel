@@ -166,6 +166,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('cart/total-money', 'CartController@getTotalCart'); 
     Route::get('cart/tangSoLuongSP/{id}', 'CartController@tangSoLuongSP'); 
     Route::get('cart/giamSoLuongSP/{id}', 'CartController@giamSoLuongSP');
+    Route::get('cart/soLuongTon', 'CartController@getSoLuongTonKho');
+    
 });
 // router comments  
 Route::group(['prefix'=>'comment'],function(){

@@ -397,7 +397,7 @@ class posts extends Model
     // lấy ra top 10 user có số điểm đc đánh giá cao nhất
     public static function getTop10User(){
 
-         $m = getdate()['mon'];
+         $m = getdate()['mon']-1;
          $y = getdate()['year'];
 
         
