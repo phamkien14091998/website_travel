@@ -109,13 +109,13 @@ class BillController extends Controller
         $dataPayment = Session::get('dataPayment');
         $checkPayment = bills::payment($dataPayment,$cart);
 
+        //Tổng tiền giỏ hàng
+        $totalMoneyOfCart = 0;
         for($i = 0 ; $i < count($cart) ; $i++){
             $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
         }
         $email = $request->email;
-
         if($checkPayment){
-            
             \Mail::send('payment',['cart'=>$cart , 'totalMoneyOfCart'=>$totalMoneyOfCart],function($message) use($email){
                 $message->from('phamkien14091998@gmail.com','WebsiteTravel');
                 $message->to($email)->subject('Thông Báo Mua Sản Phẩm !');
