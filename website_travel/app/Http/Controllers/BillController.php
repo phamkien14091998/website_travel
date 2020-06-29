@@ -98,9 +98,14 @@ class BillController extends Controller
             // chỗnayfoong lamfsao truyền thêm thông báo nha
             // khoan , chỗ này là trả về luôn tại đây hả
             // thnah toán xong nó reddire về trang này, xong từ trang này nó mưới gọi hàm insert
-            return response()->redirectTo('http://localhost:4200/product');
+
+            // return response()->redirectTo('http://localhost:4200/product');
+            return response()->redirectTo('https://app-deploy-a1b74.web.app/product');
+            
+
         } else {
-            return response()->redirectTo('http://localhost:4200');
+            // return response()->redirectTo('http://localhost:4200');
+            return response()->redirectTo('https://app-deploy-a1b74.web.app');
         }        
     }
 
