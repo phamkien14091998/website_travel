@@ -32,32 +32,34 @@ class SocialController extends Controller
     //xử lý
     public function googleLoginCallback()
     {
-        try {
+        try { 
             $user = Socialite::driver('google')->stateless()->user();
             
             $finduser = users::where('email',$user->email)->first();  // tim xem email có trong db chưa
-          
+            
             if($finduser){ // nếu có 
-
                 $token =users::loginGoogle($finduser);
                
-                $url = 'http://localhost:4200/google-login?token='.$token;
+                // $url = 'http://localhost:4200/google-login?token='.$token;
+                $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
                 return redirect($url); 
 
             }else{
                 $user_name= $user->name; 
                 $email = $user->email;
-                
+              
                 $newUser = users::createUserGoogle($user_name,$email);
-
+                
                 $token =users::loginGoogle($newUser);
-
-                $url = 'http://localhost:4200/google-login?token='.$token;
+               
+                // $url = 'http://localhost:4200/google-login?token='.$token;
+                $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
                 return redirect($url); 
             }
 
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
             return redirect('/auth/google/url');
+            // return redirect('http://localhost:4200/login');
         }
       
     

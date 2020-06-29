@@ -105,7 +105,7 @@ class users extends Authenticatable implements JWTSubject
 
     // ham create user by google
     public static function createUserGoogle($user_name,$email){
-        
+
         $users = self::create([
             'email'=>$email,
             'user_name'=>$user_name,
@@ -114,12 +114,12 @@ class users extends Authenticatable implements JWTSubject
         ]);
        
         $token = JWTAuth::fromUser($users); // tao ra token
-        return response()->json(compact('users','token'),201);
+        return self::where('email',$email)->first();
+        // response()->json(compact('users','token'),201);
     } 
   
     // log in google
-    public static function loginGoogle($newUser){
-        
+    public static function loginGoogle($newUser){ 
         $creadentials = [
             'email'=> $newUser->email,
             'password' => '12345'
