@@ -40,8 +40,8 @@ class SocialController extends Controller
             if($finduser){ // nếu có 
                 $token =users::loginGoogle($finduser);
                
-                // $url = 'http://localhost:4200/google-login?token='.$token;
-                $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
+                $url = 'http://localhost:4200/google-login?token='.$token;
+                // $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
                 return redirect($url); 
 
             }else{
@@ -52,8 +52,8 @@ class SocialController extends Controller
                 
                 $token =users::loginGoogle($newUser);
                
-                // $url = 'http://localhost:4200/google-login?token='.$token;
-                $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
+                $url = 'http://localhost:4200/google-login?token='.$token;
+                // $url = 'https://app-deploy-a1b74.web.app/google-login?token='.$token;
                 return redirect($url); 
             }
 
