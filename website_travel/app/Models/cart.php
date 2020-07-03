@@ -3,111 +3,125 @@
 // namespace App;
 namespace App\Models;
 
+namespace App\Models;
+use DB;
+use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
 
 use App\Models\products;
 
 
 class cart extends Model
 {
+	protected $table="session";   
+    
+	
 	//thêm sản phẩm vào giỏ hàng
-	public static function add($product_id){
-		$product = products::find($product_id);
-		$temp = 0;
-		
-        if(Session::has('cart')){	
-            for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-               if($product_id == Session::get('cart.name')[$i]['id']){
-					$temp += 1;
-                }
-			}
-            if($temp == 0) {
-                Session::push('cart.name', ['id' => $product_id, 'qty' => 1,'name' => $product->product_name, 'price' => $product->price,'images' => $product->images]);
-			}
-        } else {
-			Session::put('cart',$product);
-			Session::push('cart.name', ['id' => $product_id, 'qty' => 1,'name' => $product->product_name, 'price' => $product->price,'images' => $product->images]);
+	public static function add($product_id,$user_id){
+		$product = DB::table('products')
+		->select('product_id','product_name','images','price')
+		->where('product_id',$product_id)->get();
+
+		$data=[
+			'product_id'=>$product[0]->product_id,
+			'name'=>$product[0]->product_name,
+			'qty'=>1,
+			'price'=>$product[0]->price,
+			'images'=>$product[0]->images,
+			'user_id'=>$user_id
+		];
+		$temp=0;
+	
+		// get sản phẩm trong bảng mới
+		$array_product = DB::table('session')->get();
+
+		if(count($array_product) < 1){ 
+
+			DB::table('session')->insertGetId($data);
 		}
-		return count(Session::get('cart.name'));
+		else if(count($array_product) >= 1){
+			foreach($array_product as $k => $v){
+				// neu có id r
+				if($product_id == $array_product[$k]->product_id){
+					$temp++;
+				}
+			}
+			if($temp==0){
+				DB::table('session')->insertGetId($data);
+			}
+		}
+
+       return 1;
 	}
 
 	//get all product for cart
-	public static function getAllProductForCart(){
-		if(Session::has('cart')){
-			return Session::get('cart.name');
+	public static function getAllProductForCart(){ 
+		
+		$array_product = DB::table('session')->get();
+
+		if(count($array_product) >= 1){ 
+			return $array_product;
 		}
 		return null;
 	}
-
 	//xóa một sản phẩm khỏi giỏ hàng
 	public static function deleteProductFromCart($product_id){
-		if(Session::has('cart')){
-			$product = products::find($product_id);
-			$products = Session::pull('cart.name', []); // Second argument is a default value
+		$array_product = DB::table('session')->get();
+		$temp=0;
 
-			$mangId = [];
-			for($i=0 ; $i < count($products) ; $i++){
-				$mangId[$i] = ($products[$i]['id']);
+		foreach($array_product as $k => $v){
+			// neu có id r
+			if($product_id == $array_product[$k]->product_id){
+				return DB::table('session')->where('product_id','=',$product_id)
+                ->delete();
 			}
-			if(($key = array_search($product['product_id'], $mangId)) != 1000) {
-				array_splice($products,$key,1);
-			}
-			Session::put('cart.name', $products);
-        } else {
-			return 'null';
-		}
-		if(count(Session::get('cart.name')) > 0) {
-			return Session::get('cart.name');
 		}
 		return 'null';
 	}
 
 	//get tổng tiền các sản phẩm trong cart
 	public static function getTotalCart(){
+		$array_product = DB::table('session')->get();
+
 		$totalMoney = 0;
-		if(Session::has('cart')){
-			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-				if(Session::get('cart.name')[$i]['id'] != null) {
-					$totalMoney += (int)Session::get('cart.name')[$i]['price'] * Session::get('cart.name')[$i]['qty'];
-				}
-			}
+		foreach($array_product as $k => $v){
+			// neu có id r
+			$totalMoney += (int)$array_product[$k]->price * $array_product[$k]->qty;
+			
 		}
 		return $totalMoney;
 	}
 
 	//tăng số lượng sản phẩm trong cart
 	public static function tangSoLuongSP($id){
-		$soLuongCon = products::find($id)['quantity'];
-		if(Session::has('cart')){
-			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-				if(Session::get('cart.name')[$i]['id'] == $id) {
-					$t = Session::get('cart.name');			
-					$t[$i]['qty'] +=1;
-					Session::put('cart.name', $t);
-					break;
-				}
+		
+		$array_product = DB::table('session')->get();
+
+		foreach($array_product as $k => $v){
+			if($id == $array_product[$k]->product_id){
+				$qty = (int)$array_product[$k]->qty + 1;
+				DB::table('session')->where('product_id',$id)
+				->update(['qty'=>$qty]); 
 			}
+			
 		}
-		return Session::get('cart.name');
-		//return null;
+		return $array_product;
 	}
 
 	//giảm số lượng sản phẩm trong cart
 	public static function giamSoLuongSP($id){
-		if(Session::has('cart')){
-			for($i=0 ; $i < count(Session::get('cart.name')) ; $i++){
-				if(Session::get('cart.name')[$i]['id'] == $id) {
-					$t = Session::get('cart.name');
-					if($t[$i]['qty'] > 1){
-						$t[$i]['qty'] -=1;
-						Session::put('cart.name', $t);
-					}
-					break;
-				}
+		$array_product = DB::table('session')->get();
+
+		foreach($array_product as $k => $v){
+			if($id == $array_product[$k]->product_id){
+				$qty = (int)$array_product[$k]->qty - 1;
+				DB::table('session')->where('product_id',$id)
+				->update(['qty'=>$qty]); 
 			}
+			
 		}
-		return Session::get('cart.name');
+		return $array_product;
 	}
 
 	public static function getSoLuongTonKho(){

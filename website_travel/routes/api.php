@@ -160,7 +160,7 @@ Route::group(['prefix'=>'schedule'],function(){
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('cart/add/{product_id}', 'CartController@addToCart');
+    Route::post('cart/add', 'CartController@addToCart');
     Route::get('cart/get-all/', 'CartController@getAllProductForCart');
     Route::get('cart/delete/{product_id}', 'CartController@deleteProductFromCart');
     Route::get('cart/total-money', 'CartController@getTotalCart'); 

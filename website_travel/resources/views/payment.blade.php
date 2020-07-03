@@ -44,9 +44,9 @@
                             <tbody>
                                 @foreach($cart as $cart)
                                     <tr>
-                                        <td>{{$cart['name']}}</td>
-                                        <td>{{$cart['qty']}}</td>
-                                        <td>{{$cart['price']}}</td>
+                                        <td>{{$cart->name}}</td>
+                                        <td>{{$cart->qty}}</td>
+                                        <td>{{$cart->price}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

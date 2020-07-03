@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use App\Services\PayPalService as PayPalSvc;
+use DB;
 
 class BillController extends Controller
 {
@@ -22,8 +23,10 @@ class BillController extends Controller
 
     public function paymentPaypal(Request $request)
     {
+        $array_product = DB::table('session')->get();
+
         $user_id = $request->user_id;
-        $cart =  Session::get('cart.name');//lấy ra giỏ hàng  
+        $cart =  $array_product;//lấy ra giỏ hàng  
 
         //Xử lý trường hình thức giao hàng
         $form_of_delivery = '';
@@ -38,7 +41,7 @@ class BillController extends Controller
         //Tổng tiền giỏ hàng
         $totalMoneyOfCart = 0;
         for($i = 0 ; $i < count($cart) ; $i++){
-            $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
+            $totalMoneyOfCart += ((int)$cart[$i]->price * $cart[$i]->qty);
         }
 
         //Dữ liệu insert vào bảng bills
@@ -51,15 +54,15 @@ class BillController extends Controller
             "total" => $totalMoneyOfCart,
         ];
 
-        Session::put('dataPayment',$dataPayment);
+        DB::table('payment')->insertGetId($dataPayment);
 
         $dataBillDetail = [];
 
         for($i = 0 ; $i < count($cart) ; $i++){
             $dataBillDetail[$i] = [
-                'product_name' => $cart[$i]['name'],
-                'quantity' => $cart[$i]['qty'],
-                'price' => round((int)$cart[$i]['price'] / 23143, 2)
+                'product_name' => $cart[$i]->name,
+                'quantity' => $cart[$i]->qty,
+                'price' => round((int)$cart[$i]->price / 23143, 2)
             ];
         }
 
@@ -110,14 +113,25 @@ class BillController extends Controller
     }
 
     public function paymentPayPalInsertData(Request $request){
-        $cart = Session::get('cart.name');
-        $dataPayment = Session::get('dataPayment');
-        $checkPayment = bills::payment($dataPayment,$cart);
+        $array_product = DB::table('session')->get();
+
+        $cart = $array_product;
+        $dataPayment = DB::table('payment')->get();
+        
+        $data =[
+            "ship_fee" => $dataPayment[0]->ship_fee,
+            "form_of_payment" => $dataPayment[0]->form_of_payment,
+            "note" => $dataPayment[0]->note,
+            "user_id" => $dataPayment[0]->user_id,
+            "form_of_delivery" => $dataPayment[0]->form_of_delivery,
+            "total" => $dataPayment[0]->total,
+        ];
+        $checkPayment = bills::payment($data,$cart);
 
         //Tổng tiền giỏ hàng
         $totalMoneyOfCart = 0;
         for($i = 0 ; $i < count($cart) ; $i++){
-            $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
+            $totalMoneyOfCart += ((int)$cart[$i]->price * $cart[$i]->qty);
         }
         $email = $request->email;
         if($checkPayment){
@@ -125,6 +139,10 @@ class BillController extends Controller
                 $message->from('phamkien14091998@gmail.com','WebsiteTravel');
                 $message->to($email)->subject('Thông Báo Mua Sản Phẩm !');
             });
+            DB::table('payment')->where('user_id','=',$dataPayment[0]->user_id)
+                ->delete();
+            DB::table('session')->where('user_id','=',$dataPayment[0]->user_id)
+                ->delete();
             return response()->json('Thanh toán thành công',200);
         } else {
             return response()->json('Thanh toán thất bại',500);
@@ -133,11 +151,13 @@ class BillController extends Controller
 
     //thanh toán bằng tiền mặt
     public function paymentCash(Request $request){
+        $array_product = DB::table('session')->get();
+
         $user_id = $request->user_id;
-        $cart =  Session::get('cart.name');//lấy ra giỏ hàng cart này là mảng sản phẩm nó mua
+        $cart =  $array_product;//lấy ra giỏ hàng cart này là mảng sản phẩm nó mua
         $totalMoneyOfCart = 0;//Tổng tiền sản phẩm trong giỏ hàng không tính phí ship
         for($i = 0 ; $i < count($cart) ; $i++){
-            $totalMoneyOfCart += ((int)$cart[$i]['price'] * $cart[$i]['qty']);
+            $totalMoneyOfCart += ((int)$cart[$i]->price * $cart[$i]->qty);
         }
 
         //Xử lý trường hình thức giao hàng
@@ -169,6 +189,11 @@ class BillController extends Controller
                 $message->from('phamkien14091998@gmail.com','WebsiteTravel');
                 $message->to($email)->subject('Thông Báo Mua Sản Phẩm !');
             });
+            // xoa
+            DB::table('payment')->where('user_id','=',$user_id)
+                ->delete();
+            DB::table('session')->where('user_id','=',$user_id)
+                ->delete();
             return response()->json('Thanh toán thành công',200);
         } else {
             return response()->json('Thanh toán thất bại',500);

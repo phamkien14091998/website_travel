@@ -36,7 +36,8 @@ class rating extends Model
             'users.user_name',
             'rating.point',
             'rating.post_id',
-            'rating.created_at'
+            'rating.created_at',
+            'users.avatar'
         )
         ->orderBy('created_at','desc')
         ->first();
@@ -78,7 +79,8 @@ class rating extends Model
                 'users.user_name',
                 'rating.point',
                 'rating.post_id',
-                'rating.created_at'
+                'rating.created_at',
+                'users.avatar'
             )
             ->orderBy('created_at','desc')
             ->first();
@@ -115,7 +117,8 @@ class rating extends Model
             'users.user_name',
             'rating.point',
             'rating.famous_place_id',
-            'rating.created_at'
+            'rating.created_at',
+            'users.avatar'
         )
         ->orderBy('created_at','desc')
         ->first();
@@ -157,7 +160,8 @@ class rating extends Model
                 'users.user_name',
                 'rating.point',
                 'rating.famous_place_id',
-                'rating.created_at'
+                'rating.created_at',
+                'users.avatar'
             )
             ->orderBy('created_at','desc')
             ->first();

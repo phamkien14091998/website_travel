@@ -5,17 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
 
-    public function addToCart($product_id){
+    public function addToCart(Request $request){
 
         //Session::forget('cart');
+        $user_id = $request->user_id;
+        $product_id_int = $request->product_id;
 
-        $product_id_int = (int)$product_id;
-
-        $value = cart::add($product_id_int);
+        $value = cart::add($product_id_int,$user_id);
         if($value){
             return response()->json($value,200);
         }

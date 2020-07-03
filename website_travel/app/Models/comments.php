@@ -49,7 +49,8 @@ class comments extends Model
                 'comments.post_id',
                 'comments.comment_id',
                 'users.user_name',
-                'comments.created_at'
+                'comments.created_at',
+                'users.avatar'
             )
             ->orderBy('comment_id','desc')
             ->first();
@@ -76,7 +77,8 @@ class comments extends Model
                 'comments.post_id',
                 'comments.comment_id',
                 'users.user_name',
-                'comments.created_at'
+                'comments.created_at',
+                'users.avatar'
             )
             ->orderBy('comment_id','desc')
             ->get(); 
