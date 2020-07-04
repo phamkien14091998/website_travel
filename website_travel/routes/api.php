@@ -156,6 +156,11 @@ Route::group(['prefix'=>'schedule'],function(){
     Route::post('get-invate-schedule', 'ScheduleController@getInvateSchedule');
     Route::post('get-user-by-trip_id', 'ScheduleController@getUserByTripId');
     Route::post('get-user-create-by-trip_id', 'ScheduleController@getUserCreateByTripId');
+    Route::post('cancelInvitation', 'ScheduleController@cancelInvitation');
+    Route::post('getNotify', 'ScheduleController@getNotify');
+    Route::post('getCountNotify', 'ScheduleController@getCountNotify');
+    Route::post('closeNotity', 'ScheduleController@closeNotity');
+    
     
 });
 

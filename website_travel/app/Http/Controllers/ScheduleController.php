@@ -199,6 +199,39 @@ class ScheduleController extends Controller
         $data = schedules::getUserCreateByTripId($trip_id);
         return response()->json($data,200);
     }
+    // huy khong tham gia chuyen di
+    public function cancelInvitation(Request $request){
+        $user_id = $request->user_id;
+        $trip_id = $request->trip_id;
+        
+        $data = schedules::cancelInvitation($user_id,$trip_id);
+        return response()->json($data,200);
+    }
+
+    // get số lượng thông báo
+    public function getCountNotify(Request $request){
+        $user_id = $request->user_id;
+
+        $data = schedules::getCountNotify($user_id);
+        return response()->json($data,200);
+    }
+    
+    // lấy thông báo từ lịch trình
+    public function getNotify(Request $request){
+        $user_id = $request->user_id;
+
+        $data = schedules::getNotify($user_id);
+        return response()->json($data,200);
+    }
+    // tắt thông báo
+    public function closeNotity(Request $request){
+        $user_id = $request->user_id;
+        $trip_id = $request->trip_id;
+
+        $data = schedules::closeNotity($user_id,$trip_id);
+        return response()->json($data,200);
+    }
+    
     
 
 }

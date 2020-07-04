@@ -50,10 +50,21 @@ class schedules extends Model
     }   
     // insert table friends
     $f = [];
+    $n= [];
     for($i=0; $i < count($friends_arr);$i++){
         $f['trip_id']=$data_trip;
         $f['user_id']=$friends_arr[$i];
 
+        $n['trip_id']=$data_trip;
+        $n['user_id']=$friends_arr[$i];
+        $n['note'] = "Bạn đã được mời tham gia lịch trình ";
+        $n['flag']=0;
+        $n['created_at'] = Carbon::now();
+
+        // insert vào tabel notify
+        $detail=DB::table('notify')
+        ->insertGetId($n);
+        // insert vào tabel friends
         $detail=DB::table('friends')
         ->insertGetId($f);
     }   
@@ -156,7 +167,7 @@ class schedules extends Model
     public static function getInvateSchedule($user_id){
         $sql= "select *, trips.created_at from trips  
         join friends on friends.trip_id = trips.trip_id 
-        where friends.user_id = {$user_id} order by trips.trip_id";
+        where friends.user_id = {$user_id} and flag=0 order by trips.trip_id";
         return DB::select($sql);
     }
     public static function getUserByTripId($trip_id){
@@ -167,6 +178,65 @@ class schedules extends Model
         $sql= "SELECT users.user_name,trips.user_id,users.avatar FROM trips LEFT JOIN users ON trips.user_id = users.user_id where trip_id={$trip_id}";
         return DB::select($sql);
     }
+    public static function cancelInvitation($user_id,$trip_id){
+        $data=[
+            'flag'=>1
+        ];
+        $update_friends = DB::table('friends')->where(['trip_id'=> $trip_id,'user_id'=> $user_id])
+            ->update($data);
+        $col_friend = DB::table('trips')->select('friends')
+            ->where('trip_id', $trip_id)->first();
+        $arr_friend = explode("|", $col_friend->friends);
+
+        $tampp='';
+        $array=[];
+        foreach($arr_friend as $k=>$v){ 
+            if($v == $user_id){
+                $v="";
+            }else{
+                array_push($array, $v);
+            }
+            
+        }
+        $friends = implode('|', $array);
+        $data2=[
+            'friends'=> $friends
+        ];
+        $update_friends = DB::table('trips')->where('trip_id', $trip_id)
+        ->update($data2);
+        
+        return $update_friends;
+    }
+
+    public static function getCountNotify($user_id){
+        $sql = DB::table('notify')
+                ->selectRaw('count(user_id) as count_user_id')
+                ->where(['user_id'=>$user_id,'flag'=>'0'])->get();
+        return $sql;
+    }
+    public static function getNotify($user_id){
+        $sql = DB::table('notify')
+                ->leftJoin('trips','trips.trip_id','=','notify.trip_id')
+                ->selectRaw('note,trip_name,notify.trip_id,notify.created_at')
+                ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->get();
+        return $sql;
+    }
+    public static function closeNotity($user_id,$trip_id){
+        $data=[
+            'flag'=>'1'
+        ];
+
+        $sql1 = DB::table('notify')->where(['trip_id'=> $trip_id,'user_id'=>$user_id])
+            ->update($data);
+
+        $sql = DB::table('notify')
+                ->leftJoin('trips','trips.trip_id','=','notify.trip_id')
+                ->selectRaw('note,trip_name,notify.trip_id,notify.created_at,count(notify.user_id) as count_user_id')
+                ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->get();
+        return $sql;
+
+    }
+    
 
  
 }
