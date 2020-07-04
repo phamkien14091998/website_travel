@@ -96,7 +96,8 @@ class comments extends Model
                 'comments.trip_id',
                 'comments.comment_id',
                 'users.user_name',
-                'comments.created_at'
+                'comments.created_at',
+                'users.avatar'
             )
             ->orderBy('comment_id','desc')
             ->first();
@@ -113,7 +114,8 @@ class comments extends Model
             'comments.trip_id',
             'comments.comment_id',
             'users.user_name',
-            'comments.created_at'
+            'comments.created_at',
+            'users.avatar'
         )
         ->orderBy('comment_id','desc')
         ->get(); 
@@ -136,7 +138,8 @@ class comments extends Model
                 'comments.trip_id',
                 'comments.comment_id',
                 'users.user_name',
-                'comments.created_at'
+                'comments.created_at',
+                'users.avatar'
             )
             ->orderBy('comment_id','desc')
             ->get(); 
