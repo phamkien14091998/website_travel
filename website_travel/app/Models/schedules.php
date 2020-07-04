@@ -55,11 +55,12 @@ class schedules extends Model
         $f['trip_id']=$data_trip;
         $f['user_id']=$friends_arr[$i];
 
-        $n['trip_id']=$data_trip;
+        // $n['trip_id']=$data_trip;
         $n['user_id']=$friends_arr[$i];
         $n['note'] = "Bạn đã được mời tham gia lịch trình ";
         $n['flag']=0;
         $n['created_at'] = Carbon::now();
+        $n['url']="/member/schedule/detail/".$data_trip;
 
         // insert vào tabel notify
         $detail=DB::table('notify')
@@ -216,23 +217,21 @@ class schedules extends Model
     }
     public static function getNotify($user_id){
         $sql = DB::table('notify')
-                ->leftJoin('trips','trips.trip_id','=','notify.trip_id')
-                ->selectRaw('note,trip_name,notify.trip_id,notify.created_at')
-                ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->get();
+                ->selectRaw('note,notify.created_at,url')
+                ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->orderBy('created_at','desc')->get();
         return $sql;
     }
-    public static function closeNotity($user_id,$trip_id){
+    public static function closeNotity($user_id,$url){
         $data=[
             'flag'=>'1'
         ];
 
-        $sql1 = DB::table('notify')->where(['trip_id'=> $trip_id,'user_id'=>$user_id])
+        $sql1 = DB::table('notify')->where(['user_id'=>$user_id,'url'=>$url])
             ->update($data);
-
-        $sql = DB::table('notify')
-                ->leftJoin('trips','trips.trip_id','=','notify.trip_id')
-                ->selectRaw('note,trip_name,notify.trip_id,notify.created_at,count(notify.user_id) as count_user_id')
-                ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->get();
+       
+            $sql = DB::table('notify')
+            ->selectRaw('note,notify.created_at,url')
+            ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->orderBy('created_at','desc')->get();
         return $sql;
 
     }

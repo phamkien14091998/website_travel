@@ -21,10 +21,16 @@ class CommentController extends Controller
 
     }
     public function createCommentByPostId(Request $request){
-        $data_comment = $request->all();
+        $data_comment = [
+            'content' => $request->content,
+            'user_id' => $request->user_id,
+            'post_id' => $request->post_id
+        ] ;
+        $user_id_create = $request->user_id_create;
+
         $user_id= $request->user_id;
 
-        $data=comments::createCommentByPostId($user_id,$data_comment);
+        $data=comments::createCommentByPostId($user_id,$data_comment,$user_id_create);
 
         if($data){ 
             return response()->json($data,200);
@@ -87,5 +93,14 @@ class CommentController extends Controller
         
         return  response()->json($data,200);
     }
+    // get usser by posst_id
+    public function getUserByPostId(Request $request){
+        $post_id= $request->post_id;
+        
+        $data = comments::getUserByPostId($post_id);
+        
+        return  response()->json($data,200);
+    }
+    
 
 }

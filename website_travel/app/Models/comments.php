@@ -37,7 +37,18 @@ class comments extends Model
         ->get(); 
     }
     // thêm comment theo bài viết và user đăng nhập
-    public static function createCommentByPostId($user_id,$data_comment){
+    public static function createCommentByPostId($user_id,$data_comment,$user_id_create){
+
+        // lưu thông báo
+        $data_notify = [
+            'user_id'=> $user_id_create,
+            'note' => "Một người đã bình luận bài viết của bạn",
+            'created_at' => Carbon::now(),
+            'url'=> "/detail-post/".$data_comment['post_id']
+        ];
+        
+        DB::table('notify')
+        ->insertGetId($data_notify);
 
         $data_comment['created_at'] = Carbon::now();
         $data=  self::insertGetId($data_comment);
@@ -143,6 +154,14 @@ class comments extends Model
             )
             ->orderBy('comment_id','desc')
             ->get(); 
+    }
+    public static function getUserByPostId($post_id){
+        
+        return DB::table('posts')->where('post_id',$post_id)
+        ->select(
+            'user_id'
+        )
+        ->get(); 
     }
 
 }

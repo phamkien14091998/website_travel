@@ -226,9 +226,9 @@ class ScheduleController extends Controller
     // tắt thông báo
     public function closeNotity(Request $request){
         $user_id = $request->user_id;
-        $trip_id = $request->trip_id;
+        $url= $request->url;
 
-        $data = schedules::closeNotity($user_id,$trip_id);
+        $data = schedules::closeNotity($user_id,$url);
         return response()->json($data,200);
     }
     

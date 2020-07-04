@@ -185,6 +185,7 @@ Route::group(['prefix'=>'comment'],function(){
     Route::post('new-trip', 'CommentController@createCommentByTripId'); // thêm comment của bài trip 
     Route::get('list-trip/{trip_id}', 'CommentController@getAllCommentByTripId');  // get all comment của lich trinh
     Route::post('updateCommentByidTrip', 'CommentController@updateCommentByidTrip'); // update cmt by trip_id
+    Route::post('getUserByPostId', 'CommentController@getUserByPostId'); 
     
 });
 // router rating  
