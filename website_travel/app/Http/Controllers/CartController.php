@@ -23,8 +23,10 @@ class CartController extends Controller
         return response()->json('Không có dữ liệu',500);
     }
 
-    public function getAllProductForCart(){
-        $value = cart::getAllProductForCart();
+    public function getAllProductForCart(Request $request){
+        $user_id= $request->user_id;
+
+        $value = cart::getAllProductForCart($user_id);
         if($value){
             return response()->json($value,200);
         }
@@ -39,8 +41,9 @@ class CartController extends Controller
         return response()->json('Không có dữ liệu',500);
     }
 
-    public function getTotalCart(){
-        $value = cart::getTotalCart();
+    public function getTotalCart(Request $request){
+        $user_id = $request->user_id;
+        $value = cart::getTotalCart($user_id);
         if($value){
             return response()->json($value,200);
         }
@@ -65,6 +68,16 @@ class CartController extends Controller
 
     public function getSoLuongTonKho(){
         $value = cart::getSoLuongTonKho();
+        if($value){
+            return response()->json($value,200);
+        }
+        return null;
+    }
+    
+    public function getCountGioHang(Request $request){
+        $user_id = $request->user_id;
+
+        $value = cart::getCountGioHang($user_id);
         if($value){
             return response()->json($value,200);
         }

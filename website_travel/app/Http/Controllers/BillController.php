@@ -23,7 +23,7 @@ class BillController extends Controller
 
     public function paymentPaypal(Request $request)
     {
-        $array_product = DB::table('session')->get();
+        $array_product = DB::table('session')->where('user_id',$request->user_id)->get();
 
         $user_id = $request->user_id;
         $cart =  $array_product;//lấy ra giỏ hàng  
@@ -113,10 +113,11 @@ class BillController extends Controller
     }
 
     public function paymentPayPalInsertData(Request $request){
-        $array_product = DB::table('session')->get();
+        $dataPayment = DB::table('payment')->where('user_id',$request->user_id)->get();
+       
+        $array_product = DB::table('session')->where('user_id',$dataPayment[0]->user_id)->get();
 
         $cart = $array_product;
-        $dataPayment = DB::table('payment')->get();
         
         $data =[
             "ship_fee" => $dataPayment[0]->ship_fee,
@@ -151,7 +152,7 @@ class BillController extends Controller
 
     //thanh toán bằng tiền mặt
     public function paymentCash(Request $request){
-        $array_product = DB::table('session')->get();
+        $array_product = DB::table('session')->where('user_id',$request->user_id)->get();
 
         $user_id = $request->user_id;
         $cart =  $array_product;//lấy ra giỏ hàng cart này là mảng sản phẩm nó mua

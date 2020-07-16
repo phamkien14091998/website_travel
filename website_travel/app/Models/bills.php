@@ -90,6 +90,7 @@ class bills extends Model
                 'bill_details.quantity',
                 'bill_details.price'
             )
+            ->orderBy('bills.created_at','desc')
             ->get();
     
         return $data;

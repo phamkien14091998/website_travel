@@ -72,10 +72,13 @@ class schedules extends Model
 
     }
 
-    // lấy ra danh sách lịch trình của user đang đăng nhập
+    // lấy ra danh sách lịch trình của user đang đăng nhập (lấy ra những lịch trình chưa diễn ra)
     public static function getListScheduleByUser($user_id){
+        $day_now = date("Y-m-d");
+     
+        $query ="trips.user_id = '{$user_id}' and trips.day_end >= '{$day_now}' ";
         
-        return self::where('trips.user_id',$user_id)
+        return self::whereRaw($query)
                 ->leftJoin('users','users.user_id','=','trips.user_id')
                 ->select('trip_name','trips.created_at','trips.description','trips.trip_id','day_start','day_end','friends','users.user_name')
                 ->orderBy('trips.trip_id', 'desc')
@@ -117,6 +120,11 @@ class schedules extends Model
     //delete schedule
     public static function deleteScheduleById($trip_id){
 
+        DB::table('comments')->where('trip_id','=',$trip_id)
+        ->delete();
+        DB::table('friends')->where('trip_id','=',$trip_id)
+        ->delete();
+
         return self::where('trip_id','=',$trip_id)
                 ->delete();
     }
@@ -131,7 +139,7 @@ class schedules extends Model
    }
     //delete schedule-detail
     public static function deleteScheduleDetail($trip_detail_id){
-
+        // xóa cmr trước khi xóa lịch trình
         return DB::table('trip_details')->where('trip_detail_id','=',$trip_detail_id)
                 ->delete();
     }
@@ -205,6 +213,13 @@ class schedules extends Model
         ];
         $update_friends = DB::table('trips')->where('trip_id', $trip_id)
         ->update($data2);
+
+        // tắt thông báo khi rời khỏi chuyến đi
+        $noti=[
+            'flag'=>1
+        ];
+        $updateNotify = DB::table('notify')->where(['url'=> "/member/schedule/detail/".$trip_id,'user_id'=>$user_id])
+        ->update($noti);
         
         return $update_friends;
     }
@@ -230,12 +245,23 @@ class schedules extends Model
             ->update($data);
        
             $sql = DB::table('notify')
-            ->selectRaw('note,notify.created_at,url')
+            ->selectRaw('note,notify.created_at,url,count(user_id) as count_user_id')
             ->where(['notify.user_id'=>$user_id,'flag'=>'0'])->orderBy('created_at','desc')->get();
         return $sql;
 
     }
-    
+    // lấy ra danh sách lịch trình của user đang đăng nhập (lấy ra những lịch trình đã diễn ra)
+    public static function getListScheduleByUserBefore($user_id){
+        $day_now = date("Y-m-d");
+     
+        $query ="trips.user_id = '{$user_id}' and trips.day_end < '{$day_now}' ";
+        
+        return self::whereRaw($query)
+                ->leftJoin('users','users.user_id','=','trips.user_id')
+                ->select('trip_name','trips.created_at','trips.description','trips.trip_id','day_start','day_end','friends','users.user_name')
+                ->orderBy('trips.trip_id', 'desc')
+                ->get();
+    } 
 
  
 }

@@ -160,18 +160,21 @@ Route::group(['prefix'=>'schedule'],function(){
     Route::post('getNotify', 'ScheduleController@getNotify');
     Route::post('getCountNotify', 'ScheduleController@getCountNotify');
     Route::post('closeNotity', 'ScheduleController@closeNotity');
-    
+    Route::post('list-before', 'ScheduleController@getListScheduleByUserBefore');
     
 });
 
 Route::group(['middleware' => ['web']], function () {
     Route::post('cart/add', 'CartController@addToCart');
-    Route::get('cart/get-all/', 'CartController@getAllProductForCart');
+    Route::post('cart/get-all/', 'CartController@getAllProductForCart');
     Route::get('cart/delete/{product_id}', 'CartController@deleteProductFromCart');
-    Route::get('cart/total-money', 'CartController@getTotalCart'); 
+    Route::post('cart/total-money', 'CartController@getTotalCart'); 
     Route::get('cart/tangSoLuongSP/{id}', 'CartController@tangSoLuongSP'); 
     Route::get('cart/giamSoLuongSP/{id}', 'CartController@giamSoLuongSP');
     Route::get('cart/soLuongTon', 'CartController@getSoLuongTonKho');
+
+    Route::post('cart/getCount', 'CartController@getCountGioHang'); 
+    
     
 });
 // router comments  

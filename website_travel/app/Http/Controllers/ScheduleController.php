@@ -231,7 +231,16 @@ class ScheduleController extends Controller
         $data = schedules::closeNotity($user_id,$url);
         return response()->json($data,200);
     }
-    
+    // lấy ra lịch trình đã diễn ra rồi
+    public function getListScheduleByUserBefore(Request $request){
+       
+        $user_id = $request->user_id;
+        $data = schedules::getListScheduleByUserBefore($user_id);
+        if($data){
+            return response()->json($data,200);
+        }
+        return response()->json('Không có dữ liệu',500);
+    }
     
 
 }

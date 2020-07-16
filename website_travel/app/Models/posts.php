@@ -288,6 +288,11 @@ class posts extends Model
     }
      // delete post by id 
     public static function deletePostById($post_id){
+        DB::table('comments')->where('post_id','=',$post_id)
+        ->delete();
+        DB::table('rating')->where('post_id','=',$post_id)
+        ->delete();
+       
         return self::where('post_id','=',$post_id)
                 ->delete();
     }
@@ -368,7 +373,7 @@ class posts extends Model
                 LEFT JOIN users ON users.user_id = posts.user_id
                 LEFT JOIN famous_places ON famous_places.famous_place_id = posts.famous_place_id 
             WHERE
-                posts.famous_place_id = {$famous_place_id} 
+                posts.famous_place_id = {$famous_place_id}  and flag = 1
             ORDER BY
             avgPoint DESC 
         ";
